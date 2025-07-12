@@ -1,0 +1,31 @@
+2025-07-08 12:07:49,118 - RouterTest - INFO - 测试配置更新成功
+2025-07-08 12:09:49,218 - RouterTest - INFO - 强制重新创建表格样式模板成功
+2025-07-08 12:09:49,295 - RouterTest - INFO - 成功加载VLAN配置，包含 0 个测试用例
+2025-07-08 12:09:49,308 - RouterTest - INFO - 开始解析测试输出，共 206 行
+2025-07-08 12:09:49,322 - RouterTest - INFO - 发现测试用例: test_valid_login
+2025-07-08 12:09:49,334 - RouterTest - INFO - 发现测试用例: test_invalid_login
+2025-07-08 12:09:49,350 - RouterTest - INFO - 发现测试用例: test_invalid_login
+2025-07-08 12:09:49,364 - RouterTest - INFO - 发现测试用例: test_invalid_login
+2025-07-08 12:09:49,376 - RouterTest - INFO - 发现测试用例: test_invalid_login
+2025-07-08 12:09:49,390 - RouterTest - INFO - 成功解析出 5 个测试用例
+2025-07-08 12:09:49,402 - RouterTest - INFO - 报告数据准备完成，测试用例数量: 5
+2025-07-08 12:09:49,496 - RouterTest - INFO - 中文测试报告生成成功: reports\outputs\中文测试报告_20250708_120949.html
+2025-07-08 12:44:12,867 - RouterTest - INFO - 测试配置更新成功
+2025-07-08 12:44:24,704 - RouterTest - INFO - 强制重新创建表格样式模板成功
+2025-07-08 12:44:24,770 - RouterTest - INFO - 成功加载VLAN配置，包含 0 个测试用例
+2025-07-08 12:44:24,784 - RouterTest - INFO - 开始解析测试输出，共 123 行
+2025-07-08 12:44:24,797 - RouterTest - INFO - 成功解析出 0 个测试用例
+2025-07-08 12:44:24,811 - RouterTest - WARNING - 从输出中未解析到测试用例，使用备用方案
+2025-07-08 12:44:24,879 - RouterTest - INFO - 成功加载VLAN配置，包含 0 个测试用例
+2025-07-08 12:44:24,894 - RouterTest - INFO - 报告数据准备完成，测试用例数量: 0
+2025-07-08 12:44:24,939 - RouterTest - INFO - 中文测试报告生成成功: reports\outputs\中文测试报告_20250708_124424.html
+2025-07-08 12:46:38,230 - RouterTest - INFO - 测试配置更新成功
+2025-07-08 12:47:05,300 - RouterTest - INFO - 测试进程已终止
+2025-07-08 12:47:05,301 - RouterTest - INFO - 收到停止测试请求
+2025-07-08 12:47:05,659 - RouterTest - INFO - 强制重新创建表格样式模板成功
+2025-07-08 12:47:05,667 - RouterTest - INFO - 成功加载VLAN配置，包含 7 个测试用例
+2025-07-08 12:47:05,667 - RouterTest - INFO - 开始解析测试输出，共 42 行
+2025-07-08 12:47:05,667 - RouterTest - INFO - 发现测试用例: test_add_vlan
+2025-07-08 12:47:05,667 - RouterTest - INFO - 成功解析出 1 个测试用例
+2025-07-08 12:47:05,668 - RouterTest - INFO - 报告数据准备完成，测试用例数量: 1
+2025-07-08 12:47:05,675 - RouterTest - INFO - 中文测试报告生成成功: reports\outputs\中文测试报告_20250708_124705.html

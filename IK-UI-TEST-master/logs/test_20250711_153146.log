@@ -1,0 +1,179 @@
+2025-07-11 15:31:48,160 - RouterTest - INFO - ✅ 已设置全面的网络监听器
+2025-07-11 15:31:48,160 - RouterTest - INFO - 🚀 开始网络请求调试
+2025-07-11 15:31:48,162 - RouterTest - INFO - 开始登录，用户名: admin
+2025-07-11 15:31:48,924 - RouterTest - INFO - 成功导航到页面: http://10.66.0.40/login#/login
+2025-07-11 15:31:50,951 - RouterTest - INFO - 成功输入文本 role=textbox, name=用户名: admin
+2025-07-11 15:31:50,961 - RouterTest - INFO - 成功输入文本 role=textbox, name=密码: admin123
+2025-07-11 15:31:50,990 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/login
+2025-07-11 15:31:50,992 - RouterTest - INFO - 成功点击元素 role=button, name=登录
+2025-07-11 15:31:56,497 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/call
+2025-07-11 15:31:56,498 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/call
+2025-07-11 15:31:56,498 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/login
+2025-07-11 15:31:56,498 - RouterTest - INFO - 🔍 [VLAN相关] 请求体: {"username":"admin","passwd":"0192023a7bbd73250516f069df18b500","pass":"c2FsdF8xMWFkbWluMTIz","remember_password":null}
+2025-07-11 15:31:56,499 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/call
+2025-07-11 15:31:56,499 - RouterTest - INFO - 🔍 [VLAN相关] 请求体: {"func_name":"ikmessages","action":"start","param":{}}
+2025-07-11 15:31:56,499 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/call
+2025-07-11 15:31:56,499 - RouterTest - INFO - 🔍 [VLAN相关] 请求体: {"func_name":"basic","action":"set_language","param":{"language":1}}
+2025-07-11 15:31:56,499 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/tag?id=system-overview.show
+2025-07-11 15:31:56,500 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/tag?id=system-overview.show
+2025-07-11 15:31:56,503 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/call
+2025-07-11 15:31:56,503 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/call
+2025-07-11 15:31:56,503 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/call
+2025-07-11 15:31:56,505 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/call
+2025-07-11 15:31:56,505 - RouterTest - INFO - 🔍 [VLAN相关] 请求体: {"func_name":"ikmessages","action":"start","param":{}}
+2025-07-11 15:31:56,506 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/call
+2025-07-11 15:31:56,506 - RouterTest - INFO - 🔍 [VLAN相关] 请求体: {"func_name":"webuser","action":"show","param":{"TYPE":"mod_passwd","username":"admin"}}
+2025-07-11 15:31:56,506 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/call
+2025-07-11 15:31:56,507 - RouterTest - INFO - 🔍 [VLAN相关] 请求体: {"func_name":"upgrade","action":"show","param":{"TYPE":"data,fileinfo"}}
+2025-07-11 15:31:56,507 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/call
+2025-07-11 15:31:56,507 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/call
+2025-07-11 15:31:56,508 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/call
+2025-07-11 15:31:56,509 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/call
+2025-07-11 15:31:56,509 - RouterTest - INFO - 🔍 [VLAN相关] 请求体: {"func_name":"auth_code","action":"show"}
+2025-07-11 15:31:56,510 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/call
+2025-07-11 15:31:56,510 - RouterTest - INFO - 🔍 [VLAN相关] 请求体: {"func_name":"homepage","action":"show","param":{"TYPE":"forward_drop,beyond"}}
+2025-07-11 15:31:56,511 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/call
+2025-07-11 15:31:56,512 - RouterTest - INFO - 🔍 [VLAN相关] 请求体: {"func_name":"homepage","action":"show","param":{"TYPE":"antipiracy"}}
+2025-07-11 15:31:56,512 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/call
+2025-07-11 15:31:56,512 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/call
+2025-07-11 15:31:56,513 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/call
+2025-07-11 15:31:56,513 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/call
+2025-07-11 15:31:56,513 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/call
+2025-07-11 15:31:56,514 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/call
+2025-07-11 15:31:56,514 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/call
+2025-07-11 15:31:56,514 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/call
+2025-07-11 15:31:56,515 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/call
+2025-07-11 15:31:56,515 - RouterTest - INFO - 🔍 [VLAN相关] 请求体: {"func_name":"dingtalk","action":"show","param":{"TYPE":"bindid"}}
+2025-07-11 15:31:56,521 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/call
+2025-07-11 15:31:56,521 - RouterTest - INFO - 🔍 [VLAN相关] 请求体: {"func_name":"register","action":"show","param":{"TYPE":"data,gwid"}}
+2025-07-11 15:31:56,522 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/call
+2025-07-11 15:31:56,522 - RouterTest - INFO - 🔍 [VLAN相关] 请求体: {"func_name":"rt_collect","action":"show","param":{"TYPE":"warning_notify"}}
+2025-07-11 15:31:56,523 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/call
+2025-07-11 15:31:56,523 - RouterTest - INFO - 🔍 [VLAN相关] 请求体: {"func_name":"homepage","action":"show","param":{"TYPE":"dhcp_addrpool_num"}}
+2025-07-11 15:31:56,523 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/call
+2025-07-11 15:31:56,523 - RouterTest - INFO - 🔍 [VLAN相关] 请求体: {"func_name":"homepage","action":"show","param":{"TYPE":"app_flow,app_historical"}}
+2025-07-11 15:31:56,524 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/call
+2025-07-11 15:31:56,524 - RouterTest - INFO - 🔍 [VLAN相关] 请求体: {"func_name":"homepage","action":"show","param":{"TYPE":"monitor_system"}}
+2025-07-11 15:31:56,525 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/call
+2025-07-11 15:31:56,525 - RouterTest - INFO - 🔍 [VLAN相关] 请求体: {"func_name":"homepage","action":"show","param":{"TYPE":"sysstat,ac_status"}}
+2025-07-11 15:31:56,525 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/call
+2025-07-11 15:31:56,525 - RouterTest - INFO - 🔍 [VLAN相关] 请求体: {"func_name":"homepage","action":"show","param":{"TYPE":"ether_info,snapshoot"}}
+2025-07-11 15:31:56,526 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/call
+2025-07-11 15:31:56,526 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/call
+2025-07-11 15:31:56,526 - RouterTest - INFO - 🔍 [VLAN相关] 请求体: {"func_name":"ikmessages","action":"show","param":{"TYPE":"total","FILTER1":"read,==,0"}}
+2025-07-11 15:31:56,530 - RouterTest - INFO - 找到成功指示器: 网络设置
+2025-07-11 15:31:56,530 - RouterTest - INFO - 登录成功: admin
+2025-07-11 15:31:56,531 - RouterTest - INFO - 📍 导航到VLAN页面...
+2025-07-11 15:31:56,531 - RouterTest - INFO - 导航到VLAN设置页面
+2025-07-11 15:31:58,534 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/call
+2025-07-11 15:31:58,534 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/call
+2025-07-11 15:31:58,535 - RouterTest - INFO - 🔍 [VLAN相关] 请求体: {"func_name":"homepage","action":"show","param":{"TYPE":"app_historical"}}
+2025-07-11 15:31:58,567 - RouterTest - INFO - 成功点击文本元素: 网络设置
+2025-07-11 15:32:00,070 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/call
+2025-07-11 15:32:00,070 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/call
+2025-07-11 15:32:00,070 - RouterTest - INFO - 🔍 [VLAN相关] 请求体: {"func_name":"homepage","action":"show","param":{"TYPE":"sysstat,ac_status"}}
+2025-07-11 15:32:00,120 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/tag?id=network-setting-vlan-setting.show
+2025-07-11 15:32:00,120 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/tag?id=network-setting-vlan-setting.show
+2025-07-11 15:32:00,125 - RouterTest - INFO - 📡 [POST-VLAN] http://10.66.0.40/Action/tag?id=network-setting-vlan-setting.show
+2025-07-11 15:32:00,125 - RouterTest - INFO - 📡 [POST-VLAN] 数据: 
+2025-07-11 15:32:00,127 - RouterTest - INFO - 成功点击链接: VLAN设置
+2025-07-11 15:32:03,631 - RouterTest - INFO - 成功导航到VLAN设置页面
+2025-07-11 15:32:03,631 - RouterTest - INFO - 导航到VLAN设置页面
+2025-07-11 15:32:05,633 - RouterTest - INFO - 📡 [POST-VLAN] 响应状态: 200
+2025-07-11 15:32:05,634 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/call
+2025-07-11 15:32:05,635 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/call
+2025-07-11 15:32:05,635 - RouterTest - INFO - 🔍 [VLAN相关] 请求体: {"func_name":"vlan","action":"show","param":{"TYPE":"total,data","limit":"0,20","ORDER_BY":"","ORDER":""}}
+2025-07-11 15:32:05,635 - RouterTest - INFO - 📡 [POST-VLAN] http://10.66.0.40/Action/call
+2025-07-11 15:32:05,635 - RouterTest - INFO - 📡 [POST-VLAN] 数据: {"func_name":"vlan","action":"show","param":{"TYPE":"total,data","limit":"0,20","ORDER_BY":"","ORDER":""}}
+2025-07-11 15:32:05,637 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/call
+2025-07-11 15:32:05,637 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/call
+2025-07-11 15:32:05,637 - RouterTest - INFO - 🔍 [VLAN相关] 请求体: {"func_name":"sysstat","action":"show","param":{"TYPE":"verinfo,cpu,memory,stream,cputemp"}}
+2025-07-11 15:32:05,638 - RouterTest - INFO - 📡 [POST-VLAN] 响应状态: 200
+2025-07-11 15:32:05,640 - RouterTest - INFO - 📡 [POST-VLAN] 响应文本: success
+2025-07-11 15:32:05,641 - RouterTest - INFO - 📡 [POST-VLAN] 响应内容: {'Result': 30000, 'ErrMsg': 'Success', 'Data': {'total': 1, 'data': [{'ip_mask': '', 'interface': 'lan1', 'ip_addr_int': 3232244737, 'vlan_id': '36', 'id': 1, 'enabled': 'yes', 'comment': '基础VLAN测试', 'mac': '00:27:a9:a2:4e:12', 'ip_addr': '192.168.36.1', 'netmask': '255.255.255.0', 'vlan_name': 'vlan36'}]}}
+2025-07-11 15:32:05,679 - RouterTest - INFO - 成功点击文本元素: 网络设置
+2025-07-11 15:32:07,181 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/call
+2025-07-11 15:32:07,181 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/call
+2025-07-11 15:32:07,181 - RouterTest - INFO - 🔍 [VLAN相关] 请求体: {"func_name":"gv","action":"show"}
+2025-07-11 15:32:07,233 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/call
+2025-07-11 15:32:07,234 - RouterTest - INFO - 成功点击链接: VLAN设置
+2025-07-11 15:32:10,736 - RouterTest - INFO - 成功导航到VLAN设置页面
+2025-07-11 15:32:12,740 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/call
+2025-07-11 15:32:12,741 - RouterTest - INFO - 🔍 [VLAN相关] 请求体: {"func_name":"vlan","action":"show","param":{"TYPE":"total,data","limit":"0,20","ORDER_BY":"","ORDER":""}}
+2025-07-11 15:32:12,741 - RouterTest - INFO - 📡 [POST-VLAN] http://10.66.0.40/Action/call
+2025-07-11 15:32:12,741 - RouterTest - INFO - 📡 [POST-VLAN] 数据: {"func_name":"vlan","action":"show","param":{"TYPE":"total,data","limit":"0,20","ORDER_BY":"","ORDER":""}}
+2025-07-11 15:32:12,743 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/call
+2025-07-11 15:32:12,743 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/call
+2025-07-11 15:32:12,743 - RouterTest - INFO - 🔍 [VLAN相关] 请求体: {"func_name":"sysstat","action":"show","param":{"TYPE":"verinfo,cpu,memory,stream,cputemp"}}
+2025-07-11 15:32:12,744 - RouterTest - INFO - 📡 [POST-VLAN] 响应状态: 200
+2025-07-11 15:32:12,747 - RouterTest - INFO - 📡 [POST-VLAN] 响应内容: {'Result': 30000, 'ErrMsg': 'Success', 'Data': {'total': 1, 'data': [{'interface': 'lan1', 'id': 1, 'enabled': 'yes', 'comment': '基础VLAN测试', 'vlan_id': '36', 'vlan_name': 'vlan36', 'mac': '00:27:a9:a2:4e:12', 'ip_addr': '192.168.36.1', 'netmask': '255.255.255.0', 'ip_addr_int': 3232244737, 'ip_mask': ''}]}}
+2025-07-11 15:32:12,785 - RouterTest - INFO - 获取到VLAN列表，共 1 条记录
+2025-07-11 15:32:12,785 - RouterTest - INFO - 📋 准备测试VLAN 36
+2025-07-11 15:32:12,785 - RouterTest - INFO - 🔄 开始停用操作，监听所有网络请求...
+2025-07-11 15:32:12,829 - RouterTest - INFO - 🎯 找到停用按钮，准备点击...
+2025-07-11 15:32:12,829 - RouterTest - INFO - 📊 点击前网络请求计数: 59
+2025-07-11 15:32:12,853 - RouterTest - INFO - ✅ 已点击停用按钮
+2025-07-11 15:32:17,853 - RouterTest - INFO - 📊 点击后网络请求计数: 59
+2025-07-11 15:32:17,853 - RouterTest - INFO - 📊 VLAN相关请求数量: 0
+2025-07-11 15:32:17,853 - RouterTest - INFO - ⏳ 等待5秒以捕获所有可能的延迟请求...
+2025-07-11 15:32:22,854 - RouterTest - INFO - 
+==================================================
+2025-07-11 15:32:22,854 - RouterTest - INFO - 📊 网络请求分析总结
+2025-07-11 15:32:22,854 - RouterTest - INFO - ==================================================
+2025-07-11 15:32:22,854 - RouterTest - INFO - 总请求数量: 59
+2025-07-11 15:32:22,855 - RouterTest - INFO - VLAN相关请求数量: 0
+2025-07-11 15:32:22,855 - RouterTest - WARNING - ⚠️ 未捕获到任何VLAN相关请求
+2025-07-11 15:32:22,855 - RouterTest - INFO - 
+📮 最近的POST请求:
+2025-07-11 15:32:22,855 - RouterTest - INFO -   POST http://10.66.0.40/Action/call
+2025-07-11 15:32:22,855 - RouterTest - INFO -      数据: {"func_name":"homepage","action":"show","param":{"TYPE":"app_historical"}}...
+2025-07-11 15:32:22,855 - RouterTest - INFO -   POST http://10.66.0.40/Action/call
+2025-07-11 15:32:22,855 - RouterTest - INFO -      数据: {"func_name":"homepage","action":"show","param":{"TYPE":"sysstat,ac_status"}}...
+2025-07-11 15:32:22,855 - RouterTest - INFO -   POST http://10.66.0.40/Action/tag?id=network-setting-vlan-setting.show
+2025-07-11 15:32:22,855 - RouterTest - INFO -   POST http://10.66.0.40/Action/call
+2025-07-11 15:32:22,855 - RouterTest - INFO -      数据: {"func_name":"vlan","action":"show","param":{"TYPE":"total,data","limit":"0,20","ORDER_BY":"","ORDER":""}}...
+2025-07-11 15:32:22,856 - RouterTest - INFO -   POST http://10.66.0.40/Action/call
+2025-07-11 15:32:22,856 - RouterTest - INFO -      数据: {"func_name":"sysstat","action":"show","param":{"TYPE":"verinfo,cpu,memory,stream,cputemp"}}...
+2025-07-11 15:32:22,856 - RouterTest - INFO -   POST http://10.66.0.40/Action/call
+2025-07-11 15:32:22,856 - RouterTest - INFO -      数据: {"func_name":"gv","action":"show"}...
+2025-07-11 15:32:22,856 - RouterTest - INFO -   POST http://10.66.0.40/Action/call
+2025-07-11 15:32:22,856 - RouterTest - INFO -      数据: {"func_name":"vlan","action":"show","param":{"TYPE":"total,data","limit":"0,20","ORDER_BY":"","ORDER":""}}...
+2025-07-11 15:32:22,856 - RouterTest - INFO -   POST http://10.66.0.40/Action/call
+2025-07-11 15:32:22,856 - RouterTest - INFO -      数据: {"func_name":"sysstat","action":"show","param":{"TYPE":"verinfo,cpu,memory,stream,cputemp"}}...
+2025-07-11 15:33:12,519 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/call
+2025-07-11 15:33:12,519 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/call
+2025-07-11 15:33:12,519 - RouterTest - INFO - 🔍 [VLAN相关] 请求体: {"func_name":"vlan","action":"down","param":{"id":"1"}}
+2025-07-11 15:33:12,519 - RouterTest - INFO - 📡 [POST-VLAN] http://10.66.0.40/Action/call
+2025-07-11 15:33:12,519 - RouterTest - INFO - 📡 [POST-VLAN] 数据: {"func_name":"vlan","action":"down","param":{"id":"1"}}
+2025-07-11 15:33:12,521 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/call
+2025-07-11 15:33:12,521 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/call
+2025-07-11 15:33:12,521 - RouterTest - INFO - 🔍 [VLAN相关] 请求体: {"func_name":"sysstat","action":"show","param":{"TYPE":"verinfo,cpu,memory,stream,cputemp"}}
+2025-07-11 15:33:12,521 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/call
+2025-07-11 15:33:12,522 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/call
+2025-07-11 15:33:12,522 - RouterTest - INFO - 🔍 [VLAN相关] 请求体: {"func_name":"sysstat","action":"show","param":{"TYPE":"verinfo,cpu,memory,stream,cputemp"}}
+2025-07-11 15:33:12,522 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/call
+2025-07-11 15:33:12,523 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/call
+2025-07-11 15:33:12,523 - RouterTest - INFO - 🔍 [VLAN相关] 请求体: {"func_name":"sysstat","action":"show","param":{"TYPE":"verinfo,cpu,memory,stream,cputemp"}}
+2025-07-11 15:33:12,523 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/call
+2025-07-11 15:33:12,524 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/call
+2025-07-11 15:33:12,524 - RouterTest - INFO - 🔍 [VLAN相关] 请求体: {"func_name":"sysstat","action":"show","param":{"TYPE":"verinfo,cpu,memory,stream,cputemp"}}
+2025-07-11 15:33:12,524 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/call
+2025-07-11 15:33:12,524 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/call
+2025-07-11 15:33:12,524 - RouterTest - INFO - 🔍 [VLAN相关] 请求体: {"func_name":"sysstat","action":"show","param":{"TYPE":"verinfo,cpu,memory,stream,cputemp"}}
+2025-07-11 15:33:12,525 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/call
+2025-07-11 15:33:12,525 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/call
+2025-07-11 15:33:12,525 - RouterTest - INFO - 🔍 [VLAN相关] 请求体: {"func_name":"sysstat","action":"show","param":{"TYPE":"verinfo,cpu,memory,stream,cputemp"}}
+2025-07-11 15:33:12,525 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/call
+2025-07-11 15:33:12,526 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/call
+2025-07-11 15:33:12,526 - RouterTest - INFO - 🔍 [VLAN相关] 请求体: {"func_name":"sysstat","action":"show","param":{"TYPE":"verinfo,cpu,memory,stream,cputemp"}}
+2025-07-11 15:33:12,526 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/call
+2025-07-11 15:33:12,527 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/call
+2025-07-11 15:33:12,527 - RouterTest - INFO - 🔍 [VLAN相关] 请求体: {"func_name":"sysstat","action":"show","param":{"TYPE":"verinfo,cpu,memory,stream,cputemp"}}
+2025-07-11 15:33:12,527 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/call
+2025-07-11 15:33:12,527 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/call
+2025-07-11 15:33:12,528 - RouterTest - INFO - 🔍 [VLAN相关] 请求体: {"func_name":"sysstat","action":"show","param":{"TYPE":"verinfo,cpu,memory,stream,cputemp"}}
+2025-07-11 15:33:12,528 - RouterTest - INFO - 🚀 [即将发送] POST http://10.66.0.40/Action/call
+2025-07-11 15:33:12,528 - RouterTest - INFO - 🔍 [VLAN相关] POST http://10.66.0.40/Action/call
+2025-07-11 15:33:12,528 - RouterTest - INFO - 🔍 [VLAN相关] 请求体: {"func_name":"sysstat","action":"show","param":{"TYPE":"verinfo,cpu,memory,stream,cputemp"}}
+2025-07-11 15:33:12,529 - RouterTest - INFO - 📡 [POST-VLAN] 响应状态: 200
+2025-07-11 15:33:12,535 - RouterTest - WARNING - 无法获取响应: : Target page, context or browser has been closed

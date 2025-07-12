@@ -1,0 +1,53 @@
+2025-07-08 18:46:58,204 - RouterTest - INFO - [执行步骤] 打开登录页面
+2025-07-08 18:46:58,206 - RouterTest - INFO - [执行步骤] 输入用户名: admin
+2025-07-08 18:46:58,207 - RouterTest - INFO - [执行步骤] 输入密码: *********
+2025-07-08 18:46:58,207 - RouterTest - INFO - [执行步骤] 点击登录
+2025-07-08 18:46:58,207 - RouterTest - INFO - 开始登录，用户名: admin
+2025-07-08 18:46:58,997 - RouterTest - INFO - 成功导航到页面: http://10.66.0.60/login#/login
+2025-07-08 18:47:01,134 - RouterTest - INFO - 成功输入文本 role=textbox, name=用户名: admin
+2025-07-08 18:47:01,256 - RouterTest - INFO - 成功输入文本 role=textbox, name=密码: admin1234
+2025-07-08 18:47:01,407 - RouterTest - INFO - 成功点击元素 role=button, name=登录
+2025-07-08 18:47:06,957 - RouterTest - ERROR - 登录失败: 账号或密码错误
+2025-07-08 18:47:07,095 - RouterTest - INFO - 截图保存: screenshots\login_failed.png
+2025-07-08 18:47:07,095 - RouterTest - INFO - [执行步骤] 登录失败
+2025-07-08 18:47:07,095 - RouterTest - INFO - [执行步骤] 执行耗时: 8.89秒
+2025-07-08 18:47:07,095 - RouterTest - ERROR - 测试失败: test_valid_login
+2025-07-08 18:47:07,304 - RouterTest - INFO - [执行步骤] 尝试登录: 用户名=admin, 密码=**************
+2025-07-08 18:47:07,304 - RouterTest - INFO - 开始登录，用户名: admin
+2025-07-08 18:47:08,044 - RouterTest - INFO - 成功导航到页面: http://10.66.0.60/login#/login
+2025-07-08 18:47:10,171 - RouterTest - INFO - 成功输入文本 role=textbox, name=用户名: admin
+2025-07-08 18:47:10,292 - RouterTest - INFO - 成功输入文本 role=textbox, name=密码: wrong_password
+2025-07-08 18:47:10,457 - RouterTest - INFO - 成功点击元素 role=button, name=登录
+2025-07-08 18:47:16,005 - RouterTest - ERROR - 登录失败: 账号或密码错误
+2025-07-08 18:47:16,142 - RouterTest - INFO - 截图保存: screenshots\login_failed.png
+2025-07-08 18:47:16,152 - RouterTest - INFO - [执行步骤] 获取错误提示: 账号或密码错误
+2025-07-08 18:47:16,152 - RouterTest - INFO - [执行步骤] 验证错误提示成功
+2025-07-08 18:47:16,152 - RouterTest - INFO - [执行步骤] 执行耗时: 8.85秒
+2025-07-08 18:47:16,356 - RouterTest - INFO - [执行步骤] 尝试登录: 用户名=wrong_user, 密码=*****
+2025-07-08 18:47:16,357 - RouterTest - INFO - 开始登录，用户名: wrong_user
+2025-07-08 18:47:17,104 - RouterTest - INFO - 成功导航到页面: http://10.66.0.60/login#/login
+2025-07-08 18:47:19,233 - RouterTest - INFO - 成功输入文本 role=textbox, name=用户名: wrong_user
+2025-07-08 18:47:19,353 - RouterTest - INFO - 成功输入文本 role=textbox, name=密码: admin
+2025-07-08 18:47:19,504 - RouterTest - INFO - 成功点击元素 role=button, name=登录
+2025-07-08 18:47:25,049 - RouterTest - ERROR - 登录失败: 账号或密码错误
+2025-07-08 18:47:25,185 - RouterTest - INFO - 截图保存: screenshots\login_failed.png
+2025-07-08 18:47:25,194 - RouterTest - INFO - [执行步骤] 获取错误提示: 账号或密码错误
+2025-07-08 18:47:25,194 - RouterTest - INFO - [执行步骤] 验证错误提示成功
+2025-07-08 18:47:25,195 - RouterTest - INFO - [执行步骤] 执行耗时: 8.84秒
+2025-07-08 18:47:25,384 - RouterTest - INFO - [执行步骤] 尝试登录: 用户名=空, 密码=*****
+2025-07-08 18:47:25,384 - RouterTest - INFO - 开始登录，用户名: 
+2025-07-08 18:47:26,109 - RouterTest - INFO - 成功导航到页面: http://10.66.0.60/login#/login
+2025-07-08 18:47:28,236 - RouterTest - INFO - 成功输入文本 role=textbox, name=用户名: 
+2025-07-08 18:47:28,357 - RouterTest - INFO - 成功输入文本 role=textbox, name=密码: admin
+2025-07-08 18:47:28,509 - RouterTest - INFO - 成功点击元素 role=button, name=登录
+2025-07-08 18:47:34,055 - RouterTest - ERROR - 登录失败: 账号或密码错误
+2025-07-08 18:47:34,185 - RouterTest - INFO - 截图保存: screenshots\login_failed.png
+2025-07-08 18:47:34,194 - RouterTest - INFO - [执行步骤] 获取错误提示: 账号或密码错误
+2025-07-08 18:47:34,194 - RouterTest - INFO - [执行步骤] 验证错误提示成功
+2025-07-08 18:47:34,195 - RouterTest - INFO - [执行步骤] 执行耗时: 8.81秒
+2025-07-08 18:47:34,399 - RouterTest - INFO - [执行步骤] 尝试登录: 用户名=admin, 密码=空
+2025-07-08 18:47:34,399 - RouterTest - INFO - 开始登录，用户名: admin
+2025-07-08 18:47:35,130 - RouterTest - INFO - 成功导航到页面: http://10.66.0.60/login#/login
+2025-07-08 18:47:37,256 - RouterTest - INFO - 成功输入文本 role=textbox, name=用户名: admin
+2025-07-08 18:47:37,376 - RouterTest - INFO - 成功输入文本 role=textbox, name=密码: 
+2025-07-08 18:47:37,541 - RouterTest - INFO - 成功点击元素 role=button, name=登录

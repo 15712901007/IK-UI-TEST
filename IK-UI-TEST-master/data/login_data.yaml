@@ -1,0 +1,31 @@
+# 登录测试数据
+valid_login:
+  - username: "admin"
+    password: "admin"
+    expected: "success"
+    description: "有效登录功能测试"
+    
+invalid_login:
+  - username: "admin"
+    password: "wrong_password"
+    expected: "failure"
+    error_message: "账号或密码错误"
+    description: "无效登录 - 密码错误"
+    
+  - username: "wrong_user"
+    password: "admin"
+    expected: "failure"
+    error_message: "账号或密码错误"
+    description: "无效登录 - 用户名错误"
+    
+  - username: ""
+    password: "admin"
+    expected: "failure"
+    error_message: "账号或密码错误"
+    description: "无效登录 - 用户名为空"
+    
+  - username: "admin"
+    password: ""
+    expected: "failure"
+    error_message: "账号或密码错误"
+    description: "无效登录 - 密码为空"

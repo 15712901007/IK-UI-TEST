@@ -1,0 +1,75 @@
+文件夹 PATH 列表
+卷序列号为 6E47-4C6F
+C:.
+|   check_test_files.py
+|   directory_structure.txt
+|   main.py
+|   output.json
+|   README.md
+|   requirements.txt
+|   run_tests.py
+|   
++---archive
++---config
+|       gui_config.yaml
+|       router_config.yaml
+|       test_config.yaml
+|       
++---data
+|       login_data.yaml
+|       vlan_data.yaml
+|       
++---gui
+|       main_window.py
+|       __init__.py
+|       
++---logs
+|       test_20250703.log
+|       test_20250703_195424.log
+|       test_20250704_091237.log
+|       
++---pages
+|       base_page.py
+|       login_page.py
+|       vlan_page.py
+|       __init__.py
+|       
++---reports
+|   +---outputs
+|   \---templates
++---screenshots
+|       input_error.png
+|       login_failed.png
+|       navigation_error.png
+|       
++---tests
+|   |   conftest.py
+|   |   test_login.py
+|   |   test_vlan.py
+|   |   __init__.py
+|   |   
+|   \---__pycache__
+|           conftest.cpython-313-pytest-8.3.4.pyc
+|           test_login.cpython-313-pytest-8.3.4.pyc
+|           test_vlan.cpython-313-pytest-8.3.4.pyc
+|           __init__.cpython-313.pyc
+|           
+\---utils
+    |   logger.py
+    |   report_generator.py
+    |   screenshot_helper.py
+    |   test_runner copy.py
+    |   test_runner.py
+    |   wechat_notifier.py
+    |   yaml_reader.py
+    |   __init__.py
+    |   
+    \---__pycache__
+            logger.cpython-313.pyc
+            report_generator.cpython-313.pyc
+            screenshot_helper.cpython-313.pyc
+            test_runner.cpython-313.pyc
+            wechat_notifier.cpython-313.pyc
+            yaml_reader.cpython-313.pyc
+            __init__.cpython-313.pyc
+            

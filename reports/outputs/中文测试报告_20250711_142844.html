@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>路由器自动化测试报告</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Microsoft YaHei', Arial, sans-serif; 
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container { 
+            max-width: 1600px; 
+            margin: 0 auto; 
+            padding: 20px;
+        }
+        
+        .header { 
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white; 
+            padding: 30px; 
+            border-radius: 10px; 
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        
+        .summary-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .summary-card.failed { border-left-color: #f44336; }
+        .summary-card.total { border-left-color: #2196F3; }
+        .summary-card.rate { border-left-color: #FF9800; }
+        
+        .card-title { font-size: 0.9em; color: #666; margin-bottom: 5px; }
+        .card-value { font-size: 2em; font-weight: bold; }
+        .card-value.success { color: #4CAF50; }
+        .card-value.error { color: #f44336; }
+        .card-value.info { color: #2196F3; }
+        .card-value.warning { color: #FF9800; }
+        
+        .test-info-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #4CAF50;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 3px solid #4CAF50;
+        }
+        
+        .info-label { font-weight: bold; color: #555; }
+        .info-value { color: #333; }
+        
+        .test-table-section {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .table-header {
+            background: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+        
+        .test-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+        }
+        
+        .test-table thead {
+            background: #45a049;
+            color: white;
+        }
+        
+        .test-table th,
+        .test-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .test-table th {
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+        }
+        
+        .test-table tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .test-table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: white;
+            display: inline-block;
+        }
+        
+        .status-badge.passed { background: #4CAF50; }
+        .status-badge.failed { background: #f44336; }
+        .status-badge.error { background: #FF9800; }
+        
+        .details-btn {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+        
+        .details-btn:hover {
+            background: #1976D2;
+        }
+        
+        .details-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 1200px;
+            max-height: 80vh;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .modal-header {
+            background: #4CAF50;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title { font-size: 1.3em; font-weight: bold; }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+        
+        .modal-body {
+            padding: 20px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        
+        .detail-section {
+            margin-bottom: 25px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        
+        .detail-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 1.1em;
+        }
+        
+        .steps-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .steps-list li {
+            padding: 8px 12px;
+            margin: 5px 0;
+            background: #f8f9fa;
+            border-left: 3px solid #4CAF50;
+            border-radius: 4px;
+        }
+        
+        .execution-timeline {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .timeline-item {
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .timeline-item:last-child { border-bottom: none; }
+        
+        .timeline-item.step { background: #e8f5e8; }
+        .timeline-item.system { background: #e3f2fd; }
+        .timeline-item.error { background: #ffebee; }
+        
+        .timeline-time {
+            font-size: 0.8em;
+            color: #666;
+            min-width: 70px;
+        }
+        
+        .timeline-content { flex: 1; }
+        
+        @media (max-width: 768px) {
+            .container { padding: 10px; }
+            .test-table { font-size: 0.8em; }
+            .test-table th,
+            .test-table td { padding: 8px 10px; }
+            .modal-content { margin: 2% auto; width: 95%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 报告头部 -->
+        <div class="header">
+            <h1>🤖 路由器自动化测试报告</h1>
+            <div>报告生成时间：2025年07月11日 14:28:44</div>
+            <div style="margin-top: 10px;">
+                
+                <span style="background: rgba(255,255,255,0.2); padding: 8px 20px; border-radius: 20px;">
+                    ✅ 测试通过
+                </span>
+                
+            </div>
+        </div>
+
+        <!-- 测试摘要 -->
+        <div class="summary-section">
+            <div class="section-title">📊 测试摘要</div>
+            <div class="summary-cards">
+                <div class="summary-card total">
+                    <div class="card-title">测试用例总数</div>
+                    <div class="card-value info">8</div>
+                </div>
+                <div class="summary-card">
+                    <div class="card-title">成功用例</div>
+                    <div class="card-value success">8</div>
+                </div>
+                <div class="summary-card failed">
+                    <div class="card-title">失败用例</div>
+                    <div class="card-value error">0</div>
+                </div>
+                <div class="summary-card rate">
+                    <div class="card-title">成功率</div>
+                    <div class="card-value warning">100.0%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 测试环境信息 -->
+        <div class="test-info-section">
+            <div class="section-title">🌐 测试环境信息</div>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">🔗 路由器IP：</span>
+                    <span class="info-value">10.66.0.40</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">🧪 测试功能：</span>
+                    <span class="info-value">VLAN设置</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">👤 测试人员：</span>
+                    <span class="info-value">自动化测试</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">🔄 循环次数：</span>
+                    <span class="info-value">1</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">⏰ 开始时间：</span>
+                    <span class="info-value">2025-07-11 14:23:06</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">⏰ 结束时间：</span>
+                    <span class="info-value">2025-07-11 14:28:44</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">⏱️ 总耗时：</span>
+                    <span class="info-value">0:05:37</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">📋 测试版本：</span>
+                    <span class="info-value">1.0.0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 详细测试用例表格 -->
+        <div class="test-table-section">
+            <div class="table-header">📝 详细信息 (8 个测试用例)</div>
+            <table class="test-table">
+                <thead>
+                    <tr>
+                        <th>编号</th>
+                        <th>测试类</th>
+                        <th>测试方法</th>
+                        <th>用例描述</th>
+                        <th>执行时间</th>
+                        <th>执行结果</th>
+                        <th>详细信息</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    <tr>
+                        <td>1</td>
+                        <td>VLAN_TEST</td>
+                        <td>test_add_vlan</td>
+                        <td>VLAN配置添加功能测试</td>
+                        <td>19.24秒</td>
+                        <td>
+                            
+                            <span class="status-badge passed">成功</span>
+                            
+                        </td>
+                        <td>
+                            <button class="details-btn" onclick="showDetails(0)">
+                                查看详情
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>2</td>
+                        <td>VLAN_TEST</td>
+                        <td>test_add_multiple_vlans</td>
+                        <td>批量VLAN创建功能测试</td>
+                        <td>60.65秒</td>
+                        <td>
+                            
+                            <span class="status-badge passed">成功</span>
+                            
+                        </td>
+                        <td>
+                            <button class="details-btn" onclick="showDetails(1)">
+                                查看详情
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>3</td>
+                        <td>VLAN_TEST</td>
+                        <td>test_get_vlan_list</td>
+                        <td>VLAN列表查询功能测试</td>
+                        <td>9.50秒</td>
+                        <td>
+                            
+                            <span class="status-badge passed">成功</span>
+                            
+                        </td>
+                        <td>
+                            <button class="details-btn" onclick="showDetails(2)">
+                                查看详情
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>4</td>
+                        <td>VLAN_TEST</td>
+                        <td>test_vlan_workflow</td>
+                        <td>VLAN完整业务流程测试</td>
+                        <td>66.01秒</td>
+                        <td>
+                            
+                            <span class="status-badge passed">成功</span>
+                            
+                        </td>
+                        <td>
+                            <button class="details-btn" onclick="showDetails(3)">
+                                查看详情
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>5</td>
+                        <td>VLAN_TEST</td>
+                        <td>test_add_vlan_required_fields</td>
+                        <td>VLAN必填项校验测试</td>
+                        <td>24.18秒</td>
+                        <td>
+                            
+                            <span class="status-badge passed">成功</span>
+                            
+                        </td>
+                        <td>
+                            <button class="details-btn" onclick="showDetails(4)">
+                                查看详情
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>6</td>
+                        <td>VLAN_TEST</td>
+                        <td>test_add_vlan_invalid_fields</td>
+                        <td>VLAN字段格式校验测试</td>
+                        <td>42.27秒</td>
+                        <td>
+                            
+                            <span class="status-badge passed">成功</span>
+                            
+                        </td>
+                        <td>
+                            <button class="details-btn" onclick="showDetails(5)">
+                                查看详情
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>7</td>
+                        <td>VLAN_TEST</td>
+                        <td>test_enable_disable_vlan</td>
+                        <td>VLAN启用/停用功能测试</td>
+                        <td>41.41秒</td>
+                        <td>
+                            
+                            <span class="status-badge passed">成功</span>
+                            
+                        </td>
+                        <td>
+                            <button class="details-btn" onclick="showDetails(6)">
+                                查看详情
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>8</td>
+                        <td>VLAN_TEST</td>
+                        <td>test_export_import_vlan</td>
+                        <td>VLAN导出/导入功能测试</td>
+                        <td>64.0秒</td>
+                        <td>
+                            
+                            <span class="status-badge passed">成功</span>
+                            
+                        </td>
+                        <td>
+                            <button class="details-btn" onclick="showDetails(7)">
+                                查看详情
+                            </button>
+                        </td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 详情模态框 -->
+        <div id="detailsModal" class="details-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title" id="modalTitle">测试用例详情</div>
+                    <button class="close-btn" onclick="closeModal()">&times;</button>
+                </div>
+                <div class="modal-body" id="modalBody">
+                    <!-- 详情内容将在这里动态加载 -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // 测试用例数据
+        const testCases = [{"business_scenario": "\u9a8c\u8bc1VLAN\u914d\u7f6e\u7684\u6b63\u786e\u6027\u548c\u6570\u636e\u5b8c\u6574\u6027\uff0c\u786e\u4fdd\u7f51\u7edc\u9694\u79bb\u529f\u80fd\u53ef\u9760", "case_id": 1, "duration": "19.24\u79d2", "end_time": "\u672a\u77e5", "execution_details": [{"content": "\u6d4b\u8bd5\u521d\u59cb\u5316\u5b8c\u6210", "timestamp": "14:23:17", "type": "step"}, {"content": "\u5f00\u59cb\u6267\u884c: VLAN\u914d\u7f6e\u6dfb\u52a0\u529f\u80fd\u6d4b\u8bd5", "timestamp": "14:23:17", "type": "step"}, {"content": "\u4e1a\u52a1\u573a\u666f: \u9a8c\u8bc1VLAN\u914d\u7f6e\u7684\u6b63\u786e\u6027\u548c\u6570\u636e\u5b8c\u6574\u6027\uff0c\u786e\u4fdd\u7f51\u7edc\u9694\u79bb\u529f\u80fd\u53ef\u9760", "timestamp": "14:23:17", "type": "step"}, {"content": "\u9884\u5b9a\u4e49\u6b65\u9aa41: 1. \u5bfc\u822a\u5230VLAN\u8bbe\u7f6e\u9875\u9762", "timestamp": "14:23:17", "type": "step"}, {"content": "\u9884\u5b9a\u4e49\u6b65\u9aa42: 2. \u70b9\u51fb\u6dfb\u52a0VLAN\u6309\u94ae", "timestamp": "14:23:17", "type": "step"}, {"content": "\u9884\u5b9a\u4e49\u6b65\u9aa43: 3. \u586b\u5199VLAN\u914d\u7f6e\u4fe1\u606f\uff08ID\u3001\u540d\u79f0\u3001IP\u5730\u5740\u3001\u5907\u6ce8\uff09", "timestamp": "14:23:17", "type": "step"}, {"content": "\u9884\u5b9a\u4e49\u6b65\u9aa44: 4. \u70b9\u51fb\u4fdd\u5b58\u6309\u94ae\u63d0\u4ea4\u914d\u7f6e", "timestamp": "14:23:17", "type": "step"}, {"content": "\u9884\u5b9a\u4e49\u6b65\u9aa45: 5. \u9a8c\u8bc1VLAN\u521b\u5efa\u6210\u529f\u5e76\u663e\u793a\u5728\u5217\u8868\u4e2d", "timestamp": "14:23:17", "type": "step"}, {"content": "\u4f7f\u7528\u6d4b\u8bd5\u6570\u636e: ID=36, Name=vlan36", "timestamp": "14:23:17", "type": "step"}, {"content": "\u5f00\u59cb\u6267\u884cVLAN\u521b\u5efa\u64cd\u4f5c", "timestamp": "14:23:17", "type": "step"}, {"content": "\u5f00\u59cb\u6dfb\u52a0VLAN: ID=36, Name=vlan36", "timestamp": "14:23:17", "type": "system"}, {"content": "\u6210\u529f\u70b9\u51fb\u6587\u672c\u5143\u7d20: \u7f51\u7edc\u8bbe\u7f6e", "timestamp": "14:23:19", "type": "system"}, {"content": "\u6210\u529f\u70b9\u51fb\u94fe\u63a5: VLAN\u8bbe\u7f6e", "timestamp": "14:23:21", "type": "system"}, {"content": "\u6210\u529f\u5bfc\u822a\u5230VLAN\u8bbe\u7f6e\u9875\u9762", "timestamp": "14:23:24", "type": "system"}, {"content": "\u6210\u529f\u70b9\u51fb\u94fe\u63a5: \u6dfb\u52a0", "timestamp": "14:23:25", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027vlan_id\u0027]: 36", "timestamp": "14:23:27", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027vlan_name\u0027]: vlan36", "timestamp": "14:23:27", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027ip_addr\u0027]: 192.168.36.1", "timestamp": "14:23:27", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027comment\u0027]: \u57fa\u7840VLAN\u6d4b\u8bd5", "timestamp": "14:23:28", "type": "system"}, {"content": "\u6210\u529f\u70b9\u51fb\u5143\u7d20 role=button, name=\u4fdd\u5b58", "timestamp": "14:23:28", "type": "system"}, {"content": "\u540e\u53f0\u63a5\u53e3\u8fd4\u56de\u6210\u529f: {\u0027Result\u0027: 30000, \u0027ErrMsg\u0027: \u0027Success\u0027, \u0027RowId\u0027: 1}", "timestamp": "14:23:28", "type": "system"}, {"content": "VLAN \u6dfb\u52a0\u6210\u529f(\u63a5\u53e3\u6821\u9a8c): vlan36", "timestamp": "14:23:36", "type": "system"}, {"content": "VLAN vlan36 \u521b\u5efa\u6210\u529f", "timestamp": "14:23:36", "type": "step"}, {"content": "\u6d4b\u8bd5\u6267\u884c\u5b8c\u6210", "timestamp": "14:23:36", "type": "step"}, {"content": "\u6267\u884c\u8017\u65f6: 19.24\u79d2", "timestamp": "14:23:36", "type": "step"}], "execution_summary": {"key_steps": ["14:23:17: \u6d4b\u8bd5\u521d\u59cb\u5316\u5b8c\u6210", "14:23:17: \u5f00\u59cb\u6267\u884c: VLAN\u914d\u7f6e\u6dfb\u52a0\u529f\u80fd\u6d4b\u8bd5", "14:23:17: \u9884\u5b9a\u4e49\u6b65\u9aa45: 5. \u9a8c\u8bc1VLAN\u521b\u5efa\u6210\u529f\u5e76\u663e\u793a\u5728\u5217\u8868\u4e2d", "14:23:17: \u5f00\u59cb\u6267\u884cVLAN\u521b\u5efa\u64cd\u4f5c", "14:23:36: VLAN vlan36 \u521b\u5efa\u6210\u529f"], "total_actions": 12, "total_steps": 13}, "method_name": "test_add_vlan", "name": "VLAN\u914d\u7f6e\u6dfb\u52a0\u529f\u80fd\u6d4b\u8bd5", "priority": "\u4e2d", "risk_level": "\u4e2d\u7b49", "start_time": "\u672a\u77e5", "status": "PASSED", "test_class": "VLAN_TEST", "test_steps": ["1. \u5bfc\u822a\u5230VLAN\u8bbe\u7f6e\u9875\u9762", "2. \u70b9\u51fb\u6dfb\u52a0VLAN\u6309\u94ae", "3. \u586b\u5199VLAN\u914d\u7f6e\u4fe1\u606f\uff08ID\u3001\u540d\u79f0\u3001IP\u5730\u5740\u3001\u5907\u6ce8\uff09", "4. \u70b9\u51fb\u4fdd\u5b58\u6309\u94ae\u63d0\u4ea4\u914d\u7f6e", "5. \u9a8c\u8bc1VLAN\u521b\u5efa\u6210\u529f\u5e76\u663e\u793a\u5728\u5217\u8868\u4e2d"]}, {"business_scenario": "\u9a8c\u8bc1\u7cfb\u7edf\u5728\u8fde\u7eed\u521b\u5efa\u591a\u4e2aVLAN\u65f6\u7684\u7a33\u5b9a\u6027\uff0c\u786e\u4fdd\u6279\u91cf\u64cd\u4f5c\u4e0d\u4f1a\u5bfc\u81f4\u7cfb\u7edf\u5f02\u5e38\u6216\u6570\u636e\u51b2\u7a81", "case_id": 2, "duration": "60.65\u79d2", "end_time": "\u672a\u77e5", "execution_details": [{"content": "\u6279\u91cf\u6d4b\u8bd5\u521d\u59cb\u5316\u5b8c\u6210", "timestamp": "14:23:36", "type": "step"}, {"content": "\u5f00\u59cb\u6267\u884c: \u6279\u91cfVLAN\u521b\u5efa\u529f\u80fd\u6d4b\u8bd5", "timestamp": "14:23:36", "type": "step"}, {"content": "\u4e1a\u52a1\u573a\u666f: \u9a8c\u8bc1\u7cfb\u7edf\u5728\u8fde\u7eed\u521b\u5efa\u591a\u4e2aVLAN\u65f6\u7684\u7a33\u5b9a\u6027\uff0c\u786e\u4fdd\u6279\u91cf\u64cd\u4f5c\u4e0d\u4f1a\u5bfc\u81f4\u7cfb\u7edf\u5f02\u5e38\u6216\u6570\u636e\u51b2\u7a81", "timestamp": "14:23:36", "type": "step"}, {"content": "\u51c6\u5907\u6279\u91cf\u521b\u5efa 3 \u4e2aVLAN", "timestamp": "14:23:36", "type": "step"}, {"content": "\u9884\u5b9a\u4e49\u6b65\u9aa41: 1. \u51c6\u5907\u6279\u91cfVLAN\u6d4b\u8bd5\u6570\u636e\u96c6", "timestamp": "14:23:36", "type": "step"}, {"content": "\u9884\u5b9a\u4e49\u6b65\u9aa42: 2. \u5faa\u73af\u6267\u884cVLAN\u521b\u5efa\u64cd\u4f5c", "timestamp": "14:23:36", "type": "step"}, {"content": "\u9884\u5b9a\u4e49\u6b65\u9aa43: 3. \u76d1\u63a7\u6bcf\u4e2aVLAN\u7684\u521b\u5efa\u72b6\u6001\u548c\u7cfb\u7edf\u54cd\u5e94", "timestamp": "14:23:36", "type": "step"}, {"content": "\u9884\u5b9a\u4e49\u6b65\u9aa44: 4. \u7edf\u8ba1\u6279\u91cf\u64cd\u4f5c\u7684\u6210\u529f\u7387\u548c\u5931\u8d25\u539f\u56e0", "timestamp": "14:23:36", "type": "step"}, {"content": "\u9884\u5b9a\u4e49\u6b65\u9aa45: 5. \u9a8c\u8bc1\u7cfb\u7edf\u7a33\u5b9a\u6027\u548c\u6570\u636e\u4e00\u81f4\u6027", "timestamp": "14:23:36", "type": "step"}, {"content": "\u6b63\u5728\u521b\u5efa\u7b2c1\u4e2aVLAN: vlan201", "timestamp": "14:23:36", "type": "step"}, {"content": "\u5f00\u59cb\u6dfb\u52a0VLAN: ID=201, Name=vlan201", "timestamp": "14:23:36", "type": "system"}, {"content": "\u6210\u529f\u70b9\u51fb\u6587\u672c\u5143\u7d20: \u7f51\u7edc\u8bbe\u7f6e", "timestamp": "14:23:39", "type": "system"}, {"content": "\u6210\u529f\u70b9\u51fb\u94fe\u63a5: VLAN\u8bbe\u7f6e", "timestamp": "14:23:40", "type": "system"}, {"content": "\u6210\u529f\u5bfc\u822a\u5230VLAN\u8bbe\u7f6e\u9875\u9762", "timestamp": "14:23:44", "type": "system"}, {"content": "\u6210\u529f\u70b9\u51fb\u94fe\u63a5: \u6dfb\u52a0", "timestamp": "14:23:44", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027vlan_id\u0027]: 201", "timestamp": "14:23:46", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027vlan_name\u0027]: vlan201", "timestamp": "14:23:47", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027ip_addr\u0027]: 192.168.201.1", "timestamp": "14:23:47", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027comment\u0027]: \u6279\u91cf\u6d4b\u8bd5VLAN201", "timestamp": "14:23:47", "type": "system"}, {"content": "\u6210\u529f\u70b9\u51fb\u5143\u7d20 role=button, name=\u4fdd\u5b58", "timestamp": "14:23:47", "type": "system"}, {"content": "\u540e\u53f0\u63a5\u53e3\u8fd4\u56de\u6210\u529f: {\u0027Result\u0027: 30000, \u0027ErrMsg\u0027: \u0027Success\u0027, \u0027RowId\u0027: 2}", "timestamp": "14:23:48", "type": "system"}, {"content": "VLAN \u6dfb\u52a0\u6210\u529f(\u63a5\u53e3\u6821\u9a8c): vlan201", "timestamp": "14:23:56", "type": "system"}, {"content": "VLAN vlan201 \u521b\u5efa\u6210\u529f", "timestamp": "14:23:56", "type": "step"}, {"content": "\u6b63\u5728\u521b\u5efa\u7b2c2\u4e2aVLAN: vlan202", "timestamp": "14:23:57", "type": "step"}, {"content": "\u5f00\u59cb\u6dfb\u52a0VLAN: ID=202, Name=vlan202", "timestamp": "14:23:57", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027vlan_id\u0027]: 202", "timestamp": "14:24:07", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027vlan_name\u0027]: vlan202", "timestamp": "14:24:07", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027ip_addr\u0027]: 192.168.202.1", "timestamp": "14:24:07", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027comment\u0027]: \u6279\u91cf\u6d4b\u8bd5VLAN202", "timestamp": "14:24:07", "type": "system"}, {"content": "\u540e\u53f0\u63a5\u53e3\u8fd4\u56de\u6210\u529f: {\u0027Result\u0027: 30000, \u0027ErrMsg\u0027: \u0027Success\u0027, \u0027RowId\u0027: 3}", "timestamp": "14:24:08", "type": "system"}, {"content": "VLAN \u6dfb\u52a0\u6210\u529f(\u63a5\u53e3\u6821\u9a8c): vlan202", "timestamp": "14:24:16", "type": "system"}, {"content": "VLAN vlan202 \u521b\u5efa\u6210\u529f", "timestamp": "14:24:16", "type": "step"}, {"content": "\u6b63\u5728\u521b\u5efa\u7b2c3\u4e2aVLAN: vlan203", "timestamp": "14:24:17", "type": "step"}, {"content": "\u5f00\u59cb\u6dfb\u52a0VLAN: ID=203, Name=vlan203", "timestamp": "14:24:17", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027vlan_id\u0027]: 203", "timestamp": "14:24:27", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027vlan_name\u0027]: vlan203", "timestamp": "14:24:27", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027ip_addr\u0027]: 192.168.203.1", "timestamp": "14:24:27", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027comment\u0027]: \u6279\u91cf\u6d4b\u8bd5VLAN203", "timestamp": "14:24:27", "type": "system"}, {"content": "\u540e\u53f0\u63a5\u53e3\u8fd4\u56de\u6210\u529f: {\u0027Result\u0027: 30000, \u0027ErrMsg\u0027: \u0027Success\u0027, \u0027RowId\u0027: 4}", "timestamp": "14:24:28", "type": "system"}, {"content": "VLAN \u6dfb\u52a0\u6210\u529f(\u63a5\u53e3\u6821\u9a8c): vlan203", "timestamp": "14:24:36", "type": "system"}, {"content": "VLAN vlan203 \u521b\u5efa\u6210\u529f", "timestamp": "14:24:36", "type": "step"}, {"content": "\u6279\u91cf\u521b\u5efa\u5b8c\u6210\uff0c\u6210\u529f\u7387: 3/3", "timestamp": "14:24:37", "type": "step"}, {"content": "\u6279\u91cf\u6d4b\u8bd5\u6267\u884c\u5b8c\u6210", "timestamp": "14:24:37", "type": "step"}, {"content": "\u6267\u884c\u8017\u65f6: 60.65\u79d2", "timestamp": "14:24:37", "type": "step"}], "execution_summary": {"key_steps": ["14:23:36: \u6279\u91cf\u6d4b\u8bd5\u521d\u59cb\u5316\u5b8c\u6210", "14:23:36: \u5f00\u59cb\u6267\u884c: \u6279\u91cfVLAN\u521b\u5efa\u529f\u80fd\u6d4b\u8bd5", "14:23:56: VLAN vlan201 \u521b\u5efa\u6210\u529f", "14:24:16: VLAN vlan202 \u521b\u5efa\u6210\u529f", "14:24:36: VLAN vlan203 \u521b\u5efa\u6210\u529f"], "total_actions": 26, "total_steps": 18}, "method_name": "test_add_multiple_vlans", "name": "\u6279\u91cfVLAN\u521b\u5efa\u529f\u80fd\u6d4b\u8bd5", "priority": "\u4e2d", "risk_level": "\u4e2d\u7b49", "start_time": "\u672a\u77e5", "status": "PASSED", "test_class": "VLAN_TEST", "test_steps": ["1. \u51c6\u5907\u6279\u91cfVLAN\u6d4b\u8bd5\u6570\u636e\u96c6", "2. \u5faa\u73af\u6267\u884cVLAN\u521b\u5efa\u64cd\u4f5c", "3. \u76d1\u63a7\u6bcf\u4e2aVLAN\u7684\u521b\u5efa\u72b6\u6001\u548c\u7cfb\u7edf\u54cd\u5e94", "4. \u7edf\u8ba1\u6279\u91cf\u64cd\u4f5c\u7684\u6210\u529f\u7387\u548c\u5931\u8d25\u539f\u56e0", "5. \u9a8c\u8bc1\u7cfb\u7edf\u7a33\u5b9a\u6027\u548c\u6570\u636e\u4e00\u81f4\u6027"]}, {"business_scenario": "\u9a8c\u8bc1VLAN\u5217\u8868\u67e5\u8be2\u529f\u80fd\u7684\u51c6\u786e\u6027\uff0c\u786e\u4fdd\u7ba1\u7406\u5458\u80fd\u591f\u6b63\u786e\u67e5\u770b\u7f51\u7edc\u914d\u7f6e\u72b6\u6001", "case_id": 3, "duration": "9.50\u79d2", "end_time": "\u672a\u77e5", "execution_details": [{"content": "VLAN\u5217\u8868\u67e5\u8be2\u6d4b\u8bd5\u521d\u59cb\u5316\u5b8c\u6210", "timestamp": "14:24:37", "type": "step"}, {"content": "\u5f00\u59cb\u6267\u884c: VLAN\u5217\u8868\u67e5\u8be2\u529f\u80fd\u6d4b\u8bd5", "timestamp": "14:24:37", "type": "step"}, {"content": "\u4e1a\u52a1\u573a\u666f: \u9a8c\u8bc1VLAN\u5217\u8868\u67e5\u8be2\u529f\u80fd\u7684\u51c6\u786e\u6027\uff0c\u786e\u4fdd\u7ba1\u7406\u5458\u80fd\u591f\u6b63\u786e\u67e5\u770b\u7f51\u7edc\u914d\u7f6e\u72b6\u6001", "timestamp": "14:24:37", "type": "step"}, {"content": "\u9884\u5b9a\u4e49\u6b65\u9aa41: 1. \u5bfc\u822a\u5230VLAN\u8bbe\u7f6e\u9875\u9762", "timestamp": "14:24:37", "type": "step"}, {"content": "\u9884\u5b9a\u4e49\u6b65\u9aa42: 2. \u89e6\u53d1VLAN\u5217\u8868\u6570\u636e\u52a0\u8f7d", "timestamp": "14:24:37", "type": "step"}, {"content": "\u9884\u5b9a\u4e49\u6b65\u9aa43: 3. \u83b7\u53d6\u5e76\u89e3\u6790\u5217\u8868\u6570\u636e", "timestamp": "14:24:37", "type": "step"}, {"content": "\u9884\u5b9a\u4e49\u6b65\u9aa44: 4. \u9a8c\u8bc1\u6570\u636e\u683c\u5f0f\u548c\u5b57\u6bb5\u5b8c\u6574\u6027", "timestamp": "14:24:37", "type": "step"}, {"content": "\u9884\u5b9a\u4e49\u6b65\u9aa45: 5. \u68c0\u67e5\u5217\u8868\u5185\u5bb9\u4e0e\u5b9e\u9645\u914d\u7f6e\u7684\u4e00\u81f4\u6027", "timestamp": "14:24:37", "type": "step"}, {"content": "\u5f00\u59cb\u83b7\u53d6VLAN\u5217\u8868", "timestamp": "14:24:37", "type": "step"}, {"content": "\u6210\u529f\u70b9\u51fb\u6587\u672c\u5143\u7d20: \u7f51\u7edc\u8bbe\u7f6e", "timestamp": "14:24:39", "type": "system"}, {"content": "\u6210\u529f\u70b9\u51fb\u94fe\u63a5: VLAN\u8bbe\u7f6e", "timestamp": "14:24:41", "type": "system"}, {"content": "\u6210\u529f\u5bfc\u822a\u5230VLAN\u8bbe\u7f6e\u9875\u9762", "timestamp": "14:24:44", "type": "system"}, {"content": "\u83b7\u53d6\u5230VLAN\u5217\u8868\uff0c\u5171 4 \u6761\u8bb0\u5f55", "timestamp": "14:24:47", "type": "system"}, {"content": "\u6210\u529f\u83b7\u53d6VLAN\u5217\u8868\uff0c\u5171 4 \u6761\u8bb0\u5f55", "timestamp": "14:24:47", "type": "step"}, {"content": "VLAN\u8bb0\u5f551: ID=36, Name=vlan36", "timestamp": "14:24:47", "type": "step"}, {"content": "VLAN\u8bb0\u5f552: ID=201, Name=vlan201", "timestamp": "14:24:47", "type": "step"}, {"content": "VLAN\u8bb0\u5f553: ID=202, Name=vlan202", "timestamp": "14:24:47", "type": "step"}, {"content": "\u8fd8\u6709 1 \u4e2aVLAN\u8bb0\u5f55\u672a\u663e\u793a", "timestamp": "14:24:47", "type": "step"}, {"content": "VLAN\u5217\u8868\u67e5\u8be2\u6d4b\u8bd5\u5b8c\u6210", "timestamp": "14:24:47", "type": "step"}, {"content": "\u6267\u884c\u8017\u65f6: 9.50\u79d2", "timestamp": "14:24:47", "type": "step"}], "execution_summary": {"key_steps": ["14:24:37: VLAN\u5217\u8868\u67e5\u8be2\u6d4b\u8bd5\u521d\u59cb\u5316\u5b8c\u6210", "14:24:37: \u5f00\u59cb\u6267\u884c: VLAN\u5217\u8868\u67e5\u8be2\u529f\u80fd\u6d4b\u8bd5", "14:24:47: VLAN\u5217\u8868\u67e5\u8be2\u6d4b\u8bd5\u5b8c\u6210", "14:24:47: \u6267\u884c\u8017\u65f6: 9.50\u79d2"], "total_actions": 4, "total_steps": 16}, "method_name": "test_get_vlan_list", "name": "VLAN\u5217\u8868\u67e5\u8be2\u529f\u80fd\u6d4b\u8bd5", "priority": "\u4e2d", "risk_level": "\u4e2d\u7b49", "start_time": "\u672a\u77e5", "status": "PASSED", "test_class": "VLAN_TEST", "test_steps": ["1. \u5bfc\u822a\u5230VLAN\u8bbe\u7f6e\u9875\u9762", "2. \u89e6\u53d1VLAN\u5217\u8868\u6570\u636e\u52a0\u8f7d", "3. \u83b7\u53d6\u5e76\u89e3\u6790\u5217\u8868\u6570\u636e", "4. \u9a8c\u8bc1\u6570\u636e\u683c\u5f0f\u548c\u5b57\u6bb5\u5b8c\u6574\u6027", "5. \u68c0\u67e5\u5217\u8868\u5185\u5bb9\u4e0e\u5b9e\u9645\u914d\u7f6e\u7684\u4e00\u81f4\u6027"]}, {"business_scenario": "\u9a8c\u8bc1\u4ece\u67e5\u770b\u73b0\u6709VLAN\u5230\u6dfb\u52a0\u65b0VLAN\u7684\u5b8c\u6574\u4e1a\u52a1\u6d41\u7a0b\uff0c\u786e\u4fdd\u7aef\u5230\u7aef\u64cd\u4f5c\u7684\u8fde\u8d2f\u6027", "case_id": 4, "duration": "66.01\u79d2", "end_time": "\u672a\u77e5", "execution_details": [{"content": "VLAN\u5de5\u4f5c\u6d41\u7a0b\u6d4b\u8bd5\u521d\u59cb\u5316\u5b8c\u6210", "timestamp": "14:24:47", "type": "step"}, {"content": "\u5f00\u59cb\u6267\u884c: VLAN\u5b8c\u6574\u4e1a\u52a1\u6d41\u7a0b\u6d4b\u8bd5", "timestamp": "14:24:47", "type": "step"}, {"content": "\u4e1a\u52a1\u573a\u666f: \u9a8c\u8bc1\u4ece\u67e5\u770b\u73b0\u6709VLAN\u5230\u6dfb\u52a0\u65b0VLAN\u7684\u5b8c\u6574\u4e1a\u52a1\u6d41\u7a0b\uff0c\u786e\u4fdd\u7aef\u5230\u7aef\u64cd\u4f5c\u7684\u8fde\u8d2f\u6027", "timestamp": "14:24:47", "type": "step"}, {"content": "\u6b65\u9aa41: \u67e5\u770b\u5f53\u524d\u7cfb\u7edfVLAN\u914d\u7f6e\u72b6\u6001", "timestamp": "14:24:47", "type": "step"}, {"content": "\u6210\u529f\u70b9\u51fb\u6587\u672c\u5143\u7d20: \u7f51\u7edc\u8bbe\u7f6e", "timestamp": "14:24:49", "type": "system"}, {"content": "\u6210\u529f\u70b9\u51fb\u94fe\u63a5: VLAN\u8bbe\u7f6e", "timestamp": "14:24:50", "type": "system"}, {"content": "\u6210\u529f\u5bfc\u822a\u5230VLAN\u8bbe\u7f6e\u9875\u9762", "timestamp": "14:24:54", "type": "system"}, {"content": "\u83b7\u53d6\u5230VLAN\u5217\u8868\uff0c\u5171 4 \u6761\u8bb0\u5f55", "timestamp": "14:24:56", "type": "system"}, {"content": "\u5f53\u524d\u7cfb\u7edf\u4e2d\u6709 4 \u4e2aVLAN", "timestamp": "14:24:56", "type": "step"}, {"content": "\u6b65\u9aa42: \u89c4\u5212\u65b0VLAN\u914d\u7f6e", "timestamp": "14:24:56", "type": "step"}, {"content": "\u8ba1\u5212\u521b\u5efaVLAN: ID=888, Name=vlan888", "timestamp": "14:24:56", "type": "step"}, {"content": "\u6b65\u9aa43: \u6267\u884c\u65b0VLAN\u521b\u5efa\u64cd\u4f5c\uff08\u542b\u6269\u5c55IP\uff09", "timestamp": "14:24:56", "type": "step"}, {"content": "\u6210\u529f\u70b9\u51fb\u94fe\u63a5: \u6dfb\u52a0", "timestamp": "14:25:03", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027vlan_id\u0027]: 888", "timestamp": "14:25:06", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027vlan_name\u0027]: vlan888", "timestamp": "14:25:06", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027ip_addr\u0027]: 192.168.88.1", "timestamp": "14:25:06", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027comment\u0027]: \u5de5\u4f5c\u6d41\u7a0b\u6d4b\u8bd5VLAN", "timestamp": "14:25:06", "type": "system"}, {"content": "\u6dfb\u52a0\u6269\u5c55IP 192.168.113.1 255.255.255.0(24)", "timestamp": "14:25:06", "type": "step"}, {"content": "\u6269\u5c55IP\u6dfb\u52a0\u64cd\u4f5c\u6210\u529f", "timestamp": "14:25:39", "type": "step"}, {"content": "\u6269\u5c55IP 192.168.113.1 \u5df2\u51fa\u73b0\u5728\u8868\u683c\u4e2d", "timestamp": "14:25:39", "type": "step"}, {"content": "\u6210\u529f\u70b9\u51fb\u5143\u7d20 role=button, name=\u4fdd\u5b58", "timestamp": "14:25:40", "type": "system"}, {"content": "\u70b9\u51fb\u4fdd\u5b58\u6309\u94ae\u5b8c\u6210", "timestamp": "14:25:43", "type": "step"}, {"content": "\u6b65\u9aa44: \u9a8c\u8bc1VLAN\u914d\u7f6e\u7ed3\u679c", "timestamp": "14:25:43", "type": "step"}, {"content": "\u83b7\u53d6\u5230VLAN\u5217\u8868\uff0c\u5171 5 \u6761\u8bb0\u5f55", "timestamp": "14:25:53", "type": "system"}, {"content": "VLAN\u914d\u7f6e\u9a8c\u8bc1\u901a\u8fc7", "timestamp": "14:25:53", "type": "step"}, {"content": "VLAN\u5de5\u4f5c\u6d41\u7a0b\u6d4b\u8bd5\u5b8c\u6210", "timestamp": "14:25:53", "type": "step"}, {"content": "\u6267\u884c\u8017\u65f6: 66.01\u79d2", "timestamp": "14:25:53", "type": "step"}], "execution_summary": {"key_steps": ["14:24:47: VLAN\u5de5\u4f5c\u6d41\u7a0b\u6d4b\u8bd5\u521d\u59cb\u5316\u5b8c\u6210", "14:24:47: \u5f00\u59cb\u6267\u884c: VLAN\u5b8c\u6574\u4e1a\u52a1\u6d41\u7a0b\u6d4b\u8bd5", "14:25:43: \u70b9\u51fb\u4fdd\u5b58\u6309\u94ae\u5b8c\u6210", "14:25:53: VLAN\u5de5\u4f5c\u6d41\u7a0b\u6d4b\u8bd5\u5b8c\u6210", "14:25:53: \u6267\u884c\u8017\u65f6: 66.01\u79d2"], "total_actions": 11, "total_steps": 16}, "method_name": "test_vlan_workflow", "name": "VLAN\u5b8c\u6574\u4e1a\u52a1\u6d41\u7a0b\u6d4b\u8bd5", "priority": "\u4e2d", "risk_level": "\u4e2d\u7b49", "start_time": "\u672a\u77e5", "status": "PASSED", "test_class": "VLAN_TEST", "test_steps": ["1. \u67e5\u770b\u5f53\u524d\u7cfb\u7edfVLAN\u914d\u7f6e\u72b6\u6001", "2. \u5206\u6790\u73b0\u6709\u914d\u7f6e\u5e76\u89c4\u5212\u65b0VLAN\u65b9\u6848", "3. \u6267\u884c\u65b0VLAN\u521b\u5efa\u64cd\u4f5c", "4. \u9a8c\u8bc1\u65b0VLAN\u914d\u7f6e\u7684\u6b63\u786e\u6027", "5. \u786e\u8ba4\u5b8c\u6574\u4e1a\u52a1\u6d41\u7a0b\u7684\u987a\u7545\u6267\u884c"]}, {"business_scenario": "\u9a8c\u8bc1VLAN ID\u548c\u540d\u79f0\u4e3a\u7a7a\u65f6\u7684\u524d\u7aef\u5fc5\u586b\u6821\u9a8c", "case_id": 5, "duration": "24.18\u79d2", "end_time": "\u672a\u77e5", "execution_details": [{"content": "\u3010\u5f02\u5e38\u573a\u666f\u3011ID\u4e3a\u7a7a\uff0c\u5c1d\u8bd5\u4fdd\u5b58", "timestamp": "14:25:53", "type": "step"}, {"content": "\u6210\u529f\u70b9\u51fb\u6587\u672c\u5143\u7d20: \u7f51\u7edc\u8bbe\u7f6e", "timestamp": "14:25:55", "type": "system"}, {"content": "\u6210\u529f\u70b9\u51fb\u94fe\u63a5: VLAN\u8bbe\u7f6e", "timestamp": "14:25:56", "type": "system"}, {"content": "\u6210\u529f\u5bfc\u822a\u5230VLAN\u8bbe\u7f6e\u9875\u9762", "timestamp": "14:26:00", "type": "system"}, {"content": "\u6210\u529f\u70b9\u51fb\u94fe\u63a5: \u6dfb\u52a0", "timestamp": "14:26:00", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027vlan_id\u0027]:", "timestamp": "14:26:03", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027vlan_name\u0027]: vlan_no_id", "timestamp": "14:26:03", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027ip_addr\u0027]: 192.168.50.1", "timestamp": "14:26:03", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027comment\u0027]: ID\u4e3a\u7a7a", "timestamp": "14:26:03", "type": "system"}, {"content": "\u6210\u529f\u70b9\u51fb\u5143\u7d20 role=button, name=\u4fdd\u5b58", "timestamp": "14:26:03", "type": "system"}, {"content": "\u65ad\u8a00\u9875\u9762\u51fa\u73b0\"vlanID \u5b57\u6bb5\u5fc5\u586b\"\u63d0\u793a", "timestamp": "14:26:05", "type": "step"}, {"content": "\u3010\u5f02\u5e38\u573a\u666f\u3011\u540d\u79f0\u4e3a\u7a7a\uff0c\u5c1d\u8bd5\u4fdd\u5b58", "timestamp": "14:26:05", "type": "step"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027vlan_id\u0027]: 51", "timestamp": "14:26:15", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027vlan_name\u0027]:", "timestamp": "14:26:15", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027ip_addr\u0027]: 192.168.51.1", "timestamp": "14:26:15", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027comment\u0027]: \u540d\u79f0\u4e3a\u7a7a", "timestamp": "14:26:15", "type": "system"}, {"content": "\u65ad\u8a00\u9875\u9762\u51fa\u73b0\"vlan\u540d\u79f0 \u5b57\u6bb5\u5fc5\u586b\"\u63d0\u793a", "timestamp": "14:26:17", "type": "step"}, {"content": "\u6267\u884c\u8017\u65f6: 24.18\u79d2", "timestamp": "14:26:17", "type": "step"}], "execution_summary": {"key_steps": ["14:26:17: \u6267\u884c\u8017\u65f6: 24.18\u79d2"], "total_actions": 13, "total_steps": 5}, "method_name": "test_add_vlan_required_fields", "name": "VLAN\u5fc5\u586b\u9879\u6821\u9a8c\u6d4b\u8bd5", "priority": "\u4e2d", "risk_level": "\u4e2d\u7b49", "start_time": "\u672a\u77e5", "status": "PASSED", "test_class": "VLAN_TEST", "test_steps": ["1. \u5c1d\u8bd5\u4e0d\u586b\u5199VLAN ID\uff0c\u586b\u5199\u5176\u4ed6\u9879\uff0c\u70b9\u51fb\u4fdd\u5b58", "2. \u9a8c\u8bc1\u9875\u9762\u63d0\u793a\"vlanID \u5b57\u6bb5\u5fc5\u586b\"", "3. \u5c1d\u8bd5\u4e0d\u586b\u5199VLAN\u540d\u79f0\uff0c\u586b\u5199\u5176\u4ed6\u9879\uff0c\u70b9\u51fb\u4fdd\u5b58", "4. \u9a8c\u8bc1\u9875\u9762\u63d0\u793a\"vlan\u540d\u79f0 \u5b57\u6bb5\u5fc5\u586b\""]}, {"business_scenario": "\u9a8c\u8bc1VLAN ID\u8d85\u8303\u56f4\u548c\u540d\u79f0\u4e0d\u89c4\u8303\u65f6\u7684\u524d\u7aef\u6821\u9a8c\u63d0\u793a", "case_id": 6, "duration": "42.27\u79d2", "end_time": "\u672a\u77e5", "execution_details": [{"content": "\u3010\u5f02\u5e38\u573a\u666f\u3011ID\u8d85\u8303\u56f4\uff0c\u5c1d\u8bd5\u4fdd\u5b58", "timestamp": "14:26:17", "type": "step"}, {"content": "\u6210\u529f\u70b9\u51fb\u6587\u672c\u5143\u7d20: \u7f51\u7edc\u8bbe\u7f6e", "timestamp": "14:26:19", "type": "system"}, {"content": "\u6210\u529f\u70b9\u51fb\u94fe\u63a5: VLAN\u8bbe\u7f6e", "timestamp": "14:26:21", "type": "system"}, {"content": "\u6210\u529f\u5bfc\u822a\u5230VLAN\u8bbe\u7f6e\u9875\u9762", "timestamp": "14:26:24", "type": "system"}, {"content": "\u6210\u529f\u70b9\u51fb\u94fe\u63a5: \u6dfb\u52a0", "timestamp": "14:26:24", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027vlan_id\u0027]: 9999", "timestamp": "14:26:27", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027vlan_name\u0027]: vlan9999", "timestamp": "14:26:27", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027ip_addr\u0027]: 192.168.99.1", "timestamp": "14:26:27", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027comment\u0027]: ID\u8d85\u8303\u56f4", "timestamp": "14:26:27", "type": "system"}, {"content": "\u6210\u529f\u70b9\u51fb\u5143\u7d20 role=button, name=\u4fdd\u5b58", "timestamp": "14:26:27", "type": "system"}, {"content": "\u65ad\u8a00\u9875\u9762\u51fa\u73b0\"\u6574\u6570\u8303\u56f4 1~4090\uff0c\u4ee5\"-\"\u8fde\u63a5id\u6bb5\uff0c\u524d\u503c\u5c0f\u4e8e\u540e\u503c\"\u63d0\u793a", "timestamp": "14:26:32", "type": "step"}, {"content": "\u3010\u5f02\u5e38\u573a\u666f\u3011\u540d\u79f0\u4e0d\u89c4\u8303\uff0c\u5c1d\u8bd5\u4fdd\u5b58", "timestamp": "14:26:32", "type": "step"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027vlan_id\u0027]: 56", "timestamp": "14:26:42", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027vlan_name\u0027]: 56565", "timestamp": "14:26:42", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027ip_addr\u0027]: 192.168.56.1", "timestamp": "14:26:42", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027comment\u0027]: \u540d\u79f0\u4e0d\u89c4\u8303", "timestamp": "14:26:42", "type": "system"}, {"content": "\u65ad\u8a00\u9875\u9762\u51fa\u73b0\"\u540d\u79f0\u5fc5\u987b\u4ee5vlan\u5f00\u5934\uff0c\u53ea\u652f\u6301\u6570\u5b57\u3001\u5b57\u6bcd\u548c_\"\u63d0\u793a", "timestamp": "14:26:47", "type": "step"}, {"content": "\u3010\u5f02\u5e38\u573a\u666f\u3011IP\u4e0d\u89c4\u8303\uff0c\u5c1d\u8bd5\u4fdd\u5b58", "timestamp": "14:26:47", "type": "step"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027vlan_id\u0027]: 57", "timestamp": "14:26:57", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027vlan_name\u0027]: vlan57", "timestamp": "14:26:57", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027ip_addr\u0027]: 192.168.88.134343", "timestamp": "14:26:57", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027comment\u0027]: IP\u4e0d\u89c4\u8303", "timestamp": "14:26:57", "type": "system"}, {"content": "\u65ad\u8a00\u9875\u9762\u51fa\u73b0\"IP \u5fc5\u987b\u662f\u4e00\u4e2a\u6709\u6548\u7684\u5730\u5740\"\u63d0\u793a", "timestamp": "14:26:59", "type": "step"}, {"content": "\u6267\u884c\u8017\u65f6: 42.27\u79d2", "timestamp": "14:26:59", "type": "step"}], "execution_summary": {"key_steps": ["14:26:59: \u6267\u884c\u8017\u65f6: 42.27\u79d2"], "total_actions": 17, "total_steps": 7}, "method_name": "test_add_vlan_invalid_fields", "name": "VLAN\u5b57\u6bb5\u683c\u5f0f\u6821\u9a8c\u6d4b\u8bd5", "priority": "\u4e2d", "risk_level": "\u4e2d\u7b49", "start_time": "\u672a\u77e5", "status": "PASSED", "test_class": "VLAN_TEST", "test_steps": ["1. \u8f93\u5165\u8d85\u51fa\u8303\u56f4\u7684VLAN ID\uff08\u59829999\uff09\uff0c\u70b9\u51fb\u4fdd\u5b58", "2. \u9a8c\u8bc1\u9875\u9762\u63d0\u793a\uff1a\u6574\u6570\u8303\u56f4 1~4090\uff0c\u4ee5 \"-\" \u8fde\u63a5id\u6bb5\uff0c\u524d\u503c\u5c0f\u4e8e\u540e\u503c", "3. \u8f93\u5165\u4e0d\u7b26\u5408\u89c4\u8303\u7684VLAN\u540d\u79f0\uff08\u598256565\uff09\uff0c\u70b9\u51fb\u4fdd\u5b58", "4. \u9a8c\u8bc1\u9875\u9762\u63d0\u793a\uff1a\u540d\u79f0\u5fc5\u987b\u4ee5 vlan \u5f00\u5934\uff0c\u53ea\u652f\u6301\u6570\u5b57\u3001\u5b57\u6bcd\u548c\u7a7a\u5b57\u7b26\u4e32"]}, {"business_scenario": "\u9a8c\u8bc1VLAN\u7684\u5355\u72ec\u548c\u6279\u91cf\u542f\u7528\u3001\u505c\u7528\u529f\u80fd", "case_id": 7, "duration": "41.41\u79d2", "end_time": "\u672a\u77e5", "execution_details": [{"content": "\u5355\u72ec\u505c\u7528VLAN36", "timestamp": "14:26:59", "type": "step"}, {"content": "\u6210\u529f\u70b9\u51fb\u6587\u672c\u5143\u7d20: \u7f51\u7edc\u8bbe\u7f6e", "timestamp": "14:27:01", "type": "system"}, {"content": "\u6210\u529f\u70b9\u51fb\u94fe\u63a5: VLAN\u8bbe\u7f6e", "timestamp": "14:27:03", "type": "system"}, {"content": "\u6210\u529f\u5bfc\u822a\u5230VLAN\u8bbe\u7f6e\u9875\u9762", "timestamp": "14:27:06", "type": "system"}, {"content": "VLAN36\u72b6\u6001\u4e3a\u5df2\u505c\u7528", "timestamp": "14:27:10", "type": "step"}, {"content": "\u5355\u72ec\u542f\u7528VLAN36", "timestamp": "14:27:10", "type": "step"}, {"content": "VLAN36\u72b6\u6001\u4e3a\u5df2\u542f\u7528", "timestamp": "14:27:20", "type": "step"}, {"content": "\u6279\u91cf\u5168\u9009\u6240\u6709VLAN\uff0c\u70b9\u51fb\u505c\u7528", "timestamp": "14:27:20", "type": "step"}, {"content": "\u6240\u6709VLAN\u72b6\u6001\u4e3a\u5df2\u505c\u7528", "timestamp": "14:27:30", "type": "step"}, {"content": "\u6279\u91cf\u5168\u9009\u6240\u6709VLAN\uff0c\u70b9\u51fb\u542f\u7528", "timestamp": "14:27:30", "type": "step"}, {"content": "\u6240\u6709VLAN\u72b6\u6001\u4e3a\u5df2\u542f\u7528", "timestamp": "14:27:40", "type": "step"}, {"content": "\u6267\u884c\u8017\u65f6: 41.41\u79d2", "timestamp": "14:27:40", "type": "step"}], "execution_summary": {"key_steps": ["14:27:40: \u6267\u884c\u8017\u65f6: 41.41\u79d2"], "total_actions": 3, "total_steps": 9}, "method_name": "test_enable_disable_vlan", "name": "VLAN\u542f\u7528/\u505c\u7528\u529f\u80fd\u6d4b\u8bd5", "priority": "\u4e2d", "risk_level": "\u4e2d\u7b49", "start_time": "\u672a\u77e5", "status": "PASSED", "test_class": "VLAN_TEST", "test_steps": ["1. \u5355\u72ec\u505c\u7528VLAN36", "2. \u9a8c\u8bc1VLAN36\u72b6\u6001\u4e3a\u5df2\u505c\u7528", "3. \u5355\u72ec\u542f\u7528VLAN36", "4. \u9a8c\u8bc1VLAN36\u72b6\u6001\u4e3a\u5df2\u542f\u7528", "5. \u6279\u91cf\u5168\u9009\u6240\u6709VLAN\uff0c\u70b9\u51fb\u505c\u7528", "6. \u9a8c\u8bc1\u6240\u6709VLAN\u72b6\u6001\u4e3a\u5df2\u505c\u7528", "7. \u6279\u91cf\u5168\u9009\u6240\u6709VLAN\uff0c\u70b9\u51fb\u542f\u7528", "8. \u9a8c\u8bc1\u6240\u6709VLAN\u72b6\u6001\u4e3a\u5df2\u542f\u7528"]}, {"business_scenario": "\u9a8c\u8bc1VLAN\u914d\u7f6e\u7684\u5bfc\u51faCSV/TXT\u4e0e\u5bfc\u5165\uff08\u5408\u5e76/\u8986\u76d6\uff09\u6d41\u7a0b\uff0c\u786e\u4fdd\u5907\u4efd\u6062\u590d\u53ca\u6279\u91cf\u8fc1\u79fb\u529f\u80fd\u53ef\u7528", "case_id": 8, "duration": "64.0\u79d2", "end_time": "\u672a\u77e5", "execution_details": [{"content": "\u6b65\u9aa41: \u5bfc\u51faCSV/TXT", "timestamp": "14:27:40", "type": "step"}, {"content": "\u6210\u529f\u70b9\u51fb\u6587\u672c\u5143\u7d20: \u7f51\u7edc\u8bbe\u7f6e", "timestamp": "14:27:43", "type": "system"}, {"content": "\u6210\u529f\u70b9\u51fb\u94fe\u63a5: VLAN\u8bbe\u7f6e", "timestamp": "14:27:44", "type": "system"}, {"content": "\u6210\u529f\u5bfc\u822a\u5230VLAN\u8bbe\u7f6e\u9875\u9762", "timestamp": "14:27:48", "type": "system"}, {"content": "\u6210\u529f\u5bfc\u51faCSV\u6587\u4ef6: vlan_backup_20250711_142748.csv", "timestamp": "14:27:48", "type": "system"}, {"content": "\u6210\u529f\u5bfc\u51faTXT\u6587\u4ef6: vlan_backup_20250711_142756.txt", "timestamp": "14:27:56", "type": "system"}, {"content": "\u6b65\u9aa42: \u6279\u91cf\u5220\u9664\u6240\u6709VLAN\u914d\u7f6e", "timestamp": "14:27:56", "type": "step"}, {"content": "\u6b65\u9aa43: \u5bfc\u5165CSV\uff08\u8986\u76d6\u6a21\u5f0f\uff09", "timestamp": "14:28:08", "type": "step"}, {"content": "\u6b65\u9aa44: \u518d\u6b21\u6279\u91cf\u5220\u9664", "timestamp": "14:28:20", "type": "step"}, {"content": "\u6b65\u9aa45: \u5bfc\u5165TXT\uff08\u5408\u5e76\u6a21\u5f0f\uff09", "timestamp": "14:28:32", "type": "step"}, {"content": "\u5bfc\u51fa/\u5bfc\u5165\u6d41\u7a0b\u5b8c\u6210", "timestamp": "14:28:44", "type": "step"}], "execution_summary": {"key_steps": ["14:28:44: \u5bfc\u51fa/\u5bfc\u5165\u6d41\u7a0b\u5b8c\u6210"], "total_actions": 5, "total_steps": 6}, "method_name": "test_export_import_vlan", "name": "VLAN\u5bfc\u51fa/\u5bfc\u5165\u529f\u80fd\u6d4b\u8bd5", "priority": "\u4e2d", "risk_level": "\u4e2d\u7b49", "start_time": "\u672a\u77e5", "status": "PASSED", "test_class": "VLAN_TEST", "test_steps": ["1. \u5728VLAN\u8bbe\u7f6e\u9875\u9762\u70b9\u51fb\"\u5bfc\u51fa\u2192CSV\" \u4fdd\u5b58\u5907\u4efd\u6587\u4ef6", "2. \u70b9\u51fb\"\u5bfc\u51fa\u2192TXT\" \u4fdd\u5b58\u5907\u4efd\u6587\u4ef6", "3. \u5168\u9009\u5e76\u6279\u91cf\u5220\u9664\u73b0\u6709VLAN\u914d\u7f6e", "4. \u70b9\u51fb\"\u5bfc\u5165\" \u9009\u62e9CSV\u6587\u4ef6\uff0c\u4e0d\u52fe\u9009\"\u5408\u5e76\u5230\u5f53\u524d\u6570\u636e\"\uff0c\u786e\u8ba4\u5bfc\u5165", "5. \u518d\u6b21\u6279\u91cf\u5220\u9664\u6240\u6709\u914d\u7f6e", "6. \u70b9\u51fb\"\u5bfc\u5165\" \u9009\u62e9TXT\u6587\u4ef6\uff0c\u52fe\u9009\"\u5408\u5e76\u5230\u5f53\u524d\u6570\u636e\"\uff0c\u786e\u8ba4\u5bfc\u5165", "7. \u6821\u9a8c\u5bfc\u5165\u540eVLAN\u5217\u8868\u4e0e\u5907\u4efd\u5185\u5bb9\u4e00\u81f4"]}];
+        
+        function showDetails(index) {
+            const testCase = testCases[index];
+            const modal = document.getElementById('detailsModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+            
+            modalTitle.textContent = testCase.name;
+            
+            let detailsHtml = `
+                <div class="detail-section">
+                    <div class="detail-title">💼 业务场景</div>
+                    <div>${testCase.business_scenario}</div>
+                </div>
+                
+                <div class="detail-section">
+                    <div class="detail-title">📋 预定义测试步骤</div>
+                    <ul class="steps-list">
+                        ${testCase.test_steps.map(step => `<li>${step}</li>`).join('')}
+                    </ul>
+                </div>
+                
+                <div class="detail-section">
+                    <div class="detail-title">🚀 实际执行详情</div>
+                    <div class="execution-timeline">
+                        ${testCase.execution_details.map(detail => `
+                            <div class="timeline-item ${detail.type}">
+                                <div class="timeline-time">${detail.timestamp}</div>
+                                <div class="timeline-content">${detail.content}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div class="detail-section">
+                    <div class="detail-title">📊 执行摘要</div>
+                    <div>
+                        <strong>执行步骤数：</strong>${testCase.execution_summary ? testCase.execution_summary.total_steps : 0}<br>
+                        <strong>系统操作数：</strong>${testCase.execution_summary ? testCase.execution_summary.total_actions : 0}<br>
+                        <strong>执行时间：</strong>${testCase.duration}
+                    </div>
+                </div>
+            `;
+            
+            modalBody.innerHTML = detailsHtml;
+            modal.style.display = 'block';
+        }
+        
+        function closeModal() {
+            document.getElementById('detailsModal').style.display = 'none';
+        }
+        
+        // 点击模态框外部关闭
+        window.onclick = function(event) {
+            const modal = document.getElementById('detailsModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+        
+        // ESC键关闭模态框
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+# 路由器功能配置
+functions:
+  vlan:
+    name: "VLAN设置"
+    enabled: true
+    url_path: "/vlan"
+    operations: ["create", "read", "update", "delete", "export", "import", "batch_delete", "search"]
+    
+  port_mapping:
+    name: "端口映射"
+    enabled: true
+    url_path: "/port_mapping"
+    operations: ["create", "read", "update", "delete", "export", "import", "batch_delete", "search"]
+    
+  acl:
+    name: "ACL规则"
+    enabled: true
+    url_path: "/acl"
+    operations: ["create", "read", "update", "delete", "export", "import", "batch_delete", "search"]
+
+navigation:
+  main_menu:
+    vlan: "网络配置 > VLAN设置"
+    port_mapping: "高级设置 > 端口映射"
+    acl: "安全设置 > ACL规则"

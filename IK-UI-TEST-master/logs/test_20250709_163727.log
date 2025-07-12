@@ -1,0 +1,24 @@
+2025-07-09 16:37:27,100 - RouterTest - INFO - 开始登录，用户名: admin
+2025-07-09 16:37:27,902 - RouterTest - INFO - 成功导航到页面: http://10.66.0.40/login#/login
+2025-07-09 16:37:30,052 - RouterTest - INFO - 成功输入文本 role=textbox, name=用户名: admin
+2025-07-09 16:37:30,174 - RouterTest - INFO - 成功输入文本 role=textbox, name=密码: admin123
+2025-07-09 16:37:30,318 - RouterTest - INFO - 成功点击元素 role=button, name=登录
+2025-07-09 16:37:35,846 - RouterTest - INFO - 找到成功指示器: 网络设置
+2025-07-09 16:37:35,846 - RouterTest - INFO - 登录成功: admin
+2025-07-09 16:37:35,858 - RouterTest - INFO - [执行步骤] 【异常场景】ID超范围，尝试保存
+2025-07-09 16:37:35,858 - RouterTest - INFO - 开始异常场景添加VLAN: ID=9999, Name=vlan9999
+2025-07-09 16:37:35,858 - RouterTest - INFO - 导航到VLAN设置页面
+2025-07-09 16:37:38,007 - RouterTest - INFO - 成功点击文本元素: 网络设置
+2025-07-09 16:37:39,655 - RouterTest - INFO - 成功点击链接: VLAN设置
+2025-07-09 16:37:43,163 - RouterTest - INFO - 成功导航到VLAN设置页面
+2025-07-09 16:37:43,306 - RouterTest - INFO - 成功点击链接: 添加
+2025-07-09 16:37:45,940 - RouterTest - INFO - 成功输入文本到 input[name='vlan_id']: 9999
+2025-07-09 16:37:46,075 - RouterTest - INFO - 成功输入文本到 input[name='vlan_name']: vlan9999
+2025-07-09 16:37:46,197 - RouterTest - INFO - 成功输入文本到 input[name='ip_addr']: 192.168.99.1
+2025-07-09 16:37:46,319 - RouterTest - INFO - 成功输入文本到 input[name='comment']: ID超范围
+2025-07-09 16:37:46,457 - RouterTest - INFO - 成功点击元素 role=button, name=保存
+2025-07-09 16:37:50,971 - RouterTest - INFO - [执行步骤] 字段格式校验测试异常: 未检测到VLAN ID范围提示
+assert False
+ +  where False = get_required_field_message('整数范围 1~4090，以"-"连接id段，前值小于后值')
+ +    where get_required_field_message = <pages.vlan_page.VlanPage object at 0x0000025A85A8A900>.get_required_field_message
+2025-07-09 16:37:50,972 - RouterTest - ERROR - 测试失败: test_add_vlan_invalid_fields

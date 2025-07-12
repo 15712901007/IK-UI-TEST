@@ -1,0 +1,61 @@
+{
+  "timestamp": 1752281877,
+  "url": "http://10.66.0.40/Action/call",
+  "method": "POST",
+  "request_headers": {
+    "accept": "application/json, text/plain, */*",
+    "accept-encoding": "gzip, deflate",
+    "accept-language": "zh-CN,zh;q=0.9",
+    "connection": "keep-alive",
+    "content-length": "176",
+    "content-type": "application/json;charset=UTF-8",
+    "cookie": "sess_key=e75716becc6917f01d43f497fb86c5c1; username=admin; login=1",
+    "host": "10.66.0.40",
+    "referer": "http://10.66.0.40/",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+  },
+  "request_body": "{\"func_name\":\"vlan\",\"action\":\"show\",\"param\":{\"TYPE\":\"total,data\",\"limit\":\"0,20\",\"ORDER_BY\":\"\",\"ORDER\":\"\",\"FINDS\":\"vlan_id,vlan_name,ip_addr,comment\",\"KEYWORDS\":\"192.168.36.1\"}}",
+  "response_status": 200,
+  "response_headers": {
+    "x-timezone": "0800",
+    "x-enterprise": "1",
+    "x-default-ip": "0",
+    "expires": "0",
+    "date": "Sat, 12 Jul 2025 00:57:58 GMT",
+    "x-arch": "x86",
+    "content-type": "application/json;charset=UTF-8",
+    "x-sysbit": "x64",
+    "cache-control": "no-cache",
+    "x-support-i18n": "1",
+    "pragma": "no-cache",
+    "connection": "close",
+    "x-timestamp": "1752281878",
+    "x-support-wifi": "0",
+    "x-lang": "1",
+    "content-length": "288",
+    "server": "Nginx"
+  },
+  "response_body": {
+    "Result": 30000,
+    "ErrMsg": "Success",
+    "Data": {
+      "total": 1,
+      "data": [
+        {
+          "ip_addr": "192.168.36.1",
+          "netmask": "255.255.255.0",
+          "ip_mask": "",
+          "interface": "lan1",
+          "id": 1,
+          "enabled": "yes",
+          "comment": "基础VLAN测试",
+          "vlan_id": "36",
+          "vlan_name": "vlan36",
+          "ip_addr_int": 3232244737,
+          "mac": "00:65:58:86:82:e2"
+        }
+      ]
+    }
+  },
+  "python": "import requests, json\nurl = 'http://10.66.0.40/Action/call'\nheaders = {\n  \"accept\": \"application/json, text/plain, */*\",\n  \"accept-encoding\": \"gzip, deflate\",\n  \"accept-language\": \"zh-CN,zh;q=0.9\",\n  \"connection\": \"keep-alive\",\n  \"content-length\": \"176\",\n  \"content-type\": \"application/json;charset=UTF-8\",\n  \"cookie\": \"sess_key=e75716becc6917f01d43f497fb86c5c1; username=admin; login=1\",\n  \"host\": \"10.66.0.40\",\n  \"referer\": \"http://10.66.0.40/\",\n  \"user-agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36\"\n}\ndata = \"{\\\"func_name\\\":\\\"vlan\\\",\\\"action\\\":\\\"show\\\",\\\"param\\\":{\\\"TYPE\\\":\\\"total,data\\\",\\\"limit\\\":\\\"0,20\\\",\\\"ORDER_BY\\\":\\\"\\\",\\\"ORDER\\\":\\\"\\\",\\\"FINDS\\\":\\\"vlan_id,vlan_name,ip_addr,comment\\\",\\\"KEYWORDS\\\":\\\"192.168.36.1\\\"}}\"\nresp = requests.post(url, headers=headers, data=data, verify=False)\nprint(resp.text)"
+}

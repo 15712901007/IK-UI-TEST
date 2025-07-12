@@ -1,0 +1,33 @@
+2025-07-07 19:45:36,575 - RouterTest - INFO - 开始登录，用户名: admin
+2025-07-07 19:45:37,316 - RouterTest - INFO - 成功导航到页面: http://10.66.0.40/login#/login
+2025-07-07 19:45:39,445 - RouterTest - INFO - 成功输入文本 role=textbox, name=用户名: admin
+2025-07-07 19:45:39,557 - RouterTest - INFO - 成功输入文本 role=textbox, name=密码: admin123
+2025-07-07 19:45:39,695 - RouterTest - INFO - 成功点击元素 role=button, name=登录
+2025-07-07 19:45:45,215 - RouterTest - INFO - 找到成功指示器: 网络设置
+2025-07-07 19:45:45,215 - RouterTest - INFO - 登录成功: admin
+2025-07-07 19:45:45,230 - RouterTest - INFO - [执行步骤] 单独停用VLAN36
+2025-07-07 19:45:45,231 - RouterTest - INFO - 停用VLAN: 36
+2025-07-07 19:45:45,231 - RouterTest - INFO - 导航到VLAN设置页面
+2025-07-07 19:45:47,367 - RouterTest - INFO - 成功点击文本元素: 网络设置
+2025-07-07 19:45:49,012 - RouterTest - INFO - 成功点击链接: VLAN设置
+2025-07-07 19:45:52,518 - RouterTest - INFO - 成功导航到VLAN设置页面
+2025-07-07 19:45:54,729 - RouterTest - INFO - [执行步骤] VLAN36状态为已停用
+2025-07-07 19:45:54,729 - RouterTest - INFO - [执行步骤] 单独启用VLAN36
+2025-07-07 19:45:54,729 - RouterTest - INFO - 启用VLAN: 36
+2025-07-07 19:45:54,729 - RouterTest - INFO - 导航到VLAN设置页面
+2025-07-07 19:45:56,885 - RouterTest - INFO - 成功点击文本元素: 网络设置
+2025-07-07 19:45:58,553 - RouterTest - INFO - 成功点击链接: VLAN设置
+2025-07-07 19:46:02,059 - RouterTest - INFO - 成功导航到VLAN设置页面
+2025-07-07 19:46:04,252 - RouterTest - INFO - [执行步骤] VLAN36状态为已启用
+2025-07-07 19:46:04,252 - RouterTest - INFO - [执行步骤] 批量全选所有VLAN，点击停用
+2025-07-07 19:46:04,252 - RouterTest - INFO - 批量停用VLAN
+2025-07-07 19:46:34,258 - RouterTest - ERROR - 批量停用VLAN出错: Locator.is_checked: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("thead input[type='checkbox']")
+
+2025-07-07 19:46:34,367 - RouterTest - INFO - 截图保存: screenshots\batch_vlan_disable_error.png
+2025-07-07 19:46:34,368 - RouterTest - INFO - [执行步骤] 启用/停用测试异常: 批量停用失败
+assert False
+ +  where False = batch_disable_vlans(select_all=True)
+ +    where batch_disable_vlans = <pages.vlan_page.VlanPage object at 0x0000024F783DB4D0>.batch_disable_vlans
+2025-07-07 19:46:34,368 - RouterTest - ERROR - 测试失败: test_enable_disable_vlan

@@ -1,0 +1,58 @@
+2025-07-08 14:13:56,917 - RouterTest - INFO - [执行步骤] 打开登录页面
+2025-07-08 14:13:56,917 - RouterTest - INFO - [执行步骤] 输入用户名: admin
+2025-07-08 14:13:56,917 - RouterTest - INFO - [执行步骤] 输入密码: ********
+2025-07-08 14:13:56,917 - RouterTest - INFO - [执行步骤] 点击登录
+2025-07-08 14:13:56,918 - RouterTest - INFO - 开始登录，用户名: admin
+2025-07-08 14:13:57,703 - RouterTest - INFO - 成功导航到页面: http://10.66.0.40/login#/login
+2025-07-08 14:13:59,837 - RouterTest - INFO - 成功输入文本 role=textbox, name=用户名: admin
+2025-07-08 14:13:59,964 - RouterTest - INFO - 成功输入文本 role=textbox, name=密码: admin123
+2025-07-08 14:14:00,104 - RouterTest - INFO - 成功点击元素 role=button, name=登录
+2025-07-08 14:14:05,623 - RouterTest - INFO - 找到成功指示器: 网络设置
+2025-07-08 14:14:05,623 - RouterTest - INFO - 登录成功: admin
+2025-07-08 14:14:05,623 - RouterTest - INFO - [执行步骤] 验证登录成功
+2025-07-08 14:14:05,623 - RouterTest - INFO - [执行步骤] 执行耗时: 8.71秒
+2025-07-08 14:14:07,624 - RouterTest - INFO - URL已跳转，登录可能成功
+2025-07-08 14:14:07,792 - RouterTest - INFO - [执行步骤] 尝试登录: 用户名=admin, 密码=**************
+2025-07-08 14:14:07,792 - RouterTest - INFO - 开始登录，用户名: admin
+2025-07-08 14:14:08,584 - RouterTest - INFO - 成功导航到页面: http://10.66.0.40/login#/login
+2025-07-08 14:14:10,724 - RouterTest - INFO - 成功输入文本 role=textbox, name=用户名: admin
+2025-07-08 14:14:10,848 - RouterTest - INFO - 成功输入文本 role=textbox, name=密码: wrong_password
+2025-07-08 14:14:10,987 - RouterTest - INFO - 成功点击元素 role=button, name=登录
+2025-07-08 14:14:16,547 - RouterTest - ERROR - 登录失败: 账号或密码错误
+2025-07-08 14:14:16,726 - RouterTest - INFO - 截图保存: screenshots\login_failed.png
+2025-07-08 14:14:16,736 - RouterTest - INFO - [执行步骤] 获取错误提示: 账号或密码错误
+2025-07-08 14:14:16,737 - RouterTest - INFO - [执行步骤] 验证错误提示成功
+2025-07-08 14:14:16,737 - RouterTest - INFO - [执行步骤] 执行耗时: 8.94秒
+2025-07-08 14:14:16,908 - RouterTest - INFO - [执行步骤] 尝试登录: 用户名=wrong_user, 密码=*****
+2025-07-08 14:14:16,909 - RouterTest - INFO - 开始登录，用户名: wrong_user
+2025-07-08 14:14:17,709 - RouterTest - INFO - 成功导航到页面: http://10.66.0.40/login#/login
+2025-07-08 14:14:19,848 - RouterTest - INFO - 成功输入文本 role=textbox, name=用户名: wrong_user
+2025-07-08 14:14:19,973 - RouterTest - INFO - 成功输入文本 role=textbox, name=密码: admin
+2025-07-08 14:14:20,112 - RouterTest - INFO - 成功点击元素 role=button, name=登录
+2025-07-08 14:14:25,666 - RouterTest - ERROR - 登录失败: 账号或密码错误
+2025-07-08 14:14:25,852 - RouterTest - INFO - 截图保存: screenshots\login_failed.png
+2025-07-08 14:14:25,862 - RouterTest - INFO - [执行步骤] 获取错误提示: 账号或密码错误
+2025-07-08 14:14:25,863 - RouterTest - INFO - [执行步骤] 验证错误提示成功
+2025-07-08 14:14:25,863 - RouterTest - INFO - [执行步骤] 执行耗时: 8.95秒
+2025-07-08 14:14:26,037 - RouterTest - INFO - [执行步骤] 尝试登录: 用户名=空, 密码=*****
+2025-07-08 14:14:26,037 - RouterTest - INFO - 开始登录，用户名: 
+2025-07-08 14:14:26,806 - RouterTest - INFO - 成功导航到页面: http://10.66.0.40/login#/login
+2025-07-08 14:14:28,941 - RouterTest - INFO - 成功输入文本 role=textbox, name=用户名: 
+2025-07-08 14:14:29,066 - RouterTest - INFO - 成功输入文本 role=textbox, name=密码: admin
+2025-07-08 14:14:29,206 - RouterTest - INFO - 成功点击元素 role=button, name=登录
+2025-07-08 14:14:34,756 - RouterTest - ERROR - 登录失败: 账号或密码错误
+2025-07-08 14:14:34,929 - RouterTest - INFO - 截图保存: screenshots\login_failed.png
+2025-07-08 14:14:34,940 - RouterTest - INFO - [执行步骤] 获取错误提示: 账号或密码错误
+2025-07-08 14:14:34,940 - RouterTest - INFO - [执行步骤] 验证错误提示成功
+2025-07-08 14:14:34,940 - RouterTest - INFO - [执行步骤] 执行耗时: 8.90秒
+2025-07-08 14:14:35,126 - RouterTest - INFO - [执行步骤] 尝试登录: 用户名=admin, 密码=空
+2025-07-08 14:14:35,126 - RouterTest - INFO - 开始登录，用户名: admin
+2025-07-08 14:14:35,904 - RouterTest - INFO - 成功导航到页面: http://10.66.0.40/login#/login
+2025-07-08 14:14:38,029 - RouterTest - INFO - 成功输入文本 role=textbox, name=用户名: admin
+2025-07-08 14:14:38,153 - RouterTest - INFO - 成功输入文本 role=textbox, name=密码: 
+2025-07-08 14:14:38,292 - RouterTest - INFO - 成功点击元素 role=button, name=登录
+2025-07-08 14:14:43,838 - RouterTest - ERROR - 登录失败: 账号或密码错误
+2025-07-08 14:14:44,013 - RouterTest - INFO - 截图保存: screenshots\login_failed.png
+2025-07-08 14:14:44,024 - RouterTest - INFO - [执行步骤] 获取错误提示: 账号或密码错误
+2025-07-08 14:14:44,024 - RouterTest - INFO - [执行步骤] 验证错误提示成功
+2025-07-08 14:14:44,024 - RouterTest - INFO - [执行步骤] 执行耗时: 8.90秒

@@ -1,0 +1,63 @@
+2025-07-10 19:50:00,400 - RouterTest - INFO - 开始登录，用户名: admin
+2025-07-10 19:50:01,154 - RouterTest - INFO - 成功导航到页面: http://10.66.0.40/login#/login
+2025-07-10 19:50:03,283 - RouterTest - INFO - 成功输入文本 role=textbox, name=用户名: admin
+2025-07-10 19:50:03,407 - RouterTest - INFO - 成功输入文本 role=textbox, name=密码: admin123
+2025-07-10 19:50:03,547 - RouterTest - INFO - 成功点击元素 role=button, name=登录
+2025-07-10 19:50:09,068 - RouterTest - INFO - 找到成功指示器: 网络设置
+2025-07-10 19:50:09,068 - RouterTest - INFO - 登录成功: admin
+2025-07-10 19:50:09,079 - RouterTest - INFO - [执行步骤] 测试初始化完成
+2025-07-10 19:50:09,079 - RouterTest - INFO - [执行步骤] 开始执行: VLAN配置添加功能测试
+2025-07-10 19:50:09,079 - RouterTest - INFO - [执行步骤] 业务场景: 验证VLAN配置的正确性和数据完整性，确保网络隔离功能可靠
+2025-07-10 19:50:09,079 - RouterTest - INFO - [执行步骤] 预定义步骤1: 1. 导航到VLAN设置页面
+2025-07-10 19:50:09,079 - RouterTest - INFO - [执行步骤] 预定义步骤2: 2. 点击添加VLAN按钮
+2025-07-10 19:50:09,079 - RouterTest - INFO - [执行步骤] 预定义步骤3: 3. 填写VLAN配置信息（ID、名称、IP地址、备注）
+2025-07-10 19:50:09,079 - RouterTest - INFO - [执行步骤] 预定义步骤4: 4. 点击保存按钮提交配置
+2025-07-10 19:50:09,080 - RouterTest - INFO - [执行步骤] 预定义步骤5: 5. 验证VLAN创建成功并显示在列表中
+2025-07-10 19:50:09,080 - RouterTest - INFO - [执行步骤] 使用测试数据: ID=36, Name=vlan36
+2025-07-10 19:50:09,080 - RouterTest - INFO - [执行步骤] 开始执行VLAN创建操作
+2025-07-10 19:50:09,080 - RouterTest - INFO - 开始添加VLAN: ID=36, Name=vlan36
+2025-07-10 19:50:09,080 - RouterTest - INFO - 导航到VLAN设置页面
+2025-07-10 19:50:11,214 - RouterTest - INFO - 成功点击文本元素: 网络设置
+2025-07-10 19:50:12,862 - RouterTest - INFO - 成功点击链接: VLAN设置
+2025-07-10 19:50:16,367 - RouterTest - INFO - 成功导航到VLAN设置页面
+2025-07-10 19:50:16,505 - RouterTest - INFO - 成功点击链接: 添加
+2025-07-10 19:50:19,132 - RouterTest - INFO - 成功输入文本到 input[name='vlan_id']: 36
+2025-07-10 19:50:19,253 - RouterTest - INFO - 成功输入文本到 input[name='vlan_name']: vlan36
+2025-07-10 19:50:19,375 - RouterTest - INFO - 成功输入文本到 input[name='ip_addr']: 192.168.36.1
+2025-07-10 19:50:19,498 - RouterTest - INFO - 成功输入文本到 input[name='comment']: 基础VLAN测试
+2025-07-10 19:50:19,635 - RouterTest - INFO - 成功点击元素 role=button, name=保存
+2025-07-10 19:50:20,144 - RouterTest - INFO - 后台接口返回成功: {'Result': 30000, 'ErrMsg': 'Success', 'Data': {'total': 1, 'data': [{'comment': '基础VLAN测试', 'vlan_id': '36', 'vlan_name': 'vlan36', 'mac': '00:f6:5c:34:a1:0f', 'ip_addr': '192.168.36.1', 'netmask': '255.255.255.0', 'ip_mask': '', 'interface': 'lan1', 'id': 1, 'enabled': 'yes', 'ip_addr_int': 3232244737}]}}
+2025-07-10 19:50:28,181 - RouterTest - INFO - 收到提示消息: 
+2025-07-10 19:50:28,181 - RouterTest - INFO - VLAN 添加成功(接口校验): vlan36
+2025-07-10 19:50:28,181 - RouterTest - INFO - [执行步骤] VLAN vlan36 创建成功
+2025-07-10 19:50:28,181 - RouterTest - INFO - [执行步骤] 测试执行完成
+2025-07-10 19:50:28,181 - RouterTest - INFO - [执行步骤] 执行耗时: 19.10秒
+2025-07-10 19:50:28,190 - RouterTest - INFO - [执行步骤] 批量测试初始化完成
+2025-07-10 19:50:28,190 - RouterTest - INFO - [执行步骤] 开始执行: 批量VLAN创建功能测试
+2025-07-10 19:50:28,190 - RouterTest - INFO - [执行步骤] 业务场景: 验证系统在连续创建多个VLAN时的稳定性，确保批量操作不会导致系统异常或数据冲突
+2025-07-10 19:50:28,190 - RouterTest - INFO - [执行步骤] 准备批量创建 3 个VLAN
+2025-07-10 19:50:28,190 - RouterTest - INFO - [执行步骤] 预定义步骤1: 1. 准备批量VLAN测试数据集
+2025-07-10 19:50:28,191 - RouterTest - INFO - [执行步骤] 预定义步骤2: 2. 循环执行VLAN创建操作
+2025-07-10 19:50:28,191 - RouterTest - INFO - [执行步骤] 预定义步骤3: 3. 监控每个VLAN的创建状态和系统响应
+2025-07-10 19:50:28,191 - RouterTest - INFO - [执行步骤] 预定义步骤4: 4. 统计批量操作的成功率和失败原因
+2025-07-10 19:50:28,191 - RouterTest - INFO - [执行步骤] 预定义步骤5: 5. 验证系统稳定性和数据一致性
+2025-07-10 19:50:28,191 - RouterTest - INFO - [执行步骤] 正在创建第1个VLAN: vlan201
+2025-07-10 19:50:28,191 - RouterTest - INFO - 开始添加VLAN: ID=201, Name=vlan201
+2025-07-10 19:50:28,191 - RouterTest - INFO - 导航到VLAN设置页面
+2025-07-10 19:50:30,309 - RouterTest - INFO - 成功点击文本元素: 网络设置
+2025-07-10 19:50:31,950 - RouterTest - INFO - 成功点击链接: VLAN设置
+2025-07-10 19:50:35,455 - RouterTest - INFO - 成功导航到VLAN设置页面
+2025-07-10 19:50:35,581 - RouterTest - INFO - 成功点击链接: 添加
+2025-07-10 19:50:38,209 - RouterTest - INFO - 成功输入文本到 input[name='vlan_id']: 201
+2025-07-10 19:50:38,336 - RouterTest - INFO - 成功输入文本到 input[name='vlan_name']: vlan201
+2025-07-10 19:50:38,457 - RouterTest - INFO - 成功输入文本到 input[name='ip_addr']: 192.168.201.1
+2025-07-10 19:50:38,582 - RouterTest - INFO - 成功输入文本到 input[name='comment']: 批量测试VLAN201
+2025-07-10 19:50:38,716 - RouterTest - INFO - 成功点击元素 role=button, name=保存
+2025-07-10 19:50:39,223 - RouterTest - INFO - 后台接口返回成功: {'Result': 30000, 'ErrMsg': 'Success', 'Data': {'total': 2, 'data': [{'vlan_id': '36', 'vlan_name': 'vlan36', 'mac': '00:f6:5c:34:a1:0f', 'ip_addr': '192.168.36.1', 'netmask': '255.255.255.0', 'ip_mask': '', 'interface': 'lan1', 'id': 1, 'enabled': 'yes', 'comment': '基础VLAN测试', 'ip_addr_int': 3232244737}, {'vlan_id': '201', 'vlan_name': 'vlan201', 'mac': '00:31:f7:7b:00:32', 'ip_addr': '192.168.201.1', 'netmask': '255.255.255.0', 'ip_mask': '', 'interface': 'lan1', 'id': 2, 'enabled': 'yes', 'comment': '批量测试VLAN201', 'ip_addr_int': 3232286977}]}}
+2025-07-10 19:50:47,249 - RouterTest - INFO - 收到提示消息: 
+2025-07-10 19:50:47,249 - RouterTest - INFO - VLAN 添加成功(接口校验): vlan201
+2025-07-10 19:50:47,249 - RouterTest - INFO - [执行步骤] VLAN vlan201 创建成功
+2025-07-10 19:50:48,250 - RouterTest - INFO - [执行步骤] 正在创建第2个VLAN: vlan202
+2025-07-10 19:50:48,250 - RouterTest - INFO - 开始添加VLAN: ID=202, Name=vlan202
+2025-07-10 19:50:48,250 - RouterTest - INFO - 导航到VLAN设置页面
+2025-07-10 19:50:50,378 - RouterTest - INFO - 成功点击文本元素: 网络设置

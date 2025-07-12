@@ -1,0 +1,47 @@
+2025-07-09 16:47:26,183 - RouterTest - INFO - 开始登录，用户名: admin
+2025-07-09 16:47:26,968 - RouterTest - INFO - 成功导航到页面: http://10.66.0.40/login#/login
+2025-07-09 16:47:29,114 - RouterTest - INFO - 成功输入文本 role=textbox, name=用户名: admin
+2025-07-09 16:47:29,234 - RouterTest - INFO - 成功输入文本 role=textbox, name=密码: admin123
+2025-07-09 16:47:29,381 - RouterTest - INFO - 成功点击元素 role=button, name=登录
+2025-07-09 16:47:34,917 - RouterTest - INFO - 找到成功指示器: 网络设置
+2025-07-09 16:47:34,917 - RouterTest - INFO - 登录成功: admin
+2025-07-09 16:47:34,933 - RouterTest - INFO - [执行步骤] 【异常场景】ID超范围，尝试保存
+2025-07-09 16:47:34,933 - RouterTest - INFO - 开始异常场景添加VLAN: ID=9999, Name=vlan9999
+2025-07-09 16:47:34,933 - RouterTest - INFO - 导航到VLAN设置页面
+2025-07-09 16:47:37,075 - RouterTest - INFO - 成功点击文本元素: 网络设置
+2025-07-09 16:47:38,733 - RouterTest - INFO - 成功点击链接: VLAN设置
+2025-07-09 16:47:42,244 - RouterTest - INFO - 成功导航到VLAN设置页面
+2025-07-09 16:47:42,377 - RouterTest - INFO - 成功点击链接: 添加
+2025-07-09 16:47:45,000 - RouterTest - INFO - 成功输入文本到 input[name='vlan_id']: 9999
+2025-07-09 16:47:45,121 - RouterTest - INFO - 成功输入文本到 input[name='vlan_name']: vlan9999
+2025-07-09 16:47:45,241 - RouterTest - INFO - 成功输入文本到 input[name='ip_addr']: 192.168.99.1
+2025-07-09 16:47:45,363 - RouterTest - INFO - 成功输入文本到 input[name='comment']: ID超范围
+2025-07-09 16:47:45,499 - RouterTest - INFO - 成功点击元素 role=button, name=保存
+2025-07-09 16:47:50,039 - RouterTest - INFO - [执行步骤] 断言页面出现"整数范围 1~4090，以"-"连接id段，前值小于后值"提示
+2025-07-09 16:47:50,039 - RouterTest - INFO - [执行步骤] 【异常场景】名称不规范，尝试保存
+2025-07-09 16:47:50,039 - RouterTest - INFO - 开始异常场景添加VLAN: ID=56, Name=56565
+2025-07-09 16:47:50,039 - RouterTest - INFO - 导航到VLAN设置页面
+2025-07-09 16:47:52,185 - RouterTest - INFO - 成功点击文本元素: 网络设置
+2025-07-09 16:47:53,844 - RouterTest - INFO - 成功点击链接: VLAN设置
+2025-07-09 16:47:57,353 - RouterTest - INFO - 成功导航到VLAN设置页面
+2025-07-09 16:47:57,494 - RouterTest - INFO - 成功点击链接: 添加
+2025-07-09 16:48:00,115 - RouterTest - INFO - 成功输入文本到 input[name='vlan_id']: 56
+2025-07-09 16:48:00,235 - RouterTest - INFO - 成功输入文本到 input[name='vlan_name']: 56565
+2025-07-09 16:48:00,355 - RouterTest - INFO - 成功输入文本到 input[name='ip_addr']: 192.168.56.1
+2025-07-09 16:48:00,477 - RouterTest - INFO - 成功输入文本到 input[name='comment']: 名称不规范
+2025-07-09 16:48:00,612 - RouterTest - INFO - 成功点击元素 role=button, name=保存
+2025-07-09 16:48:05,150 - RouterTest - INFO - [执行步骤] 断言页面出现"名称必须以vlan开头，只支持数字、字母和_"提示
+2025-07-09 16:48:05,151 - RouterTest - INFO - [执行步骤] 【异常场景】IP不规范，尝试保存
+2025-07-09 16:48:05,151 - RouterTest - INFO - 开始异常场景添加VLAN: ID=57, Name=vlan57
+2025-07-09 16:48:05,151 - RouterTest - INFO - 导航到VLAN设置页面
+2025-07-09 16:48:07,303 - RouterTest - INFO - 成功点击文本元素: 网络设置
+2025-07-09 16:48:08,955 - RouterTest - INFO - 成功点击链接: VLAN设置
+2025-07-09 16:48:12,466 - RouterTest - INFO - 成功导航到VLAN设置页面
+2025-07-09 16:48:12,608 - RouterTest - INFO - 成功点击链接: 添加
+2025-07-09 16:48:15,232 - RouterTest - INFO - 成功输入文本到 input[name='vlan_id']: 57
+2025-07-09 16:48:15,354 - RouterTest - INFO - 成功输入文本到 input[name='vlan_name']: vlan57
+2025-07-09 16:48:15,475 - RouterTest - INFO - 成功输入文本到 input[name='ip_addr']: 192.168.88.134343
+2025-07-09 16:48:15,596 - RouterTest - INFO - 成功输入文本到 input[name='comment']: IP不规范
+2025-07-09 16:48:15,733 - RouterTest - INFO - 成功点击元素 role=button, name=保存
+2025-07-09 16:48:17,260 - RouterTest - INFO - [执行步骤] 断言页面出现"IP 必须是一个有效的地址"提示
+2025-07-09 16:48:17,260 - RouterTest - INFO - [执行步骤] 执行耗时: 42.33秒

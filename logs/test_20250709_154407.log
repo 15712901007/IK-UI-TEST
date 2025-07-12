@@ -1,0 +1,9 @@
+2025-07-09 15:44:08,014 - RouterTest - INFO - [执行步骤] 打开登录页面
+2025-07-09 15:44:08,016 - RouterTest - INFO - [执行步骤] 输入用户名: admin
+2025-07-09 15:44:08,016 - RouterTest - INFO - [执行步骤] 输入密码: ********
+2025-07-09 15:44:08,016 - RouterTest - INFO - [执行步骤] 点击登录
+2025-07-09 15:44:08,016 - RouterTest - INFO - 开始登录，用户名: admin
+2025-07-09 15:44:08,785 - RouterTest - INFO - 成功导航到页面: http://10.66.0.40/login#/login
+2025-07-09 15:44:10,954 - RouterTest - INFO - 成功输入文本 role=textbox, name=用户名: admin
+2025-07-09 15:44:11,073 - RouterTest - INFO - 成功输入文本 role=textbox, name=密码: admin123
+2025-07-09 15:44:11,237 - RouterTest - INFO - 成功点击元素 role=button, name=登录

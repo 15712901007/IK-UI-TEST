@@ -1,0 +1,16 @@
+2025-07-08 20:20:44,123 - RouterTest - INFO - 开始登录，用户名: admin
+2025-07-08 20:20:44,884 - RouterTest - INFO - 成功导航到页面: http://10.66.0.40/login#/login
+2025-07-08 20:20:47,022 - RouterTest - INFO - 成功输入文本 role=textbox, name=用户名: admin
+2025-07-08 20:20:47,144 - RouterTest - INFO - 成功输入文本 role=textbox, name=密码: admin123
+2025-07-08 20:20:47,293 - RouterTest - INFO - 成功点击元素 role=button, name=登录
+2025-07-08 20:20:52,819 - RouterTest - INFO - 找到成功指示器: 网络设置
+2025-07-08 20:20:52,819 - RouterTest - INFO - 登录成功: admin
+2025-07-08 20:21:22,959 - RouterTest - ERROR - 导出csv失败: Locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for get_by_role("link", name="导出")
+
+2025-07-08 20:21:53,074 - RouterTest - ERROR - 导出txt失败: Locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for get_by_role("link", name="导出")
+
+2025-07-08 20:21:53,075 - RouterTest - ERROR - 测试失败: test_export_import_vlan

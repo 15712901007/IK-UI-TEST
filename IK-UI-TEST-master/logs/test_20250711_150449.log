@@ -1,0 +1,25 @@
+2025-07-11 15:04:58,891 - RouterTest - INFO - 测试配置更新成功
+2025-07-11 15:13:05,732 - RouterTest - INFO - 强制重新创建表格样式模板成功
+2025-07-11 15:13:05,738 - RouterTest - INFO - 成功加载VLAN配置，包含 8 个测试用例
+2025-07-11 15:13:05,740 - RouterTest - INFO - 开始解析测试输出，共 385 行
+2025-07-11 15:13:05,741 - RouterTest - INFO - 发现测试用例: test_add_vlan
+2025-07-11 15:13:05,742 - RouterTest - INFO - 发现测试用例: test_add_multiple_vlans
+2025-07-11 15:13:05,742 - RouterTest - INFO - 发现测试用例: test_get_vlan_list
+2025-07-11 15:13:05,745 - RouterTest - INFO - 发现测试用例: test_vlan_workflow
+2025-07-11 15:13:05,745 - RouterTest - INFO - 发现测试用例: test_add_vlan_required_fields
+2025-07-11 15:13:05,745 - RouterTest - INFO - 发现测试用例: test_add_vlan_invalid_fields
+2025-07-11 15:13:05,746 - RouterTest - INFO - 发现测试用例: test_enable_disable_vlan
+2025-07-11 15:13:05,746 - RouterTest - INFO - 发现测试用例: test_export_import_vlan
+2025-07-11 15:13:05,750 - RouterTest - INFO - 成功解析出 8 个测试用例
+2025-07-11 15:13:05,750 - RouterTest - INFO - 报告数据准备完成，测试用例数量: 8
+2025-07-11 15:13:05,761 - RouterTest - INFO - 中文测试报告生成成功: reports\outputs\中文测试报告_20250711_151305.html
+2025-07-11 15:16:31,480 - RouterTest - INFO - 测试配置更新成功
+2025-07-11 15:16:55,245 - RouterTest - INFO - 测试进程已终止
+2025-07-11 15:16:55,245 - RouterTest - INFO - 收到停止测试请求
+2025-07-11 15:16:55,543 - RouterTest - INFO - 强制重新创建表格样式模板成功
+2025-07-11 15:16:55,550 - RouterTest - INFO - 成功加载VLAN配置，包含 8 个测试用例
+2025-07-11 15:16:55,552 - RouterTest - INFO - 开始解析测试输出，共 51 行
+2025-07-11 15:16:55,552 - RouterTest - INFO - 发现测试用例: test_add_vlan
+2025-07-11 15:16:55,552 - RouterTest - INFO - 成功解析出 1 个测试用例
+2025-07-11 15:16:55,552 - RouterTest - INFO - 报告数据准备完成，测试用例数量: 1
+2025-07-11 15:16:55,558 - RouterTest - INFO - 中文测试报告生成成功: reports\outputs\中文测试报告_20250711_151655.html

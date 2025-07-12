@@ -1,0 +1,4 @@
+2025-07-12 08:45:37,100 - RouterTest - INFO - 浏览器设置完成
+2025-07-12 08:45:37,104 - RouterTest - INFO - 快速登录中...
+2025-07-12 08:45:37,104 - RouterTest - ERROR - 登录过程失败: LoginPage.login() takes 3 positional arguments but 4 were given
+2025-07-12 08:45:37,519 - RouterTest - INFO - 浏览器资源清理完成

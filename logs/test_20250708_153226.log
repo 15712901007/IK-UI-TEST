@@ -1,0 +1,66 @@
+2025-07-08 15:32:44,668 - RouterTest - INFO - 测试配置更新成功
+2025-07-08 15:32:57,559 - RouterTest - INFO - 测试进程已终止
+2025-07-08 15:32:57,559 - RouterTest - INFO - 收到停止测试请求
+2025-07-08 15:32:57,866 - RouterTest - INFO - 强制重新创建表格样式模板成功
+2025-07-08 15:32:57,871 - RouterTest - INFO - 成功加载VLAN配置，包含 7 个测试用例
+2025-07-08 15:32:57,873 - RouterTest - INFO - 开始解析测试输出，共 17 行
+2025-07-08 15:32:57,874 - RouterTest - INFO - 发现测试用例: test_valid_login
+2025-07-08 15:32:57,874 - RouterTest - INFO - 成功解析出 1 个测试用例
+2025-07-08 15:32:57,874 - RouterTest - INFO - 报告数据准备完成，测试用例数量: 1
+2025-07-08 15:32:57,884 - RouterTest - INFO - 中文测试报告生成成功: reports\outputs\中文测试报告_20250708_153257.html
+2025-07-08 15:33:02,204 - RouterTest - INFO - 测试配置更新成功
+2025-07-08 15:33:14,491 - RouterTest - INFO - 测试进程已终止
+2025-07-08 15:33:14,491 - RouterTest - INFO - 收到停止测试请求
+2025-07-08 15:33:14,838 - RouterTest - INFO - 强制重新创建表格样式模板成功
+2025-07-08 15:33:14,844 - RouterTest - INFO - 成功加载VLAN配置，包含 7 个测试用例
+2025-07-08 15:33:14,845 - RouterTest - INFO - 开始解析测试输出，共 17 行
+2025-07-08 15:33:14,845 - RouterTest - INFO - 发现测试用例: test_valid_login
+2025-07-08 15:33:14,846 - RouterTest - INFO - 成功解析出 1 个测试用例
+2025-07-08 15:33:14,846 - RouterTest - INFO - 报告数据准备完成，测试用例数量: 1
+2025-07-08 15:33:14,855 - RouterTest - INFO - 中文测试报告生成成功: reports\outputs\中文测试报告_20250708_153314.html
+2025-07-08 15:33:21,125 - RouterTest - INFO - 测试配置更新成功
+2025-07-08 15:33:31,305 - RouterTest - INFO - 测试进程已终止
+2025-07-08 15:33:31,305 - RouterTest - INFO - 收到停止测试请求
+2025-07-08 15:33:31,663 - RouterTest - INFO - 强制重新创建表格样式模板成功
+2025-07-08 15:33:31,669 - RouterTest - INFO - 成功加载VLAN配置，包含 7 个测试用例
+2025-07-08 15:33:31,670 - RouterTest - INFO - 开始解析测试输出，共 21 行
+2025-07-08 15:33:31,670 - RouterTest - INFO - 发现测试用例: test_valid_login
+2025-07-08 15:33:31,670 - RouterTest - INFO - 成功解析出 1 个测试用例
+2025-07-08 15:33:31,671 - RouterTest - INFO - 报告数据准备完成，测试用例数量: 1
+2025-07-08 15:33:31,677 - RouterTest - INFO - 中文测试报告生成成功: reports\outputs\中文测试报告_20250708_153331.html
+2025-07-08 15:33:39,031 - RouterTest - INFO - 测试配置更新成功
+2025-07-08 15:33:48,041 - RouterTest - INFO - 测试进程已终止
+2025-07-08 15:33:48,042 - RouterTest - INFO - 收到停止测试请求
+2025-07-08 15:33:48,444 - RouterTest - INFO - 强制重新创建表格样式模板成功
+2025-07-08 15:33:48,451 - RouterTest - INFO - 成功加载VLAN配置，包含 7 个测试用例
+2025-07-08 15:33:48,452 - RouterTest - INFO - 开始解析测试输出，共 21 行
+2025-07-08 15:33:48,452 - RouterTest - INFO - 发现测试用例: test_valid_login
+2025-07-08 15:33:48,452 - RouterTest - INFO - 成功解析出 1 个测试用例
+2025-07-08 15:33:48,452 - RouterTest - INFO - 报告数据准备完成，测试用例数量: 1
+2025-07-08 15:33:48,459 - RouterTest - INFO - 中文测试报告生成成功: reports\outputs\中文测试报告_20250708_153348.html
+2025-07-08 15:34:36,126 - RouterTest - INFO - 测试配置更新成功
+2025-07-08 15:35:25,813 - RouterTest - INFO - 强制重新创建表格样式模板成功
+2025-07-08 15:35:25,819 - RouterTest - INFO - 成功加载VLAN配置，包含 7 个测试用例
+2025-07-08 15:35:25,821 - RouterTest - INFO - 开始解析测试输出，共 87 行
+2025-07-08 15:35:25,821 - RouterTest - INFO - 发现测试用例: test_valid_login
+2025-07-08 15:35:25,821 - RouterTest - INFO - 发现测试用例: test_invalid_login[admin/wrong_password]
+2025-07-08 15:35:25,822 - RouterTest - INFO - 发现测试用例: test_invalid_login[wrong_user/admin]
+2025-07-08 15:35:25,822 - RouterTest - INFO - 发现测试用例: test_invalid_login[/admin]
+2025-07-08 15:35:25,822 - RouterTest - INFO - 发现测试用例: test_invalid_login[admin/]
+2025-07-08 15:35:25,822 - RouterTest - INFO - 成功解析出 5 个测试用例
+2025-07-08 15:35:25,822 - RouterTest - INFO - 报告数据准备完成，测试用例数量: 5
+2025-07-08 15:35:25,828 - RouterTest - INFO - 中文测试报告生成成功: reports\outputs\中文测试报告_20250708_153525.html
+2025-07-08 15:35:45,710 - RouterTest - INFO - 测试配置更新成功
+2025-07-08 15:40:50,487 - RouterTest - INFO - 强制重新创建表格样式模板成功
+2025-07-08 15:40:50,497 - RouterTest - INFO - 成功加载VLAN配置，包含 7 个测试用例
+2025-07-08 15:40:50,499 - RouterTest - INFO - 开始解析测试输出，共 281 行
+2025-07-08 15:40:50,499 - RouterTest - INFO - 发现测试用例: test_add_vlan
+2025-07-08 15:40:50,499 - RouterTest - INFO - 发现测试用例: test_add_multiple_vlans
+2025-07-08 15:40:50,500 - RouterTest - INFO - 发现测试用例: test_get_vlan_list
+2025-07-08 15:40:50,500 - RouterTest - INFO - 发现测试用例: test_vlan_workflow
+2025-07-08 15:40:50,500 - RouterTest - INFO - 发现测试用例: test_add_vlan_required_fields
+2025-07-08 15:40:50,501 - RouterTest - INFO - 发现测试用例: test_add_vlan_invalid_fields
+2025-07-08 15:40:50,501 - RouterTest - INFO - 发现测试用例: test_enable_disable_vlan
+2025-07-08 15:40:50,501 - RouterTest - INFO - 成功解析出 7 个测试用例
+2025-07-08 15:40:50,501 - RouterTest - INFO - 报告数据准备完成，测试用例数量: 7
+2025-07-08 15:40:50,509 - RouterTest - INFO - 中文测试报告生成成功: reports\outputs\中文测试报告_20250708_154050.html

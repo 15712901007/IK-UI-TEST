@@ -1,0 +1,27 @@
+2025-07-07 19:00:21,361 - RouterTest - INFO - 开始登录，用户名: admin
+2025-07-07 19:00:22,107 - RouterTest - INFO - 成功导航到页面: http://10.66.0.40/login#/login
+2025-07-07 19:00:24,245 - RouterTest - INFO - 成功输入文本 role=textbox, name=用户名: admin
+2025-07-07 19:00:24,356 - RouterTest - INFO - 成功输入文本 role=textbox, name=密码: admin123
+2025-07-07 19:00:24,495 - RouterTest - INFO - 成功点击元素 role=button, name=登录
+2025-07-07 19:00:30,015 - RouterTest - INFO - 找到成功指示器: 网络设置
+2025-07-07 19:00:30,015 - RouterTest - INFO - 登录成功: admin
+2025-07-07 19:00:30,027 - RouterTest - INFO - [执行步骤] 单独停用VLAN36
+2025-07-07 19:00:30,027 - RouterTest - INFO - 停用VLAN: 36
+2025-07-07 19:00:30,027 - RouterTest - INFO - 导航到VLAN设置页面
+2025-07-07 19:00:32,167 - RouterTest - INFO - 成功点击文本元素: 网络设置
+2025-07-07 19:00:33,826 - RouterTest - INFO - 成功点击链接: VLAN设置
+2025-07-07 19:00:37,333 - RouterTest - INFO - 成功导航到VLAN设置页面
+2025-07-07 19:00:49,570 - RouterTest - INFO - [执行步骤] VLAN36状态为已停用
+2025-07-07 19:00:49,570 - RouterTest - INFO - [执行步骤] 单独启用VLAN36
+2025-07-07 19:00:49,570 - RouterTest - INFO - 启用VLAN: 36
+2025-07-07 19:00:49,570 - RouterTest - INFO - 导航到VLAN设置页面
+2025-07-07 19:00:51,703 - RouterTest - INFO - 成功点击文本元素: 网络设置
+2025-07-07 19:00:53,339 - RouterTest - INFO - 成功点击链接: VLAN设置
+2025-07-07 19:00:56,844 - RouterTest - INFO - 成功导航到VLAN设置页面
+2025-07-07 19:00:57,977 - RouterTest - INFO - [执行步骤] VLAN36状态为已启用
+2025-07-07 19:00:57,977 - RouterTest - INFO - [执行步骤] 批量全选所有VLAN，点击停用
+2025-07-07 19:00:57,977 - RouterTest - INFO - 批量停用VLAN
+2025-07-07 19:00:59,378 - RouterTest - INFO - [执行步骤] 启用/停用测试异常: 存在未停用的VLAN: {'36': '基础VLAN测试', '201': '批量测试VLAN201', '202': '批量测试VLAN202', '203': '批量测试VLAN203', '888': '工作流程测试VLAN'}
+assert False
+ +  where False = all(<generator object TestVlan.test_enable_disable_vlan.<locals>.<genexpr> at 0x000001F0539D9D80>)
+2025-07-07 19:00:59,378 - RouterTest - ERROR - 测试失败: test_enable_disable_vlan

@@ -1,0 +1,50 @@
+2025-07-08 10:35:32,773 - RouterTest - INFO - [执行步骤] 打开登录页面
+2025-07-08 10:35:32,773 - RouterTest - INFO - [执行步骤] 输入用户名: admin
+2025-07-08 10:35:32,774 - RouterTest - INFO - [执行步骤] 输入密码: ********
+2025-07-08 10:35:32,774 - RouterTest - INFO - [执行步骤] 点击登录
+2025-07-08 10:35:32,774 - RouterTest - INFO - 开始登录，用户名: admin
+2025-07-08 10:35:33,525 - RouterTest - INFO - 成功导航到页面: http://10.66.0.40/login#/login
+2025-07-08 10:35:35,655 - RouterTest - INFO - 成功输入文本 role=textbox, name=用户名: admin
+2025-07-08 10:35:35,779 - RouterTest - INFO - 成功输入文本 role=textbox, name=密码: admin123
+2025-07-08 10:35:35,918 - RouterTest - INFO - 成功点击元素 role=button, name=登录
+2025-07-08 10:35:41,438 - RouterTest - INFO - 找到成功指示器: 网络设置
+2025-07-08 10:35:41,438 - RouterTest - INFO - 登录成功: admin
+2025-07-08 10:35:41,438 - RouterTest - INFO - [执行步骤] 验证登录成功
+2025-07-08 10:35:41,438 - RouterTest - INFO - [执行步骤] 执行耗时: 8.67秒
+2025-07-08 10:35:43,438 - RouterTest - INFO - URL已跳转，登录可能成功
+2025-07-08 10:35:43,615 - RouterTest - INFO - [执行步骤] 尝试登录: 用户名=admin, 密码=**************
+2025-07-08 10:35:43,615 - RouterTest - INFO - 开始登录，用户名: admin
+2025-07-08 10:35:44,361 - RouterTest - INFO - 成功导航到页面: http://10.66.0.40/login#/login
+2025-07-08 10:35:46,498 - RouterTest - INFO - 成功输入文本 role=textbox, name=用户名: admin
+2025-07-08 10:35:46,620 - RouterTest - INFO - 成功输入文本 role=textbox, name=密码: wrong_password
+2025-07-08 10:35:46,760 - RouterTest - INFO - 成功点击元素 role=button, name=登录
+2025-07-08 10:35:52,313 - RouterTest - ERROR - 登录失败: 账号或密码错误
+2025-07-08 10:35:52,494 - RouterTest - INFO - 截图保存: screenshots\login_failed.png
+2025-07-08 10:35:52,500 - RouterTest - ERROR - 测试失败: test_invalid_login_cases[admin-wrong_password-\u7528\u6237\u540d\u6216\u5bc6\u7801\u9519\u8bef]
+2025-07-08 10:35:52,681 - RouterTest - INFO - [执行步骤] 尝试登录: 用户名=wrong_user, 密码=*****
+2025-07-08 10:35:52,682 - RouterTest - INFO - 开始登录，用户名: wrong_user
+2025-07-08 10:35:53,430 - RouterTest - INFO - 成功导航到页面: http://10.66.0.40/login#/login
+2025-07-08 10:35:55,565 - RouterTest - INFO - 成功输入文本 role=textbox, name=用户名: wrong_user
+2025-07-08 10:35:55,689 - RouterTest - INFO - 成功输入文本 role=textbox, name=密码: admin
+2025-07-08 10:35:55,827 - RouterTest - INFO - 成功点击元素 role=button, name=登录
+2025-07-08 10:36:01,373 - RouterTest - ERROR - 登录失败: 账号或密码错误
+2025-07-08 10:36:01,540 - RouterTest - INFO - 截图保存: screenshots\login_failed.png
+2025-07-08 10:36:01,545 - RouterTest - ERROR - 测试失败: test_invalid_login_cases[wrong_user-admin-\u7528\u6237\u540d\u6216\u5bc6\u7801\u9519\u8bef]
+2025-07-08 10:36:01,715 - RouterTest - INFO - [执行步骤] 尝试登录: 用户名=空, 密码=*****
+2025-07-08 10:36:01,715 - RouterTest - INFO - 开始登录，用户名: 
+2025-07-08 10:36:02,465 - RouterTest - INFO - 成功导航到页面: http://10.66.0.40/login#/login
+2025-07-08 10:36:04,598 - RouterTest - INFO - 成功输入文本 role=textbox, name=用户名: 
+2025-07-08 10:36:04,723 - RouterTest - INFO - 成功输入文本 role=textbox, name=密码: admin
+2025-07-08 10:36:04,861 - RouterTest - INFO - 成功点击元素 role=button, name=登录
+2025-07-08 10:36:10,414 - RouterTest - ERROR - 登录失败: 账号或密码错误
+2025-07-08 10:36:10,576 - RouterTest - INFO - 截图保存: screenshots\login_failed.png
+2025-07-08 10:36:10,581 - RouterTest - ERROR - 测试失败: test_invalid_login_cases[-admin-\u8bf7\u8f93\u5165\u7528\u6237\u540d]
+2025-07-08 10:36:10,731 - RouterTest - INFO - [执行步骤] 尝试登录: 用户名=admin, 密码=空
+2025-07-08 10:36:10,731 - RouterTest - INFO - 开始登录，用户名: admin
+2025-07-08 10:36:11,476 - RouterTest - INFO - 成功导航到页面: http://10.66.0.40/login#/login
+2025-07-08 10:36:13,600 - RouterTest - INFO - 成功输入文本 role=textbox, name=用户名: admin
+2025-07-08 10:36:13,727 - RouterTest - INFO - 成功输入文本 role=textbox, name=密码: 
+2025-07-08 10:36:13,852 - RouterTest - INFO - 成功点击元素 role=button, name=登录
+2025-07-08 10:36:19,402 - RouterTest - ERROR - 登录失败: 账号或密码错误
+2025-07-08 10:36:19,558 - RouterTest - INFO - 截图保存: screenshots\login_failed.png
+2025-07-08 10:36:19,565 - RouterTest - ERROR - 测试失败: test_invalid_login_cases[admin--\u8bf7\u8f93\u5165\u5bc6\u7801]

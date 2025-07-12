@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>路由器自动化测试报告</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Microsoft YaHei', Arial, sans-serif; 
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container { 
+            max-width: 1600px; 
+            margin: 0 auto; 
+            padding: 20px;
+        }
+        
+        .header { 
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white; 
+            padding: 30px; 
+            border-radius: 10px; 
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        
+        .summary-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .summary-card.failed { border-left-color: #f44336; }
+        .summary-card.total { border-left-color: #2196F3; }
+        .summary-card.rate { border-left-color: #FF9800; }
+        
+        .card-title { font-size: 0.9em; color: #666; margin-bottom: 5px; }
+        .card-value { font-size: 2em; font-weight: bold; }
+        .card-value.success { color: #4CAF50; }
+        .card-value.error { color: #f44336; }
+        .card-value.info { color: #2196F3; }
+        .card-value.warning { color: #FF9800; }
+        
+        .test-info-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #4CAF50;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 3px solid #4CAF50;
+        }
+        
+        .info-label { font-weight: bold; color: #555; }
+        .info-value { color: #333; }
+        
+        .test-table-section {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .table-header {
+            background: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+        
+        .test-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+        }
+        
+        .test-table thead {
+            background: #45a049;
+            color: white;
+        }
+        
+        .test-table th,
+        .test-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .test-table th {
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+        }
+        
+        .test-table tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .test-table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: white;
+            display: inline-block;
+        }
+        
+        .status-badge.passed { background: #4CAF50; }
+        .status-badge.failed { background: #f44336; }
+        .status-badge.error { background: #FF9800; }
+        
+        .details-btn {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+        
+        .details-btn:hover {
+            background: #1976D2;
+        }
+        
+        .details-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 1200px;
+            max-height: 80vh;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .modal-header {
+            background: #4CAF50;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title { font-size: 1.3em; font-weight: bold; }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+        
+        .modal-body {
+            padding: 20px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        
+        .detail-section {
+            margin-bottom: 25px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        
+        .detail-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 1.1em;
+        }
+        
+        .steps-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .steps-list li {
+            padding: 8px 12px;
+            margin: 5px 0;
+            background: #f8f9fa;
+            border-left: 3px solid #4CAF50;
+            border-radius: 4px;
+        }
+        
+        .execution-timeline {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .timeline-item {
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .timeline-item:last-child { border-bottom: none; }
+        
+        .timeline-item.step { background: #e8f5e8; }
+        .timeline-item.system { background: #e3f2fd; }
+        .timeline-item.error { background: #ffebee; }
+        
+        .timeline-time {
+            font-size: 0.8em;
+            color: #666;
+            min-width: 70px;
+        }
+        
+        .timeline-content { flex: 1; }
+        
+        @media (max-width: 768px) {
+            .container { padding: 10px; }
+            .test-table { font-size: 0.8em; }
+            .test-table th,
+            .test-table td { padding: 8px 10px; }
+            .modal-content { margin: 2% auto; width: 95%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 报告头部 -->
+        <div class="header">
+            <h1>🤖 路由器自动化测试报告</h1>
+            <div>报告生成时间：2025年07月10日 19:35:58</div>
+            <div style="margin-top: 10px;">
+                
+                <span style="background: rgba(255,255,255,0.2); padding: 8px 20px; border-radius: 20px;">
+                    ✅ 测试通过
+                </span>
+                
+            </div>
+        </div>
+
+        <!-- 测试摘要 -->
+        <div class="summary-section">
+            <div class="section-title">📊 测试摘要</div>
+            <div class="summary-cards">
+                <div class="summary-card total">
+                    <div class="card-title">测试用例总数</div>
+                    <div class="card-value info">8</div>
+                </div>
+                <div class="summary-card">
+                    <div class="card-title">成功用例</div>
+                    <div class="card-value success">0</div>
+                </div>
+                <div class="summary-card failed">
+                    <div class="card-title">失败用例</div>
+                    <div class="card-value error">0</div>
+                </div>
+                <div class="summary-card rate">
+                    <div class="card-title">成功率</div>
+                    <div class="card-value warning">0.0%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 测试环境信息 -->
+        <div class="test-info-section">
+            <div class="section-title">🌐 测试环境信息</div>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">🔗 路由器IP：</span>
+                    <span class="info-value">10.66.0.40</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">🧪 测试功能：</span>
+                    <span class="info-value">VLAN设置</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">👤 测试人员：</span>
+                    <span class="info-value">自动化测试</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">🔄 循环次数：</span>
+                    <span class="info-value">1</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">⏰ 开始时间：</span>
+                    <span class="info-value">2025-07-10 19:34:43</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">⏰ 结束时间：</span>
+                    <span class="info-value">2025-07-10 19:35:58</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">⏱️ 总耗时：</span>
+                    <span class="info-value">0:01:15</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">📋 测试版本：</span>
+                    <span class="info-value">1.0.0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 详细测试用例表格 -->
+        <div class="test-table-section">
+            <div class="table-header">📝 详细信息 (2 个测试用例)</div>
+            <table class="test-table">
+                <thead>
+                    <tr>
+                        <th>编号</th>
+                        <th>测试类</th>
+                        <th>测试方法</th>
+                        <th>用例描述</th>
+                        <th>执行时间</th>
+                        <th>执行结果</th>
+                        <th>详细信息</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    <tr>
+                        <td>1</td>
+                        <td>VLAN_TEST</td>
+                        <td>test_add_vlan</td>
+                        <td>VLAN配置添加功能测试</td>
+                        <td>29.08秒</td>
+                        <td>
+                            
+                            <span class="status-badge failed">失败</span>
+                            
+                        </td>
+                        <td>
+                            <button class="details-btn" onclick="showDetails(0)">
+                                查看详情
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>2</td>
+                        <td>VLAN_TEST</td>
+                        <td>test_add_multiple_vlans</td>
+                        <td>批量VLAN创建功能测试</td>
+                        <td>计算中...</td>
+                        <td>
+                            
+                            <span class="status-badge passed">成功</span>
+                            
+                        </td>
+                        <td>
+                            <button class="details-btn" onclick="showDetails(1)">
+                                查看详情
+                            </button>
+                        </td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 详情模态框 -->
+        <div id="detailsModal" class="details-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title" id="modalTitle">测试用例详情</div>
+                    <button class="close-btn" onclick="closeModal()">&times;</button>
+                </div>
+                <div class="modal-body" id="modalBody">
+                    <!-- 详情内容将在这里动态加载 -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // 测试用例数据
+        const testCases = [{"business_scenario": "\u9a8c\u8bc1VLAN\u914d\u7f6e\u7684\u6b63\u786e\u6027\u548c\u6570\u636e\u5b8c\u6574\u6027\uff0c\u786e\u4fdd\u7f51\u7edc\u9694\u79bb\u529f\u80fd\u53ef\u9760", "case_id": 1, "duration": "29.08\u79d2", "end_time": "\u672a\u77e5", "execution_details": [{"content": "\u6d4b\u8bd5\u521d\u59cb\u5316\u5b8c\u6210", "timestamp": "19:34:53", "type": "step"}, {"content": "\u5f00\u59cb\u6267\u884c: VLAN\u914d\u7f6e\u6dfb\u52a0\u529f\u80fd\u6d4b\u8bd5", "timestamp": "19:34:53", "type": "step"}, {"content": "\u4e1a\u52a1\u573a\u666f: \u9a8c\u8bc1VLAN\u914d\u7f6e\u7684\u6b63\u786e\u6027\u548c\u6570\u636e\u5b8c\u6574\u6027\uff0c\u786e\u4fdd\u7f51\u7edc\u9694\u79bb\u529f\u80fd\u53ef\u9760", "timestamp": "19:34:53", "type": "step"}, {"content": "\u9884\u5b9a\u4e49\u6b65\u9aa41: 1. \u5bfc\u822a\u5230VLAN\u8bbe\u7f6e\u9875\u9762", "timestamp": "19:34:53", "type": "step"}, {"content": "\u9884\u5b9a\u4e49\u6b65\u9aa42: 2. \u70b9\u51fb\u6dfb\u52a0VLAN\u6309\u94ae", "timestamp": "19:34:53", "type": "step"}, {"content": "\u9884\u5b9a\u4e49\u6b65\u9aa43: 3. \u586b\u5199VLAN\u914d\u7f6e\u4fe1\u606f\uff08ID\u3001\u540d\u79f0\u3001IP\u5730\u5740\u3001\u5907\u6ce8\uff09", "timestamp": "19:34:53", "type": "step"}, {"content": "\u9884\u5b9a\u4e49\u6b65\u9aa44: 4. \u70b9\u51fb\u4fdd\u5b58\u6309\u94ae\u63d0\u4ea4\u914d\u7f6e", "timestamp": "19:34:53", "type": "step"}, {"content": "\u9884\u5b9a\u4e49\u6b65\u9aa45: 5. \u9a8c\u8bc1VLAN\u521b\u5efa\u6210\u529f\u5e76\u663e\u793a\u5728\u5217\u8868\u4e2d", "timestamp": "19:34:53", "type": "step"}, {"content": "\u4f7f\u7528\u6d4b\u8bd5\u6570\u636e: ID=36, Name=vlan36", "timestamp": "19:34:53", "type": "step"}, {"content": "\u5f00\u59cb\u6267\u884cVLAN\u521b\u5efa\u64cd\u4f5c", "timestamp": "19:34:53", "type": "step"}, {"content": "\u5f00\u59cb\u6dfb\u52a0VLAN: ID=36, Name=vlan36", "timestamp": "19:34:53", "type": "system"}, {"content": "\u6210\u529f\u70b9\u51fb\u6587\u672c\u5143\u7d20: \u7f51\u7edc\u8bbe\u7f6e", "timestamp": "19:34:55", "type": "system"}, {"content": "\u6210\u529f\u70b9\u51fb\u94fe\u63a5: VLAN\u8bbe\u7f6e", "timestamp": "19:34:57", "type": "system"}, {"content": "\u6210\u529f\u5bfc\u822a\u5230VLAN\u8bbe\u7f6e\u9875\u9762", "timestamp": "19:35:00", "type": "system"}, {"content": "\u6210\u529f\u70b9\u51fb\u94fe\u63a5: \u6dfb\u52a0", "timestamp": "19:35:00", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027vlan_id\u0027]: 36", "timestamp": "19:35:03", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027vlan_name\u0027]: vlan36", "timestamp": "19:35:03", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027ip_addr\u0027]: 192.168.36.1", "timestamp": "19:35:03", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027comment\u0027]: \u57fa\u7840VLAN\u6d4b\u8bd5", "timestamp": "19:35:03", "type": "system"}, {"content": "\u6210\u529f\u70b9\u51fb\u5143\u7d20 role=button, name=\u4fdd\u5b58", "timestamp": "19:35:04", "type": "system"}, {"content": "VLAN vlan36 \u521b\u5efa\u5931\u8d25", "timestamp": "19:35:22", "type": "step"}, {"content": "\u6d4b\u8bd5\u6267\u884c\u5b8c\u6210", "timestamp": "19:35:22", "type": "step"}, {"content": "\u6267\u884c\u8017\u65f6: 29.08\u79d2", "timestamp": "19:35:22", "type": "step"}, {"content": "\u6d4b\u8bd5\u6267\u884c\u5f02\u5e38: VLAN vlan36 \u6dfb\u52a0\u5e94\u8be5\u6210\u529f", "timestamp": "19:35:22", "type": "step"}], "execution_summary": {"key_steps": ["19:34:53: \u6d4b\u8bd5\u521d\u59cb\u5316\u5b8c\u6210", "19:34:53: \u5f00\u59cb\u6267\u884c: VLAN\u914d\u7f6e\u6dfb\u52a0\u529f\u80fd\u6d4b\u8bd5", "19:34:53: \u9884\u5b9a\u4e49\u6b65\u9aa45: 5. \u9a8c\u8bc1VLAN\u521b\u5efa\u6210\u529f\u5e76\u663e\u793a\u5728\u5217\u8868\u4e2d", "19:34:53: \u5f00\u59cb\u6267\u884cVLAN\u521b\u5efa\u64cd\u4f5c", "19:35:22: VLAN vlan36 \u521b\u5efa\u5931\u8d25"], "total_actions": 10, "total_steps": 14}, "method_name": "test_add_vlan", "name": "VLAN\u914d\u7f6e\u6dfb\u52a0\u529f\u80fd\u6d4b\u8bd5", "priority": "\u4e2d", "risk_level": "\u4e2d\u7b49", "start_time": "\u672a\u77e5", "status": "FAILED", "test_class": "VLAN_TEST", "test_steps": ["1. \u5bfc\u822a\u5230VLAN\u8bbe\u7f6e\u9875\u9762", "2. \u70b9\u51fb\u6dfb\u52a0VLAN\u6309\u94ae", "3. \u586b\u5199VLAN\u914d\u7f6e\u4fe1\u606f\uff08ID\u3001\u540d\u79f0\u3001IP\u5730\u5740\u3001\u5907\u6ce8\uff09", "4. \u70b9\u51fb\u4fdd\u5b58\u6309\u94ae\u63d0\u4ea4\u914d\u7f6e", "5. \u9a8c\u8bc1VLAN\u521b\u5efa\u6210\u529f\u5e76\u663e\u793a\u5728\u5217\u8868\u4e2d"]}, {"business_scenario": "\u9a8c\u8bc1\u7cfb\u7edf\u5728\u8fde\u7eed\u521b\u5efa\u591a\u4e2aVLAN\u65f6\u7684\u7a33\u5b9a\u6027\uff0c\u786e\u4fdd\u6279\u91cf\u64cd\u4f5c\u4e0d\u4f1a\u5bfc\u81f4\u7cfb\u7edf\u5f02\u5e38\u6216\u6570\u636e\u51b2\u7a81", "case_id": 2, "duration": "\u8ba1\u7b97\u4e2d...", "execution_details": [{"content": "\u6279\u91cf\u6d4b\u8bd5\u521d\u59cb\u5316\u5b8c\u6210", "timestamp": "19:35:22", "type": "step"}, {"content": "\u5f00\u59cb\u6267\u884c: \u6279\u91cfVLAN\u521b\u5efa\u529f\u80fd\u6d4b\u8bd5", "timestamp": "19:35:22", "type": "step"}, {"content": "\u4e1a\u52a1\u573a\u666f: \u9a8c\u8bc1\u7cfb\u7edf\u5728\u8fde\u7eed\u521b\u5efa\u591a\u4e2aVLAN\u65f6\u7684\u7a33\u5b9a\u6027\uff0c\u786e\u4fdd\u6279\u91cf\u64cd\u4f5c\u4e0d\u4f1a\u5bfc\u81f4\u7cfb\u7edf\u5f02\u5e38\u6216\u6570\u636e\u51b2\u7a81", "timestamp": "19:35:22", "type": "step"}, {"content": "\u51c6\u5907\u6279\u91cf\u521b\u5efa 3 \u4e2aVLAN", "timestamp": "19:35:22", "type": "step"}, {"content": "\u9884\u5b9a\u4e49\u6b65\u9aa41: 1. \u51c6\u5907\u6279\u91cfVLAN\u6d4b\u8bd5\u6570\u636e\u96c6", "timestamp": "19:35:22", "type": "step"}, {"content": "\u9884\u5b9a\u4e49\u6b65\u9aa42: 2. \u5faa\u73af\u6267\u884cVLAN\u521b\u5efa\u64cd\u4f5c", "timestamp": "19:35:22", "type": "step"}, {"content": "\u9884\u5b9a\u4e49\u6b65\u9aa43: 3. \u76d1\u63a7\u6bcf\u4e2aVLAN\u7684\u521b\u5efa\u72b6\u6001\u548c\u7cfb\u7edf\u54cd\u5e94", "timestamp": "19:35:22", "type": "step"}, {"content": "\u9884\u5b9a\u4e49\u6b65\u9aa44: 4. \u7edf\u8ba1\u6279\u91cf\u64cd\u4f5c\u7684\u6210\u529f\u7387\u548c\u5931\u8d25\u539f\u56e0", "timestamp": "19:35:22", "type": "step"}, {"content": "\u9884\u5b9a\u4e49\u6b65\u9aa45: 5. \u9a8c\u8bc1\u7cfb\u7edf\u7a33\u5b9a\u6027\u548c\u6570\u636e\u4e00\u81f4\u6027", "timestamp": "19:35:22", "type": "step"}, {"content": "\u6b63\u5728\u521b\u5efa\u7b2c1\u4e2aVLAN: vlan201", "timestamp": "19:35:22", "type": "step"}, {"content": "\u5f00\u59cb\u6dfb\u52a0VLAN: ID=201, Name=vlan201", "timestamp": "19:35:22", "type": "system"}, {"content": "\u6210\u529f\u70b9\u51fb\u6587\u672c\u5143\u7d20: \u7f51\u7edc\u8bbe\u7f6e", "timestamp": "19:35:24", "type": "system"}, {"content": "\u6210\u529f\u70b9\u51fb\u94fe\u63a5: VLAN\u8bbe\u7f6e", "timestamp": "19:35:26", "type": "system"}, {"content": "\u6210\u529f\u5bfc\u822a\u5230VLAN\u8bbe\u7f6e\u9875\u9762", "timestamp": "19:35:29", "type": "system"}, {"content": "\u6210\u529f\u70b9\u51fb\u94fe\u63a5: \u6dfb\u52a0", "timestamp": "19:35:29", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027vlan_id\u0027]: 201", "timestamp": "19:35:32", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027vlan_name\u0027]: vlan201", "timestamp": "19:35:32", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027ip_addr\u0027]: 192.168.201.1", "timestamp": "19:35:32", "type": "system"}, {"content": "\u6210\u529f\u8f93\u5165\u6587\u672c\u5230 input[name=\u0027comment\u0027]: \u6279\u91cf\u6d4b\u8bd5VLAN201", "timestamp": "19:35:32", "type": "system"}, {"content": "\u6210\u529f\u70b9\u51fb\u5143\u7d20 role=button, name=\u4fdd\u5b58", "timestamp": "19:35:33", "type": "system"}, {"content": "VLAN vlan201 \u521b\u5efa\u5931\u8d25", "timestamp": "19:35:51", "type": "step"}, {"content": "\u6b63\u5728\u521b\u5efa\u7b2c2\u4e2aVLAN: vlan202", "timestamp": "19:35:52", "type": "step"}, {"content": "\u5f00\u59cb\u6dfb\u52a0VLAN: ID=202, Name=vlan202", "timestamp": "19:35:52", "type": "system"}], "execution_summary": {"key_steps": ["19:35:22: \u6279\u91cf\u6d4b\u8bd5\u521d\u59cb\u5316\u5b8c\u6210", "19:35:22: \u5f00\u59cb\u6267\u884c: \u6279\u91cfVLAN\u521b\u5efa\u529f\u80fd\u6d4b\u8bd5", "19:35:51: VLAN vlan201 \u521b\u5efa\u5931\u8d25"], "total_actions": 11, "total_steps": 12}, "method_name": "test_add_multiple_vlans", "name": "\u6279\u91cfVLAN\u521b\u5efa\u529f\u80fd\u6d4b\u8bd5", "priority": "\u4e2d", "risk_level": "\u4e2d\u7b49", "start_time": "\u672a\u77e5", "status": "PASSED", "test_class": "VLAN_TEST", "test_steps": ["1. \u51c6\u5907\u6279\u91cfVLAN\u6d4b\u8bd5\u6570\u636e\u96c6", "2. \u5faa\u73af\u6267\u884cVLAN\u521b\u5efa\u64cd\u4f5c", "3. \u76d1\u63a7\u6bcf\u4e2aVLAN\u7684\u521b\u5efa\u72b6\u6001\u548c\u7cfb\u7edf\u54cd\u5e94", "4. \u7edf\u8ba1\u6279\u91cf\u64cd\u4f5c\u7684\u6210\u529f\u7387\u548c\u5931\u8d25\u539f\u56e0", "5. \u9a8c\u8bc1\u7cfb\u7edf\u7a33\u5b9a\u6027\u548c\u6570\u636e\u4e00\u81f4\u6027"]}];
+        
+        function showDetails(index) {
+            const testCase = testCases[index];
+            const modal = document.getElementById('detailsModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+            
+            modalTitle.textContent = testCase.name;
+            
+            let detailsHtml = `
+                <div class="detail-section">
+                    <div class="detail-title">💼 业务场景</div>
+                    <div>${testCase.business_scenario}</div>
+                </div>
+                
+                <div class="detail-section">
+                    <div class="detail-title">📋 预定义测试步骤</div>
+                    <ul class="steps-list">
+                        ${testCase.test_steps.map(step => `<li>${step}</li>`).join('')}
+                    </ul>
+                </div>
+                
+                <div class="detail-section">
+                    <div class="detail-title">🚀 实际执行详情</div>
+                    <div class="execution-timeline">
+                        ${testCase.execution_details.map(detail => `
+                            <div class="timeline-item ${detail.type}">
+                                <div class="timeline-time">${detail.timestamp}</div>
+                                <div class="timeline-content">${detail.content}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div class="detail-section">
+                    <div class="detail-title">📊 执行摘要</div>
+                    <div>
+                        <strong>执行步骤数：</strong>${testCase.execution_summary ? testCase.execution_summary.total_steps : 0}<br>
+                        <strong>系统操作数：</strong>${testCase.execution_summary ? testCase.execution_summary.total_actions : 0}<br>
+                        <strong>执行时间：</strong>${testCase.duration}
+                    </div>
+                </div>
+            `;
+            
+            modalBody.innerHTML = detailsHtml;
+            modal.style.display = 'block';
+        }
+        
+        function closeModal() {
+            document.getElementById('detailsModal').style.display = 'none';
+        }
+        
+        // 点击模态框外部关闭
+        window.onclick = function(event) {
+            const modal = document.getElementById('detailsModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+        
+        // ESC键关闭模态框
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

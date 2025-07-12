@@ -1,0 +1,24 @@
+# GUI界面配置
+window:
+  title: "路由器自动化测试工具"
+  width: 2880
+  height: 1800
+  resizable: true
+
+theme:
+  style: "Fusion"
+  colors:
+    primary: "#2196F3"
+    secondary: "#FFC107"
+    success: "#4CAF50"
+    warning: "#FF9800"
+    error: "#F44336"
+
+test_options:
+  default_cycles: 1
+  max_cycles: 100
+  available_functions:
+    - "VLAN设置"
+    - "端口映射"
+    - "ACL规则"
+    - "全部功能"

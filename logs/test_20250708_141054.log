@@ -1,0 +1,5 @@
+2025-07-08 14:11:06,435 - RouterTest - INFO - 测试配置更新成功
+2025-07-08 14:11:56,057 - RouterTest - INFO - 强制重新创建表格样式模板成功
+2025-07-08 14:11:56,063 - RouterTest - INFO - 成功加载VLAN配置，包含 7 个测试用例
+2025-07-08 14:11:56,063 - RouterTest - INFO - 开始解析测试输出，共 87 行
+2025-07-08 14:11:56,064 - RouterTest - ERROR - 生成中文测试报告失败: cannot access local variable 'default_name' where it is not associated with a value
