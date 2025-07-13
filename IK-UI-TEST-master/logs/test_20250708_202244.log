@@ -1,7 +1,0 @@
-2025-07-08 20:22:44,351 - RouterTest - INFO - 开始登录，用户名: admin
-2025-07-08 20:22:45,081 - RouterTest - INFO - 成功导航到页面: http://10.66.0.40/login#/login
-2025-07-08 20:22:47,222 - RouterTest - INFO - 成功输入文本 role=textbox, name=用户名: admin
-2025-07-08 20:22:47,342 - RouterTest - INFO - 成功输入文本 role=textbox, name=密码: admin123
-2025-07-08 20:22:47,492 - RouterTest - INFO - 成功点击元素 role=button, name=登录
-2025-07-08 20:22:53,022 - RouterTest - INFO - 找到成功指示器: 网络设置
-2025-07-08 20:22:53,023 - RouterTest - INFO - 登录成功: admin
