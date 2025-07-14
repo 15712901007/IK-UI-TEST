@@ -1,0 +1,57 @@
+2025-07-13 10:15:57,547 - RouterTest - INFO - 浏览器设置完成
+2025-07-13 10:15:57,576 - RouterTest - INFO - 快速登录中...
+2025-07-13 10:15:57,578 - RouterTest - INFO - 开始登录，用户名: admin
+2025-07-13 10:15:59,449 - RouterTest - INFO - 成功导航到页面: http://10.66.0.40/login#/login
+2025-07-13 10:16:01,607 - RouterTest - INFO - 成功输入文本 role=textbox, name=用户名: admin
+2025-07-13 10:16:01,658 - RouterTest - INFO - 成功输入文本 role=textbox, name=密码: admin123
+2025-07-13 10:16:01,785 - RouterTest - INFO - 成功点击元素 role=button, name=登录
+2025-07-13 10:16:07,467 - RouterTest - INFO - 找到成功指示器: [class*='main']
+2025-07-13 10:16:07,468 - RouterTest - INFO - 登录成功: admin
+2025-07-13 10:16:07,469 - RouterTest - INFO - ✅ 登录成功
+2025-07-13 10:16:07,470 - RouterTest - INFO - 🔧 开始执行VLAN编辑功能测试...
+2025-07-13 10:16:07,547 - RouterTest - INFO - 开始编辑VLAN: 888
+2025-07-13 10:16:07,548 - RouterTest - INFO - 导航到VLAN设置页面
+2025-07-13 10:16:09,696 - RouterTest - INFO - 成功点击文本元素: 网络设置
+2025-07-13 10:16:11,564 - RouterTest - INFO - 成功点击链接: VLAN设置
+2025-07-13 10:16:15,070 - RouterTest - INFO - 成功导航到VLAN设置页面
+2025-07-13 10:16:17,075 - RouterTest - INFO - 步骤1: 点击VLAN888的编辑按钮
+2025-07-13 10:16:17,899 - RouterTest - INFO - ✅ 已点击VLAN888的编辑按钮
+2025-07-13 10:16:19,900 - RouterTest - INFO - 步骤2: 测试取消按钮功能
+2025-07-13 10:16:19,904 - RouterTest - INFO - [API监听] 捕获到VLAN接口: action=show, url=http://10.66.0.40/Action/call
+2025-07-13 10:16:19,904 - RouterTest - INFO - [API监听] 请求体: {"func_name":"vlan","action":"show","param":{"TYPE":"interface"}}
+2025-07-13 10:16:19,916 - RouterTest - INFO - [API监听] 响应: {'Result': 30000, 'ErrMsg': 'Success', 'Data': {'interface': [['lan1'], ['vlan201', '批量测试VLAN201'], ['vlan202', '批量测试VLAN202'], ['vlan203', '批量测试VLAN203'], ['vlan36', '基础VLAN测试'], ['vlan888', '工作流程测试VLAN']]}}
+2025-07-13 10:16:19,936 - RouterTest - INFO - [API-SHOW] JSON: api_logs\vlan\show_vlan_edit_888.json
+2025-07-13 10:16:19,937 - RouterTest - INFO - [API-SHOW] CURL: api_logs\vlan\show_vlan_edit_888.curl
+2025-07-13 10:16:19,992 - RouterTest - INFO - ✅ 已点击取消按钮
+2025-07-13 10:16:21,993 - RouterTest - INFO - ✅ 取消功能正常，已返回VLAN列表页面
+2025-07-13 10:16:21,994 - RouterTest - INFO - 步骤3: 再次点击VLAN888的编辑按钮
+2025-07-13 10:16:22,336 - RouterTest - INFO - ✅ 已点击VLAN888的编辑按钮
+2025-07-13 10:16:24,337 - RouterTest - INFO - 步骤4: 修改VLAN名称
+2025-07-13 10:16:24,342 - RouterTest - INFO - [API监听] 捕获到VLAN接口: action=show, url=http://10.66.0.40/Action/call
+2025-07-13 10:16:24,343 - RouterTest - INFO - [API监听] 请求体: {"func_name":"vlan","action":"show","param":{"TYPE":"interface"}}
+2025-07-13 10:16:24,349 - RouterTest - INFO - [API监听] 响应: {'Result': 30000, 'ErrMsg': 'Success', 'Data': {'interface': [['lan1'], ['vlan201', '批量测试VLAN201'], ['vlan202', '批量测试VLAN202'], ['vlan203', '批量测试VLAN203'], ['vlan36', '基础VLAN测试'], ['vlan888', '工作流程测试VLAN']]}}
+2025-07-13 10:16:24,363 - RouterTest - INFO - [API-SHOW] JSON: api_logs\vlan\show_vlan_edit_888.json
+2025-07-13 10:16:24,364 - RouterTest - INFO - [API-SHOW] CURL: api_logs\vlan\show_vlan_edit_888.curl
+2025-07-13 10:16:24,370 - RouterTest - INFO - ✅ 已修改VLAN名称为: vlan888_edited
+2025-07-13 10:16:24,371 - RouterTest - INFO - 步骤5: 修改IP地址
+2025-07-13 10:16:54,407 - RouterTest - ERROR - 执行编辑操作失败: Locator.fill: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator("input[name='ip'], input[name='ip_addr'], [placeholder*='IP']").first
+    - locator resolved to <input type="text" name="searchText" data-v-27cd4b04="" placeholder="vlanID/Vlan名称/IP/备注" class="focuseText inptText search_inpt"/>
+    - fill("192.168.88.100")
+  - attempting fill action
+    2 × waiting for element to be visible, enabled and editable
+      - element is not visible
+    - retrying fill action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and editable
+      - element is not visible
+    - retrying fill action
+      - waiting 100ms
+    59 × waiting for element to be visible, enabled and editable
+       - element is not visible
+     - retrying fill action
+       - waiting 500ms
+
+2025-07-13 10:16:54,411 - RouterTest - INFO - [API监听] 已清理API监听器
+2025-07-13 10:16:55,507 - RouterTest - INFO - 浏览器资源清理完成

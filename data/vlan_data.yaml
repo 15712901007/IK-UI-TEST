@@ -39,6 +39,94 @@ workflow_vlans:
       - ip: "192.168.113.1"
         mask: "255.255.255.0(24)"
 
+# 编辑功能测试数据
+edit_test_data:
+  target_vlan:
+    id: "888"
+    name: "vlan888"
+    description: "编辑VLAN888的功能测试"
+  
+  # 编辑前的原始数据
+  original_data:
+    vlan_id: "888"
+    vlan_name: "vlan888"
+    ip_addr: "192.168.88.1"
+    subnet_mask: "255.255.255.0"
+    line: "lan1"
+    comment: "工作流程测试VLAN"
+    extend_ips:
+      - ip: "192.168.113.1"
+        mask: "255.255.255.0(24)"
+  
+  # 编辑后的新数据
+  edited_data:
+    vlan_id: "888"  # VLAN ID通常不可编辑
+    vlan_name: "vlan888_edited"
+    ip_addr: "192.168.88.100"
+    subnet_mask: "255.255.255.128"
+    line: "vlan201"  # 先选择vlan201再改回lan1
+    line_final: "lan1"
+    comment: "编辑后的工作流程测试VLAN"
+    extend_ips:
+      - ip: "192.168.116.1"
+        mask: "255.255.255.128(25)"
+  
+  # 验证数据（用于结果验证，对应表格字段）
+  verification_data:
+    vlan_name: "vlan888_edited"
+    ip_addr: "192.168.88.100"
+    subnet_mask: "255.255.255.128"
+    line: "lan1"
+    comment: "编辑后的工作流程测试VLAN"
+  
+  # 编辑操作步骤
+  edit_steps:
+    - step: "点击VLAN888的编辑按钮"
+      action: "click_edit_button"
+      target: "vlan888"
+    
+    - step: "测试取消按钮功能"
+      action: "click_cancel"
+      expected: "返回VLAN列表页面"
+    
+    - step: "再次点击编辑按钮"
+      action: "click_edit_button"
+      target: "vlan888"
+    
+    - step: "修改VLAN名称"
+      action: "edit_field"
+      field: "vlan_name"
+      value: "vlan888_edited"
+    
+    - step: "修改IP地址"
+      action: "edit_field"
+      field: "ip_addr"
+      value: "192.168.88.100"
+    
+    - step: "修改子网掩码"
+      action: "select_option"
+      field: "subnet_mask"
+      value: "255.255.255.128"
+    
+    - step: "修改线路选择"
+      action: "select_option"
+      field: "line"
+      value: "lan1"
+    
+    - step: "编辑扩展IP"
+      action: "edit_extend_ip"
+      ip: "192.168.116.1"
+      mask: "255.255.255.128"
+    
+    - step: "修改备注"
+      action: "edit_field"
+      field: "comment"
+      value: "编辑后的工作流程测试VLAN"
+    
+    - step: "保存修改"
+      action: "click_save"
+      expected: "保存成功并返回列表"
+
 # 搜索功能测试数据
 search_test_data:
   search_scenarios:
@@ -195,6 +283,25 @@ test_cases:
       - "8. 搜索不存在的内容，验证空结果显示"
       - "9. 测试搜索的实时过滤效果"
       - "10. 验证搜索API调用和响应"
+
+  test_edit_vlan:
+    name: "VLAN编辑功能测试"
+    business_scenario: "验证VLAN配置的编辑修改功能，确保管理员能够正确更新现有VLAN配置并保持数据一致性"
+    test_steps:
+      - "1. 导航到VLAN设置页面，定位VLAN888"
+      - "2. 点击VLAN888的编辑按钮，进入编辑页面"
+      - "3. 点击取消按钮，验证返回列表页面功能"
+      - "4. 再次点击VLAN888的编辑按钮，重新进入编辑页面"
+      - "5. 修改VLAN名称为新的名称"
+      - "6. 修改IP地址为新的地址"
+      - "7. 通过下拉框修改子网掩码"
+      - "8. 通过下拉框修改线路配置"
+      - "9. 编辑扩展IP地址和对应的子网掩码"
+      - "10. 修改备注信息"
+      - "11. 点击保存按钮提交修改"
+      - "12. 验证编辑成功并返回列表页面"
+      - "13. 验证列表中显示的数据已更新"
+      - "14. 验证编辑API调用和响应"
 
 # 功能模块说明
 module_info:

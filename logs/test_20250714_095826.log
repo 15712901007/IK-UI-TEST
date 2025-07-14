@@ -1,0 +1,65 @@
+2025-07-14 09:58:29,497 - RouterTest - INFO - 浏览器设置完成
+2025-07-14 09:58:29,502 - RouterTest - INFO - 快速登录中...
+2025-07-14 09:58:29,502 - RouterTest - INFO - 开始登录，用户名: admin
+2025-07-14 09:58:30,343 - RouterTest - INFO - 成功导航到页面: http://10.66.0.40/login#/login
+2025-07-14 09:58:32,379 - RouterTest - INFO - 成功输入文本 role=textbox, name=用户名: admin
+2025-07-14 09:58:32,391 - RouterTest - INFO - 成功输入文本 role=textbox, name=密码: admin123
+2025-07-14 09:58:32,425 - RouterTest - INFO - 成功点击元素 role=button, name=登录
+2025-07-14 09:58:38,028 - RouterTest - INFO - 找到成功指示器: [class*='main']
+2025-07-14 09:58:38,028 - RouterTest - INFO - 登录成功: admin
+2025-07-14 09:58:38,028 - RouterTest - INFO - ✅ 登录成功
+2025-07-14 09:58:38,028 - RouterTest - INFO - 🔧 开始执行VLAN编辑功能测试...
+2025-07-14 09:58:38,045 - RouterTest - INFO - 开始编辑VLAN: 888
+2025-07-14 09:58:38,045 - RouterTest - INFO - 导航到VLAN设置页面
+2025-07-14 09:58:40,084 - RouterTest - INFO - 成功点击文本元素: 网络设置
+2025-07-14 09:58:41,672 - RouterTest - INFO - 成功点击链接: VLAN设置
+2025-07-14 09:58:45,174 - RouterTest - INFO - 成功导航到VLAN设置页面
+2025-07-14 09:58:47,175 - RouterTest - INFO - 步骤1: 点击VLAN888的编辑按钮
+2025-07-14 09:58:47,320 - RouterTest - INFO - ✅ 已点击VLAN888的编辑按钮
+2025-07-14 09:58:49,320 - RouterTest - INFO - 步骤2: 测试取消按钮功能
+2025-07-14 09:58:49,328 - RouterTest - WARNING - 未找到取消按钮
+2025-07-14 09:58:49,328 - RouterTest - INFO - 步骤3: 再次点击VLAN888的编辑按钮
+2025-07-14 09:58:49,461 - RouterTest - INFO - ✅ 已点击VLAN888的编辑按钮
+2025-07-14 09:58:51,462 - RouterTest - INFO - 步骤4: 修改VLAN名称
+2025-07-14 09:58:51,504 - RouterTest - INFO - ✅ 已修改VLAN名称为: vlan888_edited
+2025-07-14 09:58:51,504 - RouterTest - INFO - 步骤5: 修改IP地址
+2025-07-14 09:58:51,525 - RouterTest - WARNING - 未找到IP地址输入框
+2025-07-14 09:58:51,525 - RouterTest - INFO - 步骤6: 修改子网掩码
+2025-07-14 09:59:21,534 - RouterTest - WARNING - 修改子网掩码失败: Locator.select_option: Timeout 30000ms exceeded.
+Call log:
+  - waiting for get_by_role("combobox").first
+    - locator resolved to <select class="selects" data-v-55332825="">…</select>
+  - attempting select option action
+    2 × waiting for element to be visible and enabled
+      - did not find some options
+    - retrying select option action
+    - waiting 20ms
+    2 × waiting for element to be visible and enabled
+      - did not find some options
+    - retrying select option action
+      - waiting 100ms
+    58 × waiting for element to be visible and enabled
+       - did not find some options
+     - retrying select option action
+       - waiting 500ms
+
+2025-07-14 09:59:21,534 - RouterTest - INFO - 步骤7: 修改线路配置
+2025-07-14 09:59:21,551 - RouterTest - WARNING - 未找到线路下拉框
+2025-07-14 09:59:21,551 - RouterTest - INFO - 步骤8: 编辑扩展IP
+2025-07-14 09:59:21,775 - RouterTest - WARNING - 编辑扩展IP失败: Locator.click: Error: strict mode violation: get_by_role("rowgroup").get_by_text("编辑") resolved to 6 elements:
+    1) <a>编辑</a> aka get_by_text("编辑", exact=True).first
+    2) <a>编辑</a> aka get_by_text("编辑", exact=True).nth(1)
+    3) <a>编辑</a> aka get_by_text("编辑", exact=True).nth(2)
+    4) <a>编辑</a> aka get_by_text("编辑", exact=True).nth(3)
+    5) <span class="verticals">↵                                    编辑后的工作流程测试VL…</span> aka get_by_text("编辑后的工作流程测试VLAN")
+    6) <a>编辑</a> aka get_by_text("编辑", exact=True).nth(4)
+
+Call log:
+  - waiting for get_by_role("rowgroup").get_by_text("编辑")
+
+2025-07-14 09:59:21,776 - RouterTest - INFO - 步骤9: 修改备注
+2025-07-14 09:59:21,849 - RouterTest - INFO - ✅ 已修改备注为: 编辑后的工作流程测试VLAN
+2025-07-14 09:59:21,850 - RouterTest - INFO - 步骤11: 保存修改
+2025-07-14 09:59:21,861 - RouterTest - ERROR - 未找到保存按钮
+2025-07-14 09:59:21,862 - RouterTest - INFO - [API监听] 已清理API监听器
+2025-07-14 09:59:22,392 - RouterTest - INFO - 浏览器资源清理完成

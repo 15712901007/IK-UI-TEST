@@ -652,6 +652,127 @@ class TestVlan:
 
         print("[测试结束] test_search_vlan - 成功", flush=True)
     
+    def test_edit_vlan(self, logged_in_page, caplog):
+        """VLAN编辑功能测试"""
+        self.test_start_time = time.time()
+        print("[测试开始] test_edit_vlan", flush=True)
+
+        if logged_in_page is None:
+            pytest.skip("Playwright 不可用")
+
+        with caplog.at_level(logging.INFO):
+            try:
+                # 从YAML获取测试用例配置
+                test_case_config = self.vlan_data.get('test_cases', {}).get('test_edit_vlan', {})
+                edit_test_data = self.vlan_data.get('edit_test_data', {})
+                
+                if not edit_test_data:
+                    pytest.fail("未找到编辑测试数据配置")
+                
+                target_vlan = edit_test_data.get('target_vlan', {})
+                original_data = edit_test_data.get('original_data', {})
+                edited_data = edit_test_data.get('edited_data', {})
+                
+                vlan_id = target_vlan.get('id', '888')
+                
+                self._log_step("VLAN编辑功能测试初始化完成")
+                self._log_step(f"开始执行: {test_case_config.get('name', 'VLAN编辑功能测试')}")
+                self._log_step(f"业务场景: {test_case_config.get('business_scenario', '验证VLAN编辑功能')}")
+                self._log_step(f"目标VLAN: {vlan_id} ({target_vlan.get('name', 'vlan888')})")
+                
+                # 记录YAML中定义的测试步骤
+                test_steps = test_case_config.get('test_steps', [])
+                for i, step in enumerate(test_steps, 1):
+                    self._log_step(f"预定义步骤{i}: {step}")
+                
+                vlan_page = VlanPage(logged_in_page)
+                
+                # 步骤1: 验证目标VLAN存在
+                self._log_step(f"步骤1: 验证VLAN{vlan_id}存在")
+                initial_vlans = vlan_page.get_vlan_list()
+                target_found = any(vlan.get('id') == vlan_id for vlan in initial_vlans)
+                
+                if not target_found:
+                    self._log_step(f"目标VLAN{vlan_id}不存在，先创建", "warning")
+                    # 使用工作流程VLAN数据创建
+                    workflow_vlans = self.vlan_data.get('workflow_vlans', [])
+                    if workflow_vlans:
+                        create_vlan = workflow_vlans[0]
+                        vlan_page.add_vlan(
+                            vlan_id=create_vlan.get('id'),
+                            vlan_name=create_vlan.get('name'),
+                            ip_addr=create_vlan.get('ip_addr'),
+                            comment=create_vlan.get('comment')
+                        )
+                        self._log_step(f"已创建VLAN{vlan_id}用于编辑测试")
+                else:
+                    self._log_step(f"VLAN{vlan_id}已存在，可以进行编辑测试")
+                
+                # 步骤2: 显示编辑前后数据对比
+                self._log_step("步骤2: 编辑数据对比")
+                self._log_step(f"编辑前 - 名称: {original_data.get('vlan_name', '')}")
+                self._log_step(f"编辑后 - 名称: {edited_data.get('vlan_name', '')}")
+                self._log_step(f"编辑前 - IP地址: {original_data.get('ip_addr', '')}")
+                self._log_step(f"编辑后 - IP地址: {edited_data.get('ip_addr', '')}")
+                self._log_step(f"编辑前 - 备注: {original_data.get('comment', '')}")
+                self._log_step(f"编辑后 - 备注: {edited_data.get('comment', '')}")
+                
+                # 步骤3: 准备编辑数据
+                edit_data_with_temp = edited_data.copy()
+                if 'line' in edited_data and 'line_final' in edited_data:
+                    edit_data_with_temp['line_temp'] = edited_data.get('line', 'vlan201')
+                    edit_data_with_temp['line'] = edited_data.get('line_final', 'lan1')
+                
+                # 步骤4: 执行编辑操作
+                self._log_step("步骤3: 执行VLAN编辑操作")
+                edit_result = vlan_page.edit_vlan(vlan_id, edit_data_with_temp)
+                
+                if edit_result:
+                    self._log_step("VLAN编辑操作执行成功", "success")
+                    
+                    # 步骤5: 验证编辑结果
+                    self._log_step("步骤4: 验证编辑结果")
+                    verification_data = edit_test_data.get('verification_data', {})
+                    verify_result = vlan_page.verify_vlan_edited(vlan_id, verification_data)
+                    
+                    if verify_result:
+                        self._log_step("VLAN编辑结果验证通过", "success")
+                        
+                        # 步骤6: 获取编辑后的VLAN信息
+                        self._log_step("步骤5: 获取编辑后的VLAN信息")
+                        updated_vlans = vlan_page.get_vlan_list()
+                        updated_vlan = next((v for v in updated_vlans if v.get('id') == vlan_id), None)
+                        
+                        if updated_vlan:
+                            self._log_step(f"编辑后VLAN信息 - ID: {updated_vlan.get('id', '')}")
+                            self._log_step(f"编辑后VLAN信息 - 名称: {updated_vlan.get('name', '')}")
+                            self._log_step(f"编辑后VLAN信息 - IP: {updated_vlan.get('ip', '')}")
+                            self._log_step(f"编辑后VLAN信息 - 备注: {updated_vlan.get('comment', '')}")
+                        
+                        self._log_step("VLAN编辑功能测试完成", "success")
+                        
+                        # 计算执行时间
+                        execution_time = time.time() - self.test_start_time
+                        self._log_step(f"执行耗时: {execution_time:.2f}秒")
+                        
+                        print(f"[测试结束] test_edit_vlan - 成功", flush=True)
+                        
+                    else:
+                        self._log_step("VLAN编辑结果验证失败", "error")
+                        pytest.fail("VLAN编辑结果验证失败")
+                        
+                else:
+                    self._log_step("VLAN编辑操作执行失败", "error")
+                    pytest.fail("VLAN编辑操作执行失败")
+                
+            except Exception as e:
+                self._log_step(f"VLAN编辑功能测试异常: {str(e)}", "error")
+                execution_time = time.time() - self.test_start_time
+                self._log_step(f"执行耗时: {execution_time:.2f}秒")
+                pytest.fail(f"VLAN编辑功能测试失败: {str(e)}")
+
+        print("[测试结束] test_edit_vlan - 完成", flush=True)
+    
     def get_execution_details(self):
         """获取执行详情（供报告生成器使用）"""
         return self.execution_details

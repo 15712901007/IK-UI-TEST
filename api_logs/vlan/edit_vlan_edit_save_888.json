@@ -1,0 +1,43 @@
+{
+  "timestamp": 1752479915,
+  "url": "http://10.66.0.40/Action/call",
+  "method": "POST",
+  "request_headers": {
+    "accept": "application/json, text/plain, */*",
+    "accept-encoding": "gzip, deflate",
+    "accept-language": "zh-CN,zh;q=0.9",
+    "connection": "keep-alive",
+    "content-length": "328",
+    "content-type": "application/json;charset=UTF-8",
+    "cookie": "sess_key=34a57ef5466a2e66ba10a1055aeab66b; username=admin; login=1",
+    "host": "10.66.0.40",
+    "referer": "http://10.66.0.40/",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+  },
+  "request_body": "{\"func_name\":\"vlan\",\"action\":\"edit\",\"param\":{\"id\":5,\"enabled\":\"yes\",\"comment\":\"编辑后的工作流程测试VLAN\",\"vlan_id\":\"888\",\"vlan_name\":\"vlan888_edited\",\"mac\":\"00:40:fb:22:ff:06\",\"ip_addr\":\"192.168.88.100\",\"netmask\":\"255.255.255.128\",\"ip_addr_int\":3232258049,\"ip_mask\":\"192.168.116.1/255.255.255.128\",\"interface\":\"lan1\"}}",
+  "response_status": 200,
+  "response_headers": {
+    "x-timezone": "0800",
+    "x-enterprise": "1",
+    "x-default-ip": "0",
+    "expires": "0",
+    "date": "Mon, 14 Jul 2025 07:58:27 GMT",
+    "x-arch": "x86",
+    "content-type": "application/json;charset=UTF-8",
+    "x-sysbit": "x64",
+    "cache-control": "no-cache",
+    "x-support-i18n": "1",
+    "pragma": "no-cache",
+    "connection": "close",
+    "x-timestamp": "1752479907",
+    "x-support-wifi": "0",
+    "x-lang": "1",
+    "content-length": "36",
+    "server": "Nginx"
+  },
+  "response_body": {
+    "Result": 30000,
+    "ErrMsg": "Success"
+  },
+  "python": "import requests, json\nurl = 'http://10.66.0.40/Action/call'\nheaders = {\n  \"accept\": \"application/json, text/plain, */*\",\n  \"accept-encoding\": \"gzip, deflate\",\n  \"accept-language\": \"zh-CN,zh;q=0.9\",\n  \"connection\": \"keep-alive\",\n  \"content-length\": \"328\",\n  \"content-type\": \"application/json;charset=UTF-8\",\n  \"cookie\": \"sess_key=34a57ef5466a2e66ba10a1055aeab66b; username=admin; login=1\",\n  \"host\": \"10.66.0.40\",\n  \"referer\": \"http://10.66.0.40/\",\n  \"user-agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36\"\n}\ndata = \"{\\\"func_name\\\":\\\"vlan\\\",\\\"action\\\":\\\"edit\\\",\\\"param\\\":{\\\"id\\\":5,\\\"enabled\\\":\\\"yes\\\",\\\"comment\\\":\\\"编辑后的工作流程测试VLAN\\\",\\\"vlan_id\\\":\\\"888\\\",\\\"vlan_name\\\":\\\"vlan888_edited\\\",\\\"mac\\\":\\\"00:40:fb:22:ff:06\\\",\\\"ip_addr\\\":\\\"192.168.88.100\\\",\\\"netmask\\\":\\\"255.255.255.128\\\",\\\"ip_addr_int\\\":3232258049,\\\"ip_mask\\\":\\\"192.168.116.1/255.255.255.128\\\",\\\"interface\\\":\\\"lan1\\\"}}\"\nresp = requests.post(url, headers=headers, data=data, verify=False)\nprint(resp.text)"
+}

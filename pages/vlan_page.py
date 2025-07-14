@@ -34,11 +34,19 @@ class VlanPage(BasePage):
         matched_calls: list = []
         
         def _hook(req):
+            # 调试：记录所有POST请求
+            if req.method.lower() == "post":
+                self.logger.debug(f"[调试] POST请求: {req.url}")
+                if req.post_data:
+                    self.logger.debug(f"[调试] 请求体: {req.post_data[:200]}...")  # 只显示前200个字符
+            
             # 只处理 POST /Action/call
             if req.method.lower() != "post" or "/action/call" not in req.url.lower():
                 return
 
             body = (req.post_data or "").lower()
+            self.logger.debug(f"[调试] Action/call请求体: {body}")
+            
             # func_name=vlan
             if "\"func_name\":\"vlan\"" in body:
                 # 解析 action 字段 (add / show / edit / up / down / EXPORT / IMPORT ...)
@@ -405,12 +413,17 @@ class VlanPage(BasePage):
                     if rows:
                         for row in rows:
                             cells = row.query_selector_all("td")
-                            if len(cells) >= 2:
+                            if len(cells) >= 4:  # 确保有足够的列
+                                # 根据表格结构：vlanID | vlan名称 | MAC | IP | 子网掩码 | 线路 | 备注 | 状态 | 操作
                                 vlan_data = {
                                     'id': (cells[0].text_content() or "").strip() if len(cells) > 0 else "",
                                     'name': (cells[1].text_content() or "").strip() if len(cells) > 1 else "",
-                                    'ip': (cells[2].text_content() or "").strip() if len(cells) > 2 else "",
-                                    'comment': (cells[3].text_content() or "").strip() if len(cells) > 3 else ""
+                                    'mac': (cells[2].text_content() or "").strip() if len(cells) > 2 else "",
+                                    'ip': (cells[3].text_content() or "").strip() if len(cells) > 3 else "",
+                                    'subnet_mask': (cells[4].text_content() or "").strip() if len(cells) > 4 else "",
+                                    'line': (cells[5].text_content() or "").strip() if len(cells) > 5 else "",
+                                    'comment': (cells[6].text_content() or "").strip() if len(cells) > 6 else "",
+                                    'status': (cells[7].text_content() or "").strip() if len(cells) > 7 else ""
                                 }
                                 # 过滤掉空行
                                 if vlan_data['id'] or vlan_data['name']:
@@ -420,6 +433,12 @@ class VlanPage(BasePage):
                     continue
                     
             self.logger.info(f"获取到VLAN列表，共 {len(vlans)} 条记录")
+            
+            # 调试输出：显示解析的数据结构
+            if vlans:
+                sample_vlan = vlans[0]
+                self.logger.debug(f"VLAN数据结构示例: {sample_vlan}")
+            
             return vlans
             
         except Exception as e:
@@ -1280,4 +1299,451 @@ class VlanPage(BasePage):
             
         except Exception as e:
             self.logger.error(f"验证搜索结果失败: {e}")
+            return False
+
+    def edit_vlan(self, vlan_id: str, edit_data: dict):
+        """编辑VLAN配置"""
+        try:
+            self.logger.info(f"开始编辑VLAN: {vlan_id}")
+            
+            # 确保在VLAN页面
+            if not self.navigate_to_vlan_page():
+                return False
+            
+            # 等待页面加载
+            time.sleep(2)
+            
+            # 步骤1: 点击指定VLAN的编辑按钮
+            self.logger.info(f"步骤1: 点击VLAN{vlan_id}的编辑按钮")
+            if not self._click_vlan_edit_button(vlan_id):
+                return False
+            
+            # 等待编辑页面加载
+            time.sleep(2)
+            
+            # 步骤2: 测试取消按钮功能
+            self.logger.info("步骤2: 测试取消按钮功能")
+            # 严格按照录制代码：page.get_by_role("button", name="取消").click()
+            try:
+                cancel_button = self.page.get_by_role("button", name="取消")
+                if cancel_button.count() > 0:
+                    cancel_button.click()
+                    self.logger.info("✅ 已点击取消按钮")
+                    time.sleep(2)
+                    
+                    # 验证是否返回到列表页面
+                    if self.page.url.find("vlan") != -1:
+                        self.logger.info("✅ 取消功能正常，已返回VLAN列表页面")
+                    else:
+                        self.logger.warning("取消后页面状态异常")
+                else:
+                    self.logger.warning("未找到取消按钮")
+            except Exception as e:
+                self.logger.warning(f"取消按钮操作失败: {e}")
+            
+            # 步骤3: 再次点击编辑按钮
+            self.logger.info(f"步骤3: 再次点击VLAN{vlan_id}的编辑按钮")
+            if not self._click_vlan_edit_button(vlan_id):
+                return False
+            
+            # 等待编辑页面加载
+            time.sleep(2)
+            
+            # 步骤4-10: 执行编辑操作
+            if not self._perform_edit_operations(edit_data):
+                return False
+            
+            # 步骤11: 保存修改 - 在保存前设置API监听器
+            self.logger.info("步骤11: 保存修改")
+            
+            # 在点击保存按钮前设置API监听器，只捕获保存操作的API
+            hook_func, matched_calls = self._setup_vlan_api_listener(f"edit_save_{vlan_id}")
+            
+            # 同时监听request和requestfinished事件
+            self.page.on("request", hook_func)
+            self.page.on("requestfinished", hook_func)
+            
+            try:
+                # 尝试多种保存按钮定位方式
+                save_button = None
+                save_selectors = [
+                    ("button", "保存"),
+                    ("button", "确定"),
+                    ("button", "提交"),
+                    ("link", "保存"),
+                    ("link", "确定")
+                ]
+                
+                for role, name in save_selectors:
+                    try:
+                        button = self.page.get_by_role(role, name=name)
+                        if button.count() > 0 and button.first.is_visible():
+                            save_button = button.first
+                            self.logger.info(f"找到保存按钮: {role}[name='{name}']")
+                            break
+                    except:
+                        continue
+                
+                if save_button:
+                    save_button.click()
+                    self.logger.info("✅ 已点击保存按钮")
+                    
+                    # 等待API调用被捕获
+                    self.logger.info("等待API调用捕获...")
+                    for i in range(50):  # 等待最多5秒
+                        if matched_calls:
+                            self.logger.info(f"🎉 检测到API调用 (第{i+1}次检查): {[c['action'] for c in matched_calls]}")
+                            break
+                        time.sleep(0.1)
+                    else:
+                        self.logger.warning("⚠️ 等待5秒后仍未检测到API调用")
+                    
+                    # 等待保存完成
+                    time.sleep(2)
+                    self.page.wait_for_load_state("networkidle", timeout=10000)
+                    
+                    self.logger.info("✅ VLAN编辑操作完成")
+                    return True
+                else:
+                    self.logger.error("未找到保存按钮")
+                    # 调试：显示页面上所有可见的按钮
+                    try:
+                        buttons = self.page.get_by_role("button")
+                        self.logger.debug(f"页面上的按钮数量: {buttons.count()}")
+                        for i in range(min(buttons.count(), 10)):  # 最多显示10个
+                            try:
+                                button_text = buttons.nth(i).text_content()
+                                self.logger.debug(f"按钮{i+1}: '{button_text}'")
+                            except:
+                                pass
+                    except:
+                        pass
+                    return False
+                    
+            finally:
+                # 清理API监听器
+                self._cleanup_api_listener(hook_func)
+                
+        except Exception as e:
+            self.logger.error(f"编辑VLAN失败: {e}")
+            self.screenshot.take_screenshot("edit_vlan_error")
+            return False
+    
+    def _click_vlan_edit_button(self, vlan_id: str):
+        """点击指定VLAN的编辑按钮"""
+        try:
+            # 根据录制代码，使用nth(4)定位VLAN888的编辑按钮
+            # 但这里我们要更通用，先尝试通过VLAN ID定位
+            
+            # 方法1: 尝试通过表格行定位
+            rows = self.page.query_selector_all("table tbody tr")
+            for row in rows:
+                cells = row.query_selector_all("td")
+                if cells and len(cells) > 0:
+                    vlan_id_cell = cells[0].text_content()
+                    if vlan_id_cell and vlan_id_cell.strip() == vlan_id:
+                        # 找到对应的行，查找编辑按钮
+                        edit_buttons = row.query_selector_all("text=编辑")
+                        if edit_buttons:
+                            edit_buttons[0].click()
+                            self.logger.info(f"✅ 已点击VLAN{vlan_id}的编辑按钮")
+                            return True
+            
+            # 方法2: 使用录制代码的方式（作为备用）
+            if vlan_id == "888":
+                edit_button = self.page.get_by_text("编辑").nth(4)
+                if edit_button.count() > 0:
+                    edit_button.click()
+                    self.logger.info(f"✅ 已点击VLAN{vlan_id}的编辑按钮 (备用方法)")
+                    return True
+            
+            # 方法3: 通用的编辑按钮查找
+            edit_buttons = self.page.get_by_text("编辑")
+            for i in range(edit_buttons.count()):
+                try:
+                    # 获取按钮所在行的VLAN ID
+                    button = edit_buttons.nth(i)
+                    # 这里需要根据实际页面结构调整
+                    button.click()
+                    self.logger.info(f"✅ 已点击编辑按钮 (通用方法，索引{i})")
+                    return True
+                except:
+                    continue
+            
+            self.logger.error(f"未找到VLAN{vlan_id}的编辑按钮")
+            return False
+            
+        except Exception as e:
+            self.logger.error(f"点击编辑按钮失败: {e}")
+            return False
+    
+    def _perform_edit_operations(self, edit_data: dict):
+        """执行编辑操作"""
+        try:
+            # 步骤4: 修改VLAN名称
+            if 'vlan_name' in edit_data:
+                self.logger.info("步骤4: 修改VLAN名称")
+                # 在编辑页面中查找VLAN名称输入框
+                vlan_name_selectors = [
+                    "input[name='vlan_name']",
+                    "input[name='vlanName']", 
+                    "#vlan_name",
+                    "#vlanName",
+                    "input[placeholder*='vlan名称']",
+                    "input[placeholder*='名称']"
+                ]
+                
+                vlan_name_input = None
+                for selector in vlan_name_selectors:
+                    try:
+                        element = self.page.locator(selector)
+                        if element.count() > 0 and element.first.is_visible():
+                            vlan_name_input = element.first
+                            break
+                    except:
+                        continue
+                
+                if vlan_name_input:
+                    vlan_name_input.fill(edit_data['vlan_name'])
+                    self.logger.info(f"✅ 已修改VLAN名称为: {edit_data['vlan_name']}")
+                else:
+                    self.logger.warning("未找到VLAN名称输入框")
+            
+            # 步骤5: 修改IP地址
+            if 'ip_addr' in edit_data:
+                self.logger.info("步骤5: 修改IP地址")
+                # 在编辑页面中查找IP地址输入框，排除搜索框
+                ip_selectors = [
+                    "input[name='ip_addr']",
+                    "input[name='ipAddr']",
+                    "input[name='ip']",
+                    "#ip_addr",
+                    "#ipAddr",
+                    "#ip"
+                ]
+                
+                ip_input = None
+                for selector in ip_selectors:
+                    try:
+                        element = self.page.locator(selector)
+                        if element.count() > 0 and element.first.is_visible():
+                            # 确保不是搜索框
+                            placeholder = element.first.get_attribute("placeholder") or ""
+                            if "搜索" not in placeholder and "search" not in placeholder.lower():
+                                ip_input = element.first
+                                break
+                    except:
+                        continue
+                
+                if ip_input:
+                    ip_input.fill(edit_data['ip_addr'])
+                    self.logger.info(f"✅ 已修改IP地址为: {edit_data['ip_addr']}")
+                else:
+                    self.logger.warning("未找到IP地址输入框")
+            
+            # 步骤6: 修改子网掩码 (下拉框选择)
+            if 'subnet_mask' in edit_data:
+                self.logger.info("步骤6: 修改子网掩码")
+                # 根据录制代码：page.get_by_role("combobox").first.select_option("255.255.255.128")
+                try:
+                    subnet_combobox = self.page.get_by_role("combobox").first
+                    if subnet_combobox.count() > 0:
+                        subnet_combobox.select_option(edit_data['subnet_mask'])
+                        self.logger.info(f"✅ 已修改子网掩码为: {edit_data['subnet_mask']}")
+                    else:
+                        self.logger.warning("未找到子网掩码下拉框")
+                except Exception as e:
+                    self.logger.warning(f"修改子网掩码失败: {e}")
+            
+            # 步骤7: 修改线路配置 (下拉框选择)
+            if 'line' in edit_data:
+                self.logger.info("步骤7: 修改线路配置")
+                # 根据录制代码：page.get_by_role("combobox").nth(1).select_option("lan1")
+                try:
+                    line_combobox = self.page.get_by_role("combobox").nth(1)
+                    if line_combobox.count() > 0:
+                        # 先选择vlan201再改回lan1 (根据录制代码)
+                        if 'line_temp' in edit_data:
+                            line_combobox.select_option(edit_data['line_temp'])
+                            time.sleep(0.5)
+                        line_combobox.select_option(edit_data['line'])
+                        self.logger.info(f"✅ 已修改线路为: {edit_data['line']}")
+                    else:
+                        self.logger.warning("未找到线路下拉框")
+                except Exception as e:
+                    self.logger.warning(f"修改线路配置失败: {e}")
+            
+            # 步骤8: 编辑扩展IP
+            if 'extend_ips' in edit_data and edit_data['extend_ips']:
+                self.logger.info("步骤8: 编辑扩展IP")
+                extend_ip_data = edit_data['extend_ips'][0]
+                
+                try:
+                    # 点击扩展IP的编辑按钮
+                    # 根据录制代码：page.get_by_role("rowgroup").get_by_text("编辑").click()
+                    extend_edit_button = self.page.get_by_role("rowgroup").get_by_text("编辑")
+                    if extend_edit_button.count() > 0:
+                        extend_edit_button.click()
+                        self.logger.info("✅ 已点击扩展IP编辑按钮")
+                        time.sleep(1)
+                        
+                        # 修改扩展IP的子网掩码
+                        # 根据录制代码：page.get_by_role("cell", name="(24)").get_by_role("combobox").select_option("255.255.255.128")
+                        try:
+                            extend_mask_combobox = self.page.get_by_role("cell", name="(24)").get_by_role("combobox")
+                            if extend_mask_combobox.count() > 0:
+                                extend_mask_combobox.select_option(extend_ip_data['mask'])
+                                self.logger.info(f"✅ 已修改扩展IP子网掩码为: {extend_ip_data['mask']}")
+                        except Exception as e:
+                            self.logger.warning(f"修改扩展IP子网掩码失败: {e}")
+                        
+                        # 修改扩展IP地址
+                        # 根据录制代码：page.locator("input[name=\"ip\"]").fill("192.168.116.1")
+                        # 这里需要区分主IP和扩展IP的输入框
+                        try:
+                            # 在扩展IP编辑对话框中查找IP输入框
+                            extend_ip_input = self.page.locator("input[name=\"ip\"]").last  # 使用last避免选中主IP输入框
+                            if extend_ip_input.count() > 0:
+                                extend_ip_input.fill(extend_ip_data['ip'])
+                                self.logger.info(f"✅ 已修改扩展IP地址为: {extend_ip_data['ip']}")
+                        except Exception as e:
+                            self.logger.warning(f"修改扩展IP地址失败: {e}")
+                        
+                        # 确认扩展IP修改
+                        # 根据录制代码：page.locator("#fantasyMenu").get_by_text("确定").click()
+                        try:
+                            confirm_button = self.page.locator("#fantasyMenu").get_by_text("确定")
+                            if confirm_button.count() > 0:
+                                confirm_button.click()
+                                self.logger.info("✅ 已确认扩展IP修改")
+                                time.sleep(1)
+                        except Exception as e:
+                            self.logger.warning(f"确认扩展IP修改失败: {e}")
+                    else:
+                        self.logger.warning("未找到扩展IP编辑按钮")
+                except Exception as e:
+                    self.logger.warning(f"编辑扩展IP失败: {e}")
+            
+            # 步骤9: 修改备注
+            if 'comment' in edit_data:
+                self.logger.info("步骤9: 修改备注")
+                # 在编辑页面中查找备注输入框
+                comment_selectors = [
+                    "input[name='comment']",
+                    "textarea[name='comment']",
+                    "#comment",
+                    "input[placeholder*='备注']",
+                    "textarea[placeholder*='备注']"
+                ]
+                
+                comment_input = None
+                for selector in comment_selectors:
+                    try:
+                        element = self.page.locator(selector)
+                        if element.count() > 0 and element.first.is_visible():
+                            comment_input = element.first
+                            break
+                    except:
+                        continue
+                
+                if comment_input:
+                    comment_input.fill(edit_data['comment'])
+                    self.logger.info(f"✅ 已修改备注为: {edit_data['comment']}")
+                else:
+                    self.logger.warning("未找到备注输入框")
+            
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"执行编辑操作失败: {e}")
+            return False
+    
+    def verify_vlan_edited(self, vlan_id: str, expected_data: dict):
+        """验证VLAN编辑结果"""
+        try:
+            self.logger.info(f"验证VLAN{vlan_id}编辑结果")
+            
+            # 确保在VLAN页面
+            if not self.navigate_to_vlan_page():
+                return False
+            
+            # 等待页面加载
+            time.sleep(2)
+            
+            # 获取VLAN列表
+            vlans = self.get_vlan_list()
+            
+            # 调试：显示所有VLAN数据结构
+            self.logger.debug(f"当前VLAN列表数据: {vlans}")
+            
+            # 查找指定的VLAN
+            target_vlan = None
+            for vlan in vlans:
+                if vlan['id'] == vlan_id:
+                    target_vlan = vlan
+                    break
+            
+            if not target_vlan:
+                self.logger.error(f"未找到VLAN{vlan_id}")
+                return False
+            
+            # 调试：显示目标VLAN的完整数据
+            self.logger.info(f"找到目标VLAN数据: {target_vlan}")
+            self.logger.info(f"表格结构: vlanID={target_vlan.get('id')}, vlan名称={target_vlan.get('name')}, MAC={target_vlan.get('mac')}, IP={target_vlan.get('ip')}, 子网掩码={target_vlan.get('subnet_mask')}, 线路={target_vlan.get('line')}, 备注={target_vlan.get('comment')}, 状态={target_vlan.get('status')}")
+            
+            # 验证各字段是否已更新
+            verification_results = []
+            
+            if 'vlan_name' in expected_data:
+                if target_vlan['name'] == expected_data['vlan_name']:
+                    self.logger.info(f"✅ VLAN名称验证通过: {target_vlan['name']}")
+                    verification_results.append(True)
+                else:
+                    self.logger.error(f"❌ VLAN名称验证失败: 期望{expected_data['vlan_name']}, 实际{target_vlan['name']}")
+                    verification_results.append(False)
+            
+            if 'ip_addr' in expected_data:
+                if target_vlan['ip'] == expected_data['ip_addr']:
+                    self.logger.info(f"✅ IP地址验证通过: {target_vlan['ip']}")
+                    verification_results.append(True)
+                else:
+                    self.logger.error(f"❌ IP地址验证失败: 期望{expected_data['ip_addr']}, 实际{target_vlan['ip']}")
+                    verification_results.append(False)
+            
+            if 'comment' in expected_data:
+                if target_vlan['comment'] == expected_data['comment']:
+                    self.logger.info(f"✅ 备注验证通过: {target_vlan['comment']}")
+                    verification_results.append(True)
+                else:
+                    self.logger.error(f"❌ 备注验证失败: 期望{expected_data['comment']}, 实际{target_vlan['comment']}")
+                    verification_results.append(False)
+            
+            # 验证子网掩码（如果有）
+            if 'subnet_mask' in expected_data:
+                if target_vlan['subnet_mask'] == expected_data['subnet_mask']:
+                    self.logger.info(f"✅ 子网掩码验证通过: {target_vlan['subnet_mask']}")
+                    verification_results.append(True)
+                else:
+                    self.logger.error(f"❌ 子网掩码验证失败: 期望{expected_data['subnet_mask']}, 实际{target_vlan['subnet_mask']}")
+                    verification_results.append(False)
+            
+            # 验证线路（如果有）
+            if 'line' in expected_data:
+                if target_vlan['line'] == expected_data['line']:
+                    self.logger.info(f"✅ 线路验证通过: {target_vlan['line']}")
+                    verification_results.append(True)
+                else:
+                    self.logger.error(f"❌ 线路验证失败: 期望{expected_data['line']}, 实际{target_vlan['line']}")
+                    verification_results.append(False)
+            
+            # 总体验证结果
+            if all(verification_results):
+                self.logger.info(f"✅ VLAN{vlan_id}编辑结果验证通过")
+                return True
+            else:
+                self.logger.error(f"❌ VLAN{vlan_id}编辑结果验证失败")
+                return False
+                
+        except Exception as e:
+            self.logger.error(f"验证VLAN编辑结果失败: {e}")
             return False

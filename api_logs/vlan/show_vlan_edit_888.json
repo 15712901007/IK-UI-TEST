@@ -1,0 +1,70 @@
+{
+  "timestamp": 1752374330,
+  "url": "http://10.66.0.40/Action/call",
+  "method": "POST",
+  "request_headers": {
+    "accept": "application/json, text/plain, */*",
+    "accept-encoding": "gzip, deflate",
+    "accept-language": "zh-CN,zh;q=0.9",
+    "connection": "keep-alive",
+    "content-length": "65",
+    "content-type": "application/json;charset=UTF-8",
+    "cookie": "sess_key=f9126e01e4cdf87d76ddda0de1bc8b4b; username=admin; login=1",
+    "host": "10.66.0.40",
+    "referer": "http://10.66.0.40/",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+  },
+  "request_body": "{\"func_name\":\"vlan\",\"action\":\"show\",\"param\":{\"TYPE\":\"interface\"}}",
+  "response_status": 200,
+  "response_headers": {
+    "x-timezone": "0800",
+    "x-enterprise": "1",
+    "x-default-ip": "0",
+    "expires": "0",
+    "date": "Sun, 13 Jul 2025 02:38:50 GMT",
+    "x-arch": "x86",
+    "content-type": "application/json;charset=UTF-8",
+    "x-sysbit": "x64",
+    "cache-control": "no-cache",
+    "x-support-i18n": "1",
+    "pragma": "no-cache",
+    "connection": "close",
+    "x-timestamp": "1752374330",
+    "x-support-wifi": "0",
+    "x-lang": "1",
+    "content-length": "237",
+    "server": "Nginx"
+  },
+  "response_body": {
+    "Result": 30000,
+    "ErrMsg": "Success",
+    "Data": {
+      "interface": [
+        [
+          "lan1"
+        ],
+        [
+          "vlan201",
+          "批量测试VLAN201"
+        ],
+        [
+          "vlan202",
+          "批量测试VLAN202"
+        ],
+        [
+          "vlan203",
+          "批量测试VLAN203"
+        ],
+        [
+          "vlan36",
+          "基础VLAN测试"
+        ],
+        [
+          "vlan888",
+          "工作流程测试VLAN"
+        ]
+      ]
+    }
+  },
+  "python": "import requests, json\nurl = 'http://10.66.0.40/Action/call'\nheaders = {\n  \"accept\": \"application/json, text/plain, */*\",\n  \"accept-encoding\": \"gzip, deflate\",\n  \"accept-language\": \"zh-CN,zh;q=0.9\",\n  \"connection\": \"keep-alive\",\n  \"content-length\": \"65\",\n  \"content-type\": \"application/json;charset=UTF-8\",\n  \"cookie\": \"sess_key=f9126e01e4cdf87d76ddda0de1bc8b4b; username=admin; login=1\",\n  \"host\": \"10.66.0.40\",\n  \"referer\": \"http://10.66.0.40/\",\n  \"user-agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36\"\n}\ndata = \"{\\\"func_name\\\":\\\"vlan\\\",\\\"action\\\":\\\"show\\\",\\\"param\\\":{\\\"TYPE\\\":\\\"interface\\\"}}\"\nresp = requests.post(url, headers=headers, data=data, verify=False)\nprint(resp.text)"
+}

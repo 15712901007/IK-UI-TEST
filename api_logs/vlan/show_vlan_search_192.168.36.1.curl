@@ -5,7 +5,7 @@ curl -X POST 'http://10.66.0.40/Action/call' \
   -H 'connection: keep-alive' \
   -H 'content-length: 176' \
   -H 'content-type: application/json;charset=UTF-8' \
-  -H 'cookie: sess_key=e75716becc6917f01d43f497fb86c5c1; username=admin; login=1' \
+  -H 'cookie: sess_key=34a57ef5466a2e66ba10a1055aeab66b; username=admin; login=1' \
   -H 'host: 10.66.0.40' \
   -H 'referer: http://10.66.0.40/' \
   -H 'user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' \
