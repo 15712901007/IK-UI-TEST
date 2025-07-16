@@ -191,7 +191,8 @@ class TestRunner:
             '登录测试': 'tests/test_login.py',
             'VLAN设置': 'tests/test_vlan.py',
             '端口映射': 'tests/test_port_mapping.py',
-            'ACL规则': 'tests/test_acl.py'
+            'ACL规则': 'tests/test_acl.py',
+            '终端分组': 'tests/test_sta_group.py'
         }
 
         test_files = []
@@ -294,6 +295,7 @@ class TestRunner:
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
                 text=True,
+                encoding='utf-8',
                 bufsize=1,
                 universal_newlines=True
             )

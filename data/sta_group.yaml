@@ -1,0 +1,151 @@
+# 终端分组测试数据
+# IP分组测试用例配置
+ip_groups:
+  # 基础功能测试（单分组）
+  - test_case: "基础功能测试（单分组）"
+    name: "基础IP分组"
+    ip_list:
+      - "192.168.1.1"
+      - "192.168.1.2"
+    description: "验证基础IP分组添加功能"
+
+  # 批量分组测试
+  - test_case: "批量分组测试"
+    name: "批量分组"
+    ip_list:
+      - "10.0.1.1-10.0.1.50"
+      - "10.0.2.0/24"
+    description: "测试批量IP段添加"
+
+  # 边界值测试
+  - test_case: "边界值测试"
+    name: "边界值测试"
+    ip_list:
+      - "0.0.0.0"
+      - "255.255.255.255"
+      - "224.0.0.1"
+    description: "特殊IP地址处理验证"
+
+  # 混合格式测试
+  - test_case: "混合格式测试"
+    name: "混合格式"
+    ip_list:
+      - "172.16.1.1"
+      - "192.168.0.0/16"
+      - "10.1.1.1-10.1.1.9"
+    description: "混合格式IP输入验证"
+
+  # 纯英文分组名称测试
+  - test_case: "纯英文分组名称测试"
+    name: "EnglishGroup"
+    ip_list:
+      - "192.168.1.10"
+    description: "验证纯英文分组名称"
+
+  # 纯数字分组名称测试
+  - test_case: "纯数字分组名称测试"
+    name: "1234567890"
+    ip_list:
+      - "192.168.1.20"
+    description: "验证纯数字分组名称"
+
+  # 中英文混合分组名称测试
+  - test_case: "中英文混合分组名称测试"
+    name: "分组Group混合"
+    ip_list:
+      - "192.168.1.40"
+    description: "验证中英文混合分组名称"
+
+  # 英文数字混合分组名称测试
+  - test_case: "英文数字混合分组名称测试"
+    name: "Group123"
+    ip_list:
+      - "192.168.1.50"
+    description: "验证英文数字混合分组名称"
+
+  # 特殊字符分组名称测试
+  - test_case: "特殊字符分组名称测试"
+    name: "!@#$%^&*()_+-="
+    ip_list:
+      - "192.168.1.30"
+    description: "验证特殊字符分组名称"
+    expected_error: "字符区间1-20,不能有特殊字符"
+
+  # 中英数特殊字符混合分组名称测试
+  - test_case: "中英数特殊字符混合分组名称测试"
+    name: "分组Group!123@"
+    ip_list:
+      - "192.168.1.60"
+    description: "验证混合字符分组名称"
+    expected_error: "字符区间1-20,不能有特殊字符"
+
+  # 异常格式测试
+  - test_case: "异常格式测试"
+    name: "异常格式组"
+    ip_list:
+      - "300.400.500.600"
+      - "192.168.1."
+      - "192.168.1.1/33"
+    expected_error: "第 1 行 IP 输入有误"  # 预期错误码
+    description: "验证异常IP格式"
+
+  # 超长名称测试
+  - test_case: "超长名称测试"
+    name: "超长分组名称测试_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    ip_list:
+      - "198.51.100.1"
+    expected_error: "字符区间1-20,不能有特殊字符"
+    description: "验证系统对长分组名的处理"
+
+  # 重复IP测试
+  - test_case: "重复IP测试"
+    name: "重复IP测试组"
+    ip_list:
+      - "192.0.2.1"
+      - "192.0.2.1"
+    expected_error: "第 2 行 IP 输入重复"  # 预期错误码
+    description: "验证重复IP测试"
+
+  # 空分组测试
+  - test_case: "空分组名称测试"
+    name: ""
+    ip_list:
+      - "192.0.2.1"
+    expected_error: "自定义组名 字段必填."
+    description: "验证空分组名称处理"
+
+  # 空IP列表测试
+  - test_case: "空IP列表测试"
+    name: "空IP列表测试"
+    ip_list:
+      - ""
+    expected_error: "IP列表 字段必填."
+    description: "验证空IP列表"
+
+  # 搜索
+  - test_case: "搜索测试 - 现有数据"
+    name: "分组Group混合"
+
+  - test_case: "搜索测试 - 没有数据"
+    name: "没有数据"
+    expected_error: "暂无数据"
+
+  # 编辑
+  - test_case: "编辑分组测试"
+    original_name: "基础IP分组"   # 要编辑的原始分组名称
+    new_name: "编辑后的分组"      # 编辑后的新名称
+    new_ip_list: # 编辑后的新IP列表
+      - "10.10.10.1"
+      - "10.10.10.2"
+      - "10.10.10.3-10.10.10.5"
+    description: "测试编辑分组功能"
+
+  # 删除
+  - test_case: "删除分组测试"
+    name: "分组Group混合"   # 要删除的分组名称
+    description: "测试删除分组功能"
+
+  # 全部删除
+  - test_case: "全部删除"
+    description: "测试全部删除功能"
+

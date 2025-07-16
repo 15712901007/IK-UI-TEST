@@ -182,7 +182,7 @@ try:
             test_layout.addWidget(QLabel("测试功能:"), 0, 0)
             self.function_list = QListWidget()
             self.function_list.setMaximumHeight(120)
-            for name in ["全部功能", "登录测试", "VLAN设置", "端口映射", "ACL规则"]:
+            for name in ["全部功能", "登录测试", "VLAN设置", "端口映射", "ACL规则", "终端分组"]:
                 item = QListWidgetItem(name)
                 item.setCheckState(getattr(Qt, 'Unchecked', 0))  # type: ignore
                 self.function_list.addItem(item)

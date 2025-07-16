@@ -166,7 +166,7 @@ class MainWindow(QMainWindow):
         test_layout.addWidget(QLabel("测试功能:"), 0, 0)
         self.function_combo = QComboBox()
         self.function_combo.addItems([
-            "全部功能", "登录测试", "VLAN设置", "端口映射", "ACL规则"
+            "全部功能", "登录测试", "VLAN设置", "端口映射", "ACL规则", "终端分组"
         ])
         test_layout.addWidget(self.function_combo, 0, 1)
         
