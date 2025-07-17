@@ -773,6 +773,75 @@ class TestVlan:
 
         print("[测试结束] test_edit_vlan - 完成", flush=True)
     
+    def test_pagination_display(self, logged_in_page, caplog):
+        """测试VLAN分页显示功能 - 完全基于YAML配置"""
+        self.test_start_time = time.time()
+        print("[测试开始] test_pagination_display", flush=True)
+        
+        if logged_in_page is None:
+            pytest.skip("Playwright 不可用")
+        
+        with caplog.at_level(logging.INFO):
+            try:
+                # 从YAML获取测试用例配置
+                test_case_config = self.vlan_data.get('test_cases', {}).get('test_pagination_display', {})
+                pagination_config = self.vlan_data.get('pagination_test', {})
+                
+                self._log_step("分页显示测试初始化完成")
+                self._log_step(f"开始执行: {test_case_config.get('name', 'VLAN分页显示测试')}")
+                self._log_step(f"业务场景: {test_case_config.get('business_scenario', '验证VLAN分页显示功能')}")
+                
+                # 记录YAML中定义的测试步骤
+                test_steps = test_case_config.get('test_steps', [])
+                for i, step in enumerate(test_steps, 1):
+                    self._log_step(f"预定义步骤{i}: {step}")
+                
+                vlan_page = VlanPage(logged_in_page)
+                
+                # 步骤1: 批量创建VLAN（前置条件）
+                self._log_step("步骤1: 批量创建200个VLAN作为测试数据")
+                batch_config = pagination_config.get('batch_create', {})
+                start_id = batch_config.get('start_id', 300)
+                count = batch_config.get('count', 200)
+                
+                batch_result = vlan_page.batch_create_vlans_via_api(start_id=start_id, count=count)
+                if batch_result:
+                    self._log_step(f"批量创建VLAN成功，起始ID: {start_id}，数量: {count}", "success")
+                else:
+                    self._log_step("批量创建VLAN失败，但继续执行分页测试", "warning")
+                
+                # 步骤2: 测试各种分页大小
+                self._log_step("步骤2: 测试分页显示功能")
+                page_sizes = pagination_config.get('page_sizes', [100, 50, 20, 10])
+                
+                pagination_result = vlan_page.test_pagination_display(page_sizes=page_sizes)
+                
+                if pagination_result:
+                    self._log_step("分页显示功能测试成功", "success")
+                else:
+                    self._log_step("分页显示功能测试失败", "error")
+                
+                # 步骤3: 验证分页功能的详细信息
+                self._log_step("步骤3: 验证分页功能详细信息")
+                for page_size in page_sizes:
+                    self._log_step(f"已测试分页大小: {page_size}")
+                
+                self._log_step("分页显示测试执行完成")
+                
+                # 计算执行时间
+                execution_time = time.time() - self.test_start_time
+                self._log_step(f"执行耗时: {execution_time:.2f}秒")
+                
+                print(f"[测试结束] test_pagination_display - {'成功' if pagination_result else '失败'}", flush=True)
+                assert pagination_result == True, "VLAN分页显示功能测试应该成功"
+                
+            except Exception as e:
+                self._log_step(f"分页显示测试执行异常: {str(e)}", "error")
+                execution_time = time.time() - self.test_start_time
+                self._log_step(f"执行耗时: {execution_time:.2f}秒")
+                print(f"[测试异常] test_pagination_display: {str(e)}", flush=True)
+                raise
+    
     def get_execution_details(self):
         """获取执行详情（供报告生成器使用）"""
         return self.execution_details

@@ -1,0 +1,4 @@
+2025-07-17 18:27:45,992 - RouterTest - INFO - 开始API优化效果验证
+2025-07-17 18:27:46,000 - RouterTest - INFO - API去重逻辑: ✅ 通过
+2025-07-17 18:27:46,060 - RouterTest - INFO - YAML描述检查: ❌ 失败
+2025-07-17 18:27:46,061 - RouterTest - WARNING - API优化效果验证部分失败: 1/2
