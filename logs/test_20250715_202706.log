@@ -1,0 +1,122 @@
+2025-07-15 20:27:06,408 - RouterTest - INFO - 🚀 开始测试批量启用/停用API抓取功能
+2025-07-15 20:27:07,734 - RouterTest - INFO - 开始登录，用户名: admin
+2025-07-15 20:27:08,516 - RouterTest - INFO - 成功导航到页面: http://10.66.0.40/login#/login
+2025-07-15 20:27:10,545 - RouterTest - INFO - 成功输入文本 role=textbox, name=用户名: admin
+2025-07-15 20:27:10,556 - RouterTest - INFO - 成功输入文本 role=textbox, name=密码: admin123
+2025-07-15 20:27:10,586 - RouterTest - INFO - 成功点击元素 role=button, name=登录
+2025-07-15 20:27:16,127 - RouterTest - INFO - 找到成功指示器: [class*='main']
+2025-07-15 20:27:16,128 - RouterTest - INFO - 登录成功: admin
+2025-07-15 20:27:16,128 - RouterTest - INFO - ✅ 登录成功
+2025-07-15 20:27:16,128 - RouterTest - INFO - 📋 测试1: 全部停用VLAN
+2025-07-15 20:27:16,129 - RouterTest - INFO - 全部停用VLAN
+2025-07-15 20:27:16,129 - RouterTest - INFO - [API监听] 已设置全局停用VLAN的API监听器
+2025-07-15 20:27:16,129 - RouterTest - INFO - 导航到VLAN设置页面
+2025-07-15 20:27:18,131 - RouterTest - DEBUG - [调试] POST请求: http://10.66.0.40/Action/call
+2025-07-15 20:27:18,132 - RouterTest - DEBUG - [调试] 请求体: {"func_name":"homepage","action":"show","param":{"TYPE":"app_historical"}}...
+2025-07-15 20:27:18,132 - RouterTest - DEBUG - [调试] Action/call请求体: {"func_name":"homepage","action":"show","param":{"type":"app_historical"}}
+2025-07-15 20:27:18,163 - RouterTest - INFO - 成功点击文本元素: 网络设置
+2025-07-15 20:27:19,665 - RouterTest - DEBUG - [调试] POST请求: http://10.66.0.40/Action/call
+2025-07-15 20:27:19,665 - RouterTest - DEBUG - [调试] 请求体: {"func_name":"homepage","action":"show","param":{"TYPE":"sysstat,ac_status"}}...
+2025-07-15 20:27:19,665 - RouterTest - DEBUG - [调试] Action/call请求体: {"func_name":"homepage","action":"show","param":{"type":"sysstat,ac_status"}}
+2025-07-15 20:27:19,696 - RouterTest - DEBUG - [调试] POST请求: http://10.66.0.40/Action/tag?id=network-setting-vlan-setting.show
+2025-07-15 20:27:19,696 - RouterTest - INFO - 成功点击链接: VLAN设置
+2025-07-15 20:27:23,198 - RouterTest - INFO - 成功导航到VLAN设置页面
+2025-07-15 20:27:25,200 - RouterTest - DEBUG - [调试] POST请求: http://10.66.0.40/Action/call
+2025-07-15 20:27:25,200 - RouterTest - DEBUG - [调试] 请求体: {"func_name":"vlan","action":"show","param":{"TYPE":"total,data","limit":"0,20","ORDER_BY":"","ORDER":""}}...
+2025-07-15 20:27:25,200 - RouterTest - DEBUG - [调试] Action/call请求体: {"func_name":"vlan","action":"show","param":{"type":"total,data","limit":"0,20","order_by":"","order":""}}
+2025-07-15 20:27:25,200 - RouterTest - DEBUG - [调试] POST请求: http://10.66.0.40/Action/call
+2025-07-15 20:27:25,200 - RouterTest - DEBUG - [调试] 请求体: {"func_name":"sysstat","action":"show","param":{"TYPE":"verinfo,cpu,memory,stream,cputemp"}}...
+2025-07-15 20:27:25,200 - RouterTest - DEBUG - [调试] Action/call请求体: {"func_name":"sysstat","action":"show","param":{"type":"verinfo,cpu,memory,stream,cputemp"}}
+2025-07-15 20:27:25,217 - RouterTest - INFO - 🎯 准备点击全选复选框...
+2025-07-15 20:27:25,246 - RouterTest - INFO - ✅ 已点击全选复选框
+2025-07-15 20:27:26,246 - RouterTest - INFO - 🎯 准备点击批量停用按钮...
+2025-07-15 20:27:26,248 - RouterTest - DEBUG - [调试] POST请求: http://10.66.0.40/Action/call
+2025-07-15 20:27:26,248 - RouterTest - DEBUG - [调试] 请求体: {"func_name":"gv","action":"show"}...
+2025-07-15 20:27:26,248 - RouterTest - DEBUG - [调试] Action/call请求体: {"func_name":"gv","action":"show"}
+2025-07-15 20:27:26,265 - RouterTest - INFO - ✅ 已点击批量停用按钮，等待API调用...
+2025-07-15 20:27:41,309 - RouterTest - INFO - ⏳ 继续等待5秒以捕获延迟的停用API调用...
+2025-07-15 20:27:46,323 - RouterTest - WARNING - ⚠️ 等待20秒后仍未检测到批量停用(down)API调用
+2025-07-15 20:27:46,323 - RouterTest - INFO - ⏳ 等待额外2秒以确保所有延迟的API调用都被捕获...
+2025-07-15 20:27:48,324 - RouterTest - INFO - [API监听] 已清理API监听器
+2025-07-15 20:27:48,324 - RouterTest - INFO - ✅ 全部停用VLAN测试成功
+2025-07-15 20:27:51,325 - RouterTest - INFO - 📋 测试2: 全部启用VLAN
+2025-07-15 20:27:51,325 - RouterTest - INFO - 全部启用VLAN
+2025-07-15 20:27:51,326 - RouterTest - INFO - [API监听] 已设置全局启用VLAN的API监听器
+2025-07-15 20:27:51,326 - RouterTest - INFO - 导航到VLAN设置页面
+2025-07-15 20:27:53,328 - RouterTest - DEBUG - [调试] POST请求: http://10.66.0.40/Action/call
+2025-07-15 20:27:53,328 - RouterTest - DEBUG - [调试] 请求体: {"func_name":"vlan","action":"down","param":{"id":"1,2,3,4,5"}}...
+2025-07-15 20:27:53,328 - RouterTest - DEBUG - [调试] Action/call请求体: {"func_name":"vlan","action":"down","param":{"id":"1,2,3,4,5"}}
+2025-07-15 20:27:53,328 - RouterTest - DEBUG - [调试] POST请求: http://10.66.0.40/Action/call
+2025-07-15 20:27:53,328 - RouterTest - DEBUG - [调试] 请求体: {"func_name":"sysstat","action":"show","param":{"TYPE":"verinfo,cpu,memory,stream,cputemp"}}...
+2025-07-15 20:27:53,328 - RouterTest - DEBUG - [调试] Action/call请求体: {"func_name":"sysstat","action":"show","param":{"type":"verinfo,cpu,memory,stream,cputemp"}}
+2025-07-15 20:27:53,328 - RouterTest - DEBUG - [调试] POST请求: http://10.66.0.40/Action/call
+2025-07-15 20:27:53,328 - RouterTest - DEBUG - [调试] 请求体: {"func_name":"sysstat","action":"show","param":{"TYPE":"verinfo,cpu,memory,stream,cputemp"}}...
+2025-07-15 20:27:53,328 - RouterTest - DEBUG - [调试] Action/call请求体: {"func_name":"sysstat","action":"show","param":{"type":"verinfo,cpu,memory,stream,cputemp"}}
+2025-07-15 20:27:53,329 - RouterTest - DEBUG - [调试] POST请求: http://10.66.0.40/Action/call
+2025-07-15 20:27:53,329 - RouterTest - DEBUG - [调试] 请求体: {"func_name":"sysstat","action":"show","param":{"TYPE":"verinfo,cpu,memory,stream,cputemp"}}...
+2025-07-15 20:27:53,329 - RouterTest - DEBUG - [调试] Action/call请求体: {"func_name":"sysstat","action":"show","param":{"type":"verinfo,cpu,memory,stream,cputemp"}}
+2025-07-15 20:27:53,329 - RouterTest - DEBUG - [调试] POST请求: http://10.66.0.40/Action/call
+2025-07-15 20:27:53,329 - RouterTest - DEBUG - [调试] 请求体: {"func_name":"sysstat","action":"show","param":{"TYPE":"verinfo,cpu,memory,stream,cputemp"}}...
+2025-07-15 20:27:53,329 - RouterTest - DEBUG - [调试] Action/call请求体: {"func_name":"sysstat","action":"show","param":{"type":"verinfo,cpu,memory,stream,cputemp"}}
+2025-07-15 20:27:53,346 - RouterTest - INFO - 成功点击文本元素: 网络设置
+2025-07-15 20:27:54,847 - RouterTest - DEBUG - [调试] POST请求: http://10.66.0.40/Action/call
+2025-07-15 20:27:54,848 - RouterTest - DEBUG - [调试] 请求体: {"func_name":"sysstat","action":"show","param":{"TYPE":"verinfo,cpu,memory,stream,cputemp"}}...
+2025-07-15 20:27:54,848 - RouterTest - DEBUG - [调试] Action/call请求体: {"func_name":"sysstat","action":"show","param":{"type":"verinfo,cpu,memory,stream,cputemp"}}
+2025-07-15 20:27:54,871 - RouterTest - INFO - 成功点击链接: VLAN设置
+2025-07-15 20:27:58,374 - RouterTest - INFO - 成功导航到VLAN设置页面
+2025-07-15 20:28:00,376 - RouterTest - DEBUG - [调试] POST请求: http://10.66.0.40/Action/call
+2025-07-15 20:28:00,376 - RouterTest - DEBUG - [调试] 请求体: {"func_name":"vlan","action":"show","param":{"TYPE":"total,data","limit":"0,20","ORDER_BY":"","ORDER":""}}...
+2025-07-15 20:28:00,376 - RouterTest - DEBUG - [调试] Action/call请求体: {"func_name":"vlan","action":"show","param":{"type":"total,data","limit":"0,20","order_by":"","order":""}}
+2025-07-15 20:28:00,377 - RouterTest - DEBUG - [调试] POST请求: http://10.66.0.40/Action/call
+2025-07-15 20:28:00,377 - RouterTest - DEBUG - [调试] 请求体: {"func_name":"sysstat","action":"show","param":{"TYPE":"verinfo,cpu,memory,stream,cputemp"}}...
+2025-07-15 20:28:00,377 - RouterTest - DEBUG - [调试] Action/call请求体: {"func_name":"sysstat","action":"show","param":{"type":"verinfo,cpu,memory,stream,cputemp"}}
+2025-07-15 20:28:00,390 - RouterTest - INFO - 🎯 准备点击全选复选框...
+2025-07-15 20:28:00,416 - RouterTest - INFO - ✅ 已点击全选复选框
+2025-07-15 20:28:01,417 - RouterTest - INFO - 🎯 准备点击批量启用按钮...
+2025-07-15 20:28:01,438 - RouterTest - INFO - ✅ 已点击批量启用按钮，等待API调用...
+2025-07-15 20:28:16,482 - RouterTest - INFO - ⏳ 继续等待5秒以捕获延迟的启用API调用...
+2025-07-15 20:28:21,497 - RouterTest - WARNING - ⚠️ 等待20秒后仍未检测到批量启用(up)API调用
+2025-07-15 20:28:21,497 - RouterTest - INFO - ⏳ 等待额外2秒以确保所有延迟的API调用都被捕获...
+2025-07-15 20:28:23,499 - RouterTest - INFO - [API监听] 已清理API监听器
+2025-07-15 20:28:23,500 - RouterTest - INFO - ✅ 全部启用VLAN测试成功
+2025-07-15 20:28:26,501 - RouterTest - INFO - 📋 测试3: 再次全部停用VLAN
+2025-07-15 20:28:26,501 - RouterTest - INFO - 全部停用VLAN
+2025-07-15 20:28:26,502 - RouterTest - INFO - [API监听] 已设置全局停用VLAN的API监听器
+2025-07-15 20:28:26,502 - RouterTest - INFO - 导航到VLAN设置页面
+2025-07-15 20:28:28,503 - RouterTest - DEBUG - [调试] POST请求: http://10.66.0.40/Action/call
+2025-07-15 20:28:28,503 - RouterTest - DEBUG - [调试] 请求体: {"func_name":"vlan","action":"up","param":{"id":"1,2,3,4,5"}}...
+2025-07-15 20:28:28,503 - RouterTest - DEBUG - [调试] Action/call请求体: {"func_name":"vlan","action":"up","param":{"id":"1,2,3,4,5"}}
+2025-07-15 20:28:28,504 - RouterTest - DEBUG - [调试] POST请求: http://10.66.0.40/Action/call
+2025-07-15 20:28:28,504 - RouterTest - DEBUG - [调试] 请求体: {"func_name":"sysstat","action":"show","param":{"TYPE":"verinfo,cpu,memory,stream,cputemp"}}...
+2025-07-15 20:28:28,504 - RouterTest - DEBUG - [调试] Action/call请求体: {"func_name":"sysstat","action":"show","param":{"type":"verinfo,cpu,memory,stream,cputemp"}}
+2025-07-15 20:28:28,504 - RouterTest - DEBUG - [调试] POST请求: http://10.66.0.40/Action/call
+2025-07-15 20:28:28,504 - RouterTest - DEBUG - [调试] 请求体: {"func_name":"sysstat","action":"show","param":{"TYPE":"verinfo,cpu,memory,stream,cputemp"}}...
+2025-07-15 20:28:28,504 - RouterTest - DEBUG - [调试] Action/call请求体: {"func_name":"sysstat","action":"show","param":{"type":"verinfo,cpu,memory,stream,cputemp"}}
+2025-07-15 20:28:28,504 - RouterTest - DEBUG - [调试] POST请求: http://10.66.0.40/Action/call
+2025-07-15 20:28:28,504 - RouterTest - DEBUG - [调试] 请求体: {"func_name":"sysstat","action":"show","param":{"TYPE":"verinfo,cpu,memory,stream,cputemp"}}...
+2025-07-15 20:28:28,504 - RouterTest - DEBUG - [调试] Action/call请求体: {"func_name":"sysstat","action":"show","param":{"type":"verinfo,cpu,memory,stream,cputemp"}}
+2025-07-15 20:28:28,505 - RouterTest - DEBUG - [调试] POST请求: http://10.66.0.40/Action/call
+2025-07-15 20:28:28,505 - RouterTest - DEBUG - [调试] 请求体: {"func_name":"sysstat","action":"show","param":{"TYPE":"verinfo,cpu,memory,stream,cputemp"}}...
+2025-07-15 20:28:28,505 - RouterTest - DEBUG - [调试] Action/call请求体: {"func_name":"sysstat","action":"show","param":{"type":"verinfo,cpu,memory,stream,cputemp"}}
+2025-07-15 20:28:28,519 - RouterTest - INFO - 成功点击文本元素: 网络设置
+2025-07-15 20:28:30,021 - RouterTest - DEBUG - [调试] POST请求: http://10.66.0.40/Action/call
+2025-07-15 20:28:30,021 - RouterTest - DEBUG - [调试] 请求体: {"func_name":"sysstat","action":"show","param":{"TYPE":"verinfo,cpu,memory,stream,cputemp"}}...
+2025-07-15 20:28:30,021 - RouterTest - DEBUG - [调试] Action/call请求体: {"func_name":"sysstat","action":"show","param":{"type":"verinfo,cpu,memory,stream,cputemp"}}
+2025-07-15 20:28:30,045 - RouterTest - INFO - 成功点击链接: VLAN设置
+2025-07-15 20:28:33,547 - RouterTest - INFO - 成功导航到VLAN设置页面
+2025-07-15 20:28:35,549 - RouterTest - DEBUG - [调试] POST请求: http://10.66.0.40/Action/call
+2025-07-15 20:28:35,550 - RouterTest - DEBUG - [调试] 请求体: {"func_name":"vlan","action":"show","param":{"TYPE":"total,data","limit":"0,20","ORDER_BY":"","ORDER":""}}...
+2025-07-15 20:28:35,550 - RouterTest - DEBUG - [调试] Action/call请求体: {"func_name":"vlan","action":"show","param":{"type":"total,data","limit":"0,20","order_by":"","order":""}}
+2025-07-15 20:28:35,563 - RouterTest - INFO - 🎯 准备点击全选复选框...
+2025-07-15 20:28:35,587 - RouterTest - INFO - ✅ 已点击全选复选框
+2025-07-15 20:28:36,588 - RouterTest - INFO - 🎯 准备点击批量停用按钮...
+2025-07-15 20:28:36,593 - RouterTest - DEBUG - [调试] POST请求: http://10.66.0.40/Action/call
+2025-07-15 20:28:36,593 - RouterTest - DEBUG - [调试] 请求体: {"func_name":"sysstat","action":"show","param":{"TYPE":"verinfo,cpu,memory,stream,cputemp"}}...
+2025-07-15 20:28:36,593 - RouterTest - DEBUG - [调试] Action/call请求体: {"func_name":"sysstat","action":"show","param":{"type":"verinfo,cpu,memory,stream,cputemp"}}
+2025-07-15 20:28:36,612 - RouterTest - INFO - ✅ 已点击批量停用按钮，等待API调用...
+2025-07-15 20:28:51,652 - RouterTest - INFO - ⏳ 继续等待5秒以捕获延迟的停用API调用...
+2025-07-15 20:28:56,668 - RouterTest - WARNING - ⚠️ 等待20秒后仍未检测到批量停用(down)API调用
+2025-07-15 20:28:56,668 - RouterTest - INFO - ⏳ 等待额外2秒以确保所有延迟的API调用都被捕获...
+2025-07-15 20:28:58,669 - RouterTest - INFO - [API监听] 已清理API监听器
+2025-07-15 20:28:58,669 - RouterTest - INFO - ✅ 再次全部停用VLAN测试成功
+2025-07-15 20:28:58,669 - RouterTest - INFO - 🎉 所有测试完成

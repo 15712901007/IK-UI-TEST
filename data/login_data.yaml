@@ -1,7 +1,7 @@
 # 登录测试数据
 valid_login:
   - username: "admin"
-    password: "admin"
+    password: "admin123"
     expected: "success"
     description: "有效登录功能测试"
     
