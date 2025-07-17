@@ -282,22 +282,44 @@ class TestRunner:
             'raw_output': '\n'.join(combined_output)
         }
     
+    def _decode_with_fallback(self, data_bytes):
+        """
+        尝试多种编码方式解码字节数据
+        优先尝试UTF-8，失败后尝试GBK，最后使用errors='ignore'
+        """
+        if not data_bytes:
+            return ""
+            
+        # 编码尝试顺序：UTF-8 -> GBK -> CP936 -> 忽略错误的UTF-8
+        encodings = ['utf-8', 'gbk', 'cp936']
+        
+        for encoding in encodings:
+            try:
+                return data_bytes.decode(encoding)
+            except UnicodeDecodeError:
+                continue
+        
+        # 如果所有编码都失败，使用UTF-8并忽略错误
+        try:
+            return data_bytes.decode('utf-8', errors='ignore')
+        except Exception:
+            # 最后的保险措施
+            return str(data_bytes, errors='ignore')
+    
     def _run_single_cycle(self, pytest_args, cycle_num, log_callback, result_callback):
         """运行单轮测试"""
         try:
             # 使用实时输出的方式运行pytest
             cmd = [sys.executable, "-m", "pytest"] + pytest_args
             
-            # 启动进程
+            # 启动进程 - 使用兼容的编码处理
             self._current_process = subprocess.Popen(
                 cmd,
                 cwd=self.project_root,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
-                text=True,
-                encoding='utf-8',
-                bufsize=1,
-                universal_newlines=True
+                text=False,  # 使用二进制模式，稍后手动处理编码
+                bufsize=1
             )
             
             # 实时读取输出
@@ -308,11 +330,13 @@ class TestRunner:
                     self._current_process.terminate()
                     break
                     
-                output = self._current_process.stdout.readline()
-                if output == '' and self._current_process.poll() is not None:
+                output_bytes = self._current_process.stdout.readline()
+                if output_bytes == b'' and self._current_process.poll() is not None:
                     break
                     
-                if output:
+                if output_bytes:
+                    # 尝试多种编码方式解码
+                    output = self._decode_with_fallback(output_bytes)
                     output = output.strip()
                     output_lines.append(output)
                     

@@ -1,0 +1,13 @@
+2025-07-17 12:48:14,375 - RouterTest - INFO - 开始登录，用户名: admin
+2025-07-17 12:48:15,612 - RouterTest - INFO - 成功导航到页面: http://10.66.0.40/login#/login
+2025-07-17 12:48:17,857 - RouterTest - INFO - 成功输入文本 role=textbox, name=用户名: admin
+2025-07-17 12:48:17,994 - RouterTest - INFO - 成功输入文本 role=textbox, name=密码: admin123
+2025-07-17 12:48:18,143 - RouterTest - INFO - 成功点击元素 role=button, name=登录
+2025-07-17 12:48:23,665 - RouterTest - ERROR - 检查元素可见性失败 .main-content: Page.query_selector: Target page, context or browser has been closed
+2025-07-17 12:48:23,672 - RouterTest - ERROR - 检查元素可见性失败 .dashboard: Page.query_selector: Target page, context or browser has been closed
+2025-07-17 12:48:23,676 - RouterTest - ERROR - 检查元素可见性失败 #main: Page.query_selector: Target page, context or browser has been closed
+2025-07-17 12:48:23,683 - RouterTest - ERROR - 检查元素可见性失败 .layout-main: Page.query_selector: Target page, context or browser has been closed
+2025-07-17 12:48:23,690 - RouterTest - ERROR - 检查元素可见性失败 [class*='main']: Page.query_selector: Target page, context or browser has been closed
+2025-07-17 12:48:23,696 - RouterTest - ERROR - 检查元素可见性失败 [class*='dashboard']: Page.query_selector: Target page, context or browser has been closed
+2025-07-17 12:48:23,746 - RouterTest - ERROR - 登录失败: 登录失败，未知错误
+2025-07-17 12:48:23,752 - RouterTest - ERROR - 截图失败: Page.screenshot: Target page, context or browser has been closed

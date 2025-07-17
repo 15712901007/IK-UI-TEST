@@ -6,6 +6,30 @@ class YamlReader:
     def __init__(self):
         self.project_root = Path(__file__).parent.parent
     
+    def _read_file_with_fallback(self, file_path):
+        """
+        尝试多种编码方式读取文件
+        优先尝试UTF-8，失败后尝试GBK
+        """
+        encodings = ['utf-8', 'gbk', 'cp936']
+        
+        for encoding in encodings:
+            try:
+                with open(file_path, 'r', encoding=encoding) as file:
+                    return file.read()
+            except UnicodeDecodeError:
+                continue
+            except Exception as e:
+                # 其他错误直接抛出
+                raise e
+        
+        # 如果所有编码都失败，使用UTF-8并忽略错误
+        try:
+            with open(file_path, 'r', encoding='utf-8', errors='ignore') as file:
+                return file.read()
+        except Exception as e:
+            raise Exception(f"无法读取文件 {file_path}: {e}")
+    
     def read_yaml(self, file_path: str):
         try:
             full_path = self.project_root / file_path
@@ -14,9 +38,10 @@ class YamlReader:
                 print(f"YAML文件不存在: {full_path}")
                 return {}
             
-            with open(full_path, 'r', encoding='utf-8') as file:
-                data = yaml.safe_load(file)
-                return data or {}
+            # 使用兼容的文件读取方法
+            content = self._read_file_with_fallback(full_path)
+            data = yaml.safe_load(content)
+            return data or {}
                 
         except yaml.YAMLError as e:
             print(f"YAML文件格式错误 {file_path}: {e}")

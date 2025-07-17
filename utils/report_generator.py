@@ -26,6 +26,30 @@ class ReportGenerator:
         # 创建中文报告模板
         self._create_chinese_template()
     
+    def _read_file_with_fallback(self, file_path):
+        """
+        尝试多种编码方式读取文件
+        优先尝试UTF-8，失败后尝试GBK
+        """
+        encodings = ['utf-8', 'gbk', 'cp936']
+        
+        for encoding in encodings:
+            try:
+                with open(file_path, 'r', encoding=encoding) as file:
+                    return file.read()
+            except UnicodeDecodeError:
+                continue
+            except Exception as e:
+                # 其他错误直接抛出
+                raise e
+        
+        # 如果所有编码都失败，使用UTF-8并忽略错误
+        try:
+            with open(file_path, 'r', encoding='utf-8', errors='ignore') as file:
+                return file.read()
+        except Exception as e:
+            raise Exception(f"无法读取文件 {file_path}: {e}")
+    
     def generate_report(self, test_results=None, test_config=None, output_dir="reports/outputs"):
         """生成测试报告"""
         try:

@@ -3,6 +3,30 @@ import os
 import sys
 from pathlib import Path
 
+def _read_file_with_fallback(file_path):
+    """
+    尝试多种编码方式读取文件
+    优先尝试UTF-8，失败后尝试GBK
+    """
+    encodings = ['utf-8', 'gbk', 'cp936']
+    
+    for encoding in encodings:
+        try:
+            with open(file_path, 'r', encoding=encoding) as file:
+                return file.read()
+        except UnicodeDecodeError:
+            continue
+        except Exception as e:
+            # 其他错误直接抛出
+            raise e
+    
+    # 如果所有编码都失败，使用UTF-8并忽略错误
+    try:
+        with open(file_path, 'r', encoding='utf-8', errors='ignore') as file:
+            return file.read()
+    except Exception as e:
+        raise Exception(f"无法读取文件 {file_path}: {e}")
+
 def check_test_files():
     """检查测试文件是否存在并且格式正确"""
     
@@ -39,13 +63,13 @@ def check_test_files():
         else:
             if required_content:
                 try:
-                    with open(full_path, 'r', encoding='utf-8') as f:
-                        content = f.read()
-                        if required_content not in content:
-                            invalid_files.append(file_path)
-                            print(f"⚠️  内容错误: {file_path} (缺少: {required_content})")
-                        else:
-                            print(f"✅ 正确: {file_path}")
+                    # 使用兼容的文件读取方法
+                    content = _read_file_with_fallback(full_path)
+                    if required_content not in content:
+                        invalid_files.append(file_path)
+                        print(f"⚠️  内容错误: {file_path} (缺少: {required_content})")
+                    else:
+                        print(f"✅ 正确: {file_path}")
                 except Exception as e:
                     invalid_files.append(file_path)
                     print(f"❌ 读取错误: {file_path} - {e}")
