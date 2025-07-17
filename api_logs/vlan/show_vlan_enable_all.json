@@ -1,0 +1,113 @@
+{
+  "timestamp": 1752580656,
+  "url": "http://10.66.0.40/Action/call",
+  "method": "POST",
+  "request_headers": {
+    "accept": "application/json, text/plain, */*",
+    "accept-encoding": "gzip, deflate",
+    "accept-language": "zh-CN,zh;q=0.9",
+    "connection": "keep-alive",
+    "content-length": "106",
+    "content-type": "application/json;charset=UTF-8",
+    "cookie": "sess_key=5e44d1b94e36056ffb04bff4bd229ffb; username=admin; login=1",
+    "host": "10.66.0.40",
+    "referer": "http://10.66.0.40/",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+  },
+  "request_body": "{\"func_name\":\"vlan\",\"action\":\"show\",\"param\":{\"TYPE\":\"total,data\",\"limit\":\"0,20\",\"ORDER_BY\":\"\",\"ORDER\":\"\"}}",
+  "response_status": 200,
+  "response_headers": {
+    "x-timezone": "0800",
+    "x-enterprise": "1",
+    "x-default-ip": "0",
+    "expires": "0",
+    "date": "Tue, 15 Jul 2025 11:57:37 GMT",
+    "x-arch": "x86",
+    "content-type": "application/json;charset=UTF-8",
+    "x-sysbit": "x64",
+    "cache-control": "no-cache",
+    "x-support-i18n": "1",
+    "pragma": "no-cache",
+    "connection": "close",
+    "x-timestamp": "1752580657",
+    "x-support-wifi": "0",
+    "x-lang": "1",
+    "content-length": "1233",
+    "server": "Nginx"
+  },
+  "response_body": {
+    "Result": 30000,
+    "ErrMsg": "Success",
+    "Data": {
+      "total": 5,
+      "data": [
+        {
+          "comment": "基础VLAN测试",
+          "vlan_id": "36",
+          "vlan_name": "vlan36",
+          "mac": "00:7d:70:df:f0:c2",
+          "ip_addr": "192.168.36.1",
+          "netmask": "255.255.255.0",
+          "ip_addr_int": 3232244737,
+          "ip_mask": "",
+          "interface": "lan1",
+          "id": 1,
+          "enabled": "no"
+        },
+        {
+          "comment": "批量测试VLAN201",
+          "vlan_id": "201",
+          "vlan_name": "vlan201",
+          "mac": "00:ba:9c:7c:69:e6",
+          "ip_addr": "192.168.201.1",
+          "netmask": "255.255.255.0",
+          "ip_addr_int": 3232286977,
+          "ip_mask": "",
+          "interface": "lan1",
+          "id": 2,
+          "enabled": "no"
+        },
+        {
+          "comment": "批量测试VLAN202",
+          "vlan_id": "202",
+          "vlan_name": "vlan202",
+          "mac": "00:a0:d6:7f:3c:75",
+          "ip_addr": "192.168.202.1",
+          "netmask": "255.255.255.0",
+          "ip_addr_int": 3232287233,
+          "ip_mask": "",
+          "interface": "lan1",
+          "id": 3,
+          "enabled": "no"
+        },
+        {
+          "comment": "批量测试VLAN203",
+          "vlan_id": "203",
+          "vlan_name": "vlan203",
+          "mac": "00:26:ef:39:88:49",
+          "ip_addr": "192.168.203.1",
+          "netmask": "255.255.255.0",
+          "ip_addr_int": 3232287489,
+          "ip_mask": "",
+          "interface": "lan1",
+          "id": 4,
+          "enabled": "no"
+        },
+        {
+          "comment": "工作流程测试VLAN",
+          "vlan_id": "888",
+          "vlan_name": "vlan888",
+          "mac": "00:d2:61:1f:cb:fd",
+          "ip_addr": "192.168.88.1",
+          "netmask": "255.255.255.0",
+          "ip_addr_int": 3232258049,
+          "ip_mask": "192.168.113.1/255.255.255.0",
+          "interface": "lan1",
+          "id": 5,
+          "enabled": "no"
+        }
+      ]
+    }
+  },
+  "python": "import requests, json\nurl = 'http://10.66.0.40/Action/call'\nheaders = {\n  \"accept\": \"application/json, text/plain, */*\",\n  \"accept-encoding\": \"gzip, deflate\",\n  \"accept-language\": \"zh-CN,zh;q=0.9\",\n  \"connection\": \"keep-alive\",\n  \"content-length\": \"106\",\n  \"content-type\": \"application/json;charset=UTF-8\",\n  \"cookie\": \"sess_key=5e44d1b94e36056ffb04bff4bd229ffb; username=admin; login=1\",\n  \"host\": \"10.66.0.40\",\n  \"referer\": \"http://10.66.0.40/\",\n  \"user-agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36\"\n}\ndata = \"{\\\"func_name\\\":\\\"vlan\\\",\\\"action\\\":\\\"show\\\",\\\"param\\\":{\\\"TYPE\\\":\\\"total,data\\\",\\\"limit\\\":\\\"0,20\\\",\\\"ORDER_BY\\\":\\\"\\\",\\\"ORDER\\\":\\\"\\\"}}\"\nresp = requests.post(url, headers=headers, data=data, verify=False)\nprint(resp.text)"
+}

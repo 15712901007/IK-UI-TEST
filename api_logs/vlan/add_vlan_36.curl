@@ -5,8 +5,8 @@ curl -X POST 'http://10.66.0.40/Action/call' \
   -H 'connection: keep-alive' \
   -H 'content-length: 235' \
   -H 'content-type: application/json;charset=UTF-8' \
-  -H 'cookie: sess_key=34a57ef5466a2e66ba10a1055aeab66b; username=admin; login=1' \
+  -H 'cookie: sess_key=47d38791b44647f6244eeac5314ae9b8; username=admin; login=1' \
   -H 'host: 10.66.0.40' \
   -H 'referer: http://10.66.0.40/' \
   -H 'user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' \
-  -d '{"func_name":"vlan","action":"add","param":{"vlan_id":"36","vlan_name":"vlan36","ip_addr":"192.168.36.1","mac":"00:5d:de:a6:f2:70","ip_mask":"","interface":"lan1","netmask":"255.255.255.0","comment":"基础VLAN测试","enabled":"yes"}}'
+  -d '{"func_name":"vlan","action":"add","param":{"vlan_id":"36","vlan_name":"vlan36","ip_addr":"192.168.36.1","mac":"00:b7:21:ef:42:f8","ip_mask":"","interface":"lan1","netmask":"255.255.255.0","comment":"基础VLAN测试","enabled":"yes"}}'

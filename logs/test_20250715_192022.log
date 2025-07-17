@@ -1,0 +1,9 @@
+2025-07-15 19:20:22,968 - RouterTest - INFO - 🚀 开始测试批量启用/停用API抓取功能
+2025-07-15 19:20:24,134 - RouterTest - INFO - 开始登录，用户名: admin
+2025-07-15 19:20:24,930 - RouterTest - INFO - 成功导航到页面: http://10.66.0.40/login#/login
+2025-07-15 19:20:26,960 - RouterTest - INFO - 成功输入文本 role=textbox, name=用户名: admin
+2025-07-15 19:20:26,970 - RouterTest - INFO - 成功输入文本 role=textbox, name=密码: admin
+2025-07-15 19:20:26,998 - RouterTest - INFO - 成功点击元素 role=button, name=登录
+2025-07-15 19:20:32,532 - RouterTest - ERROR - 登录失败: 登录失败，未知错误
+2025-07-15 19:20:32,669 - RouterTest - INFO - 截图保存: screenshots\login_failed.png
+2025-07-15 19:20:32,669 - RouterTest - ERROR - 登录失败

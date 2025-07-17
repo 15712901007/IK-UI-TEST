@@ -1,0 +1,44 @@
+{
+  "timestamp": 1752578485,
+  "url": "http://10.66.0.40/Action/call",
+  "method": "POST",
+  "request_headers": {
+    "accept": "application/json, text/plain, */*",
+    "accept-encoding": "gzip, deflate",
+    "accept-language": "zh-CN,zh;q=0.9",
+    "connection": "keep-alive",
+    "content-length": "63",
+    "content-type": "application/json;charset=UTF-8",
+    "cookie": "sess_key=a36c2f30168154d7120c57c845f04844; username=admin; login=1",
+    "host": "10.66.0.40",
+    "origin": "http://10.66.0.40",
+    "referer": "http://10.66.0.40/",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"
+  },
+  "request_body": "{\"func_name\":\"vlan\",\"action\":\"down\",\"param\":{\"id\":\"1,2,3,4,5\"}}",
+  "response_status": 200,
+  "response_headers": {
+    "x-timezone": "0800",
+    "x-enterprise": "1",
+    "x-default-ip": "0",
+    "expires": "0",
+    "date": "Tue, 15 Jul 2025 11:21:18 GMT",
+    "x-arch": "x86",
+    "content-type": "application/json;charset=UTF-8",
+    "x-sysbit": "x64",
+    "cache-control": "no-cache",
+    "x-support-i18n": "1",
+    "pragma": "no-cache",
+    "connection": "close",
+    "x-timestamp": "1752578478",
+    "x-support-wifi": "0",
+    "x-lang": "1",
+    "content-length": "36",
+    "server": "Nginx"
+  },
+  "response_body": {
+    "Result": 30000,
+    "ErrMsg": "Success"
+  },
+  "python": "import requests, json\nurl = 'http://10.66.0.40/Action/call'\nheaders = {\n  \"accept\": \"application/json, text/plain, */*\",\n  \"accept-encoding\": \"gzip, deflate\",\n  \"accept-language\": \"zh-CN,zh;q=0.9\",\n  \"connection\": \"keep-alive\",\n  \"content-length\": \"63\",\n  \"content-type\": \"application/json;charset=UTF-8\",\n  \"cookie\": \"sess_key=a36c2f30168154d7120c57c845f04844; username=admin; login=1\",\n  \"host\": \"10.66.0.40\",\n  \"origin\": \"http://10.66.0.40\",\n  \"referer\": \"http://10.66.0.40/\",\n  \"user-agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36\"\n}\ndata = \"{\\\"func_name\\\":\\\"vlan\\\",\\\"action\\\":\\\"down\\\",\\\"param\\\":{\\\"id\\\":\\\"1,2,3,4,5\\\"}}\"\nresp = requests.post(url, headers=headers, data=data, verify=False)\nprint(resp.text)"
+}

@@ -29,8 +29,13 @@ class VlanPage(BasePage):
         self.search_clear_btn = "button[aria-label='Clear']"
         self.search_button_role = ("button", "")  # 搜索按钮（空文本）
         
-    def _setup_vlan_api_listener(self, operation_name: str = "unknown"):
-        """设置VLAN API监听器，返回监听器函数和结果容器"""
+    def _setup_vlan_api_listener(self, operation_name: str = "unknown", filter_actions: list[str] | None = None):
+        """设置VLAN API监听器，返回监听器函数和结果容器
+        
+        Args:
+            operation_name: 操作名称
+            filter_actions: 需要过滤的action列表，如['up', 'down']，None表示捕获所有
+        """
         matched_calls: list = []
         
         def _hook(req):
@@ -57,56 +62,75 @@ class VlanPage(BasePage):
                 if m:
                     action_val = m.group(1).lower()  # 统一转为小写
 
+                # 如果设置了过滤器，只处理指定的action
+                if filter_actions and action_val not in filter_actions:
+                    return
+
+                # 获取响应（如果可用）
+                try:
+                    resp_obj = req.response()
+                except:
+                    resp_obj = None
+
                 matched_calls.append({
                     "action": action_val,
                     "req": req,
-                    "resp": req.response()
+                    "resp": resp_obj
                 })
                 
-                # 输出调试信息
-                self.logger.info(f"[API监听] 捕获到VLAN接口: action={action_val}, url={req.url}")
-                self.logger.info(f"[API监听] 请求体: {req.post_data}")
-                try:
-                    resp_data = req.response().json()
-                    self.logger.info(f"[API监听] 响应: {resp_data}")
-                except:
-                    self.logger.info(f"[API监听] 响应状态: {req.response().status}")
+                # 输出调试信息（只有在没有过滤器或符合过滤条件时才输出）
+                if not filter_actions or action_val in filter_actions:
+                    self.logger.info(f"🎯 [全局监听] 捕获到VLAN API: action={action_val}")
+                    self.logger.info(f"🎯 [全局监听] 请求体: {req.post_data}")
+                    try:
+                        if resp_obj:
+                            resp_data = resp_obj.json()
+                            self.logger.info(f"🎯 [全局监听] 响应: {resp_data}")
+                        else:
+                            self.logger.info(f"🎯 [全局监听] 响应未就绪")
+                    except:
+                        if resp_obj:
+                            self.logger.info(f"🎯 [全局监听] 响应状态: {resp_obj.status}")
+                        else:
+                            self.logger.info(f"🎯 [全局监听] 响应解析失败")
                 
                 
                 # 保存API记录 - 支持所有VLAN操作
                 try:
                     from utils.api_recorder import save_api_call
-                    resp_obj = req.response()
                     
-                    # 根据action类型和操作名称生成文件名
-                    if action_val == "add":
-                        # 尝试从请求体中提取vlan_id
-                        vlan_id = "unknown"
-                        try:
-                            import json
-                            body_json = json.loads(req.post_data or "{}")
-                            vlan_id = body_json.get("param", {}).get("vlan_id", "unknown")
-                        except:
-                            pass
-                        filename = f"add_vlan_{vlan_id}"
-                    elif action_val == "show":
-                        filename = f"show_vlan_{operation_name}"
-                    elif action_val == "up":
-                        filename = f"enable_vlan_{operation_name}"
-                    elif action_val == "down":
-                        filename = f"disable_vlan_{operation_name}"
-                    elif action_val == "export":
-                        filename = f"export_vlan_{operation_name}"
-                    elif action_val == "import":
-                        filename = f"import_vlan_{operation_name}"
-                    elif action_val == "del":
-                        filename = f"delete_vlan_{operation_name}"
+                    if resp_obj:
+                        # 根据action类型和操作名称生成文件名
+                        if action_val == "add":
+                            # 尝试从请求体中提取vlan_id
+                            vlan_id = "unknown"
+                            try:
+                                import json
+                                body_json = json.loads(req.post_data or "{}")
+                                vlan_id = body_json.get("param", {}).get("vlan_id", "unknown")
+                            except:
+                                pass
+                            filename = f"add_vlan_{vlan_id}"
+                        elif action_val == "show":
+                            filename = f"show_vlan_{operation_name}"
+                        elif action_val == "up":
+                            filename = f"enable_vlan_{operation_name}"
+                        elif action_val == "down":
+                            filename = f"disable_vlan_{operation_name}"
+                        elif action_val == "export":
+                            filename = f"export_vlan_{operation_name}"
+                        elif action_val == "import":
+                            filename = f"import_vlan_{operation_name}"
+                        elif action_val == "del":
+                            filename = f"delete_vlan_{operation_name}"
+                        else:
+                            filename = f"{action_val}_vlan_{operation_name}"
+                        
+                        json_path, curl_path = save_api_call(filename, req, resp_obj, use_timestamp=False)
+                        self.logger.info(f"[API-{action_val.upper()}] JSON: {json_path}")
+                        self.logger.info(f"[API-{action_val.upper()}] CURL: {curl_path}")
                     else:
-                        filename = f"{action_val}_vlan_{operation_name}"
-                    
-                    json_path, curl_path = save_api_call(filename, req, resp_obj, use_timestamp=False)
-                    self.logger.info(f"[API-{action_val.upper()}] JSON: {json_path}")
-                    self.logger.info(f"[API-{action_val.upper()}] CURL: {curl_path}")
+                        self.logger.warning(f"响应未就绪，无法保存API记录: {action_val}")
                 except Exception as e:
                     self.logger.warning(f"保存 API 记录失败: {e}")
         
@@ -535,17 +559,11 @@ class VlanPage(BasePage):
             return False
         
     def enable_vlan(self, vlan_id: str):
-        """单个VLAN启用（唯一定位vlanID列）"""
+        """单个VLAN启用（不抓取API）"""
         try:
             self.logger.info(f"启用VLAN: {vlan_id}")
             self.navigate_to_vlan_page()
             time.sleep(2)  # 确保页面完全加载
-            
-            # 在页面稳定后设置API监听
-            hook_func, matched_calls = self._setup_vlan_api_listener(f"enable_{vlan_id}")
-            self.page.on("requestfinished", hook_func)
-            self.logger.info(f"[API监听] 已设置启用VLAN {vlan_id}的API监听器")
-            time.sleep(0.5)  # 给监听器一点时间绑定
             
             rows = self.page.query_selector_all("table tbody tr")
             for row in rows:
@@ -555,48 +573,100 @@ class VlanPage(BasePage):
                     for btn in btns:
                         if btn.text_content() and btn.text_content().strip() == "启用":
                             self.logger.info(f"🎯 找到启用按钮，准备点击...")
-                            
-                            # 先等待一下确保监听器完全就绪
-                            time.sleep(0.2)
                             btn.click()
-                            self.logger.info(f"✅ 已点击启用按钮，等待API调用...")
-                            
-                            # 等待更长时间，确保API调用被捕获（路由器可能有延迟）
-                            for i in range(200):  # 等待20秒，每100ms检查一次
-                                if matched_calls:
-                                    self.logger.info(f"🎉 检测到启用API调用 (第{i+1}次检查): {[c['action'] for c in matched_calls]}")
-                                    break
-                                time.sleep(0.1)
-                            else:
-                                self.logger.warning(f"⚠️ 等待20秒后仍未检测到启用API调用")
-                            
-                            # 在这里等待额外的时间确保所有API调用都被捕获
-                            self.logger.info("⏳ 等待额外5秒以确保所有延迟的API调用都被捕获...")
-                            time.sleep(5)
-                            
-                            self._cleanup_api_listener(hook_func)
+                            self.logger.info(f"✅ 已点击启用按钮")
+                            time.sleep(2)  # 等待操作完成
                             return True
             
-            self._cleanup_api_listener(hook_func)
             self.logger.error(f"未找到VLAN{vlan_id}的启用按钮")
             return False
         except Exception as e:
             self.logger.error(f"启用VLAN出错: {e}")
             self.screenshot.take_screenshot("vlan_enable_error")
             return False
+
+    def enable_all_vlans(self):
+        """全部启用VLAN（抓取批量启用API）- 使用全局监听"""
+        try:
+            self.logger.info("全部启用VLAN")
+            
+            # 设置全局API监听器，只过滤up操作
+            hook_func, matched_calls = self._setup_vlan_api_listener("enable_all", filter_actions=["up"])
+            self.page.on("requestfinished", hook_func)
+            self.logger.info("[API监听] 已设置全局启用VLAN的API监听器")
+            
+            # 导航到VLAN页面
+            self.navigate_to_vlan_page()
+            time.sleep(2)  # 确保页面完全加载
+            
+            # 点击表头全选复选框
+            checkbox = self._find_select_all_checkbox()
+            if not checkbox:
+                self.logger.error("未找到表头全选复选框")
+                self._cleanup_api_listener(hook_func)
+                return False
+            
+            self.logger.info("🎯 准备点击全选复选框...")
+            checkbox.click()
+            self.logger.info("✅ 已点击全选复选框")
+            time.sleep(1)
+            
+            # 点击批量启用按钮
+            self.logger.info("🎯 准备点击批量启用按钮...")
+            self.page.get_by_role("link", name="启用").click()
+            self.logger.info("✅ 已点击批量启用按钮，等待API调用...")
+            
+            # 等待API调用被捕获 - 专门等待up接口
+            up_api_found = False
+            for i in range(150):  # 等待15秒，每100ms检查一次
+                if matched_calls:
+                    actions = [c['action'] for c in matched_calls]
+                    if 'up' in actions:
+                        self.logger.info(f"🎉 检测到批量启用API调用 (第{i+1}次检查): {actions}")
+                        up_api_found = True
+                        break
+                    elif i % 10 == 0:  # 每秒输出一次进度
+                        self.logger.info(f"⏳ 等待启用API调用... (第{i+1}次检查，已捕获: {actions})")
+                time.sleep(0.1)
+            
+            # 如果还没找到up接口，再等待5秒
+            if not up_api_found:
+                self.logger.info("⏳ 继续等待5秒以捕获延迟的启用API调用...")
+                for i in range(50):  # 再等待5秒
+                    if matched_calls:
+                        actions = [c['action'] for c in matched_calls]
+                        if 'up' in actions:
+                            self.logger.info(f"🎉 检测到延迟的批量启用API调用: {actions}")
+                            up_api_found = True
+                            break
+                    time.sleep(0.1)
+            
+            if not up_api_found:
+                self.logger.warning("⚠️ 等待20秒后仍未检测到批量启用(up)API调用")
+                # 显示捕获到的所有API调用
+                if matched_calls:
+                    all_actions = [c['action'] for c in matched_calls]
+                    self.logger.warning(f"实际捕获到的API调用: {all_actions}")
+            
+            # 等待额外时间确保所有API调用都被捕获
+            self.logger.info("⏳ 等待额外2秒以确保所有延迟的API调用都被捕获...")
+            time.sleep(2)
+            
+            self._cleanup_api_listener(hook_func)
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"全部启用VLAN出错: {e}")
+            self.screenshot.take_screenshot("vlan_enable_all_error")
+            self._cleanup_api_listener(hook_func)
+            return False
             
     def disable_vlan(self, vlan_id: str):
-        """单个VLAN停用（唯一定位vlanID列）"""
+        """单个VLAN停用（不抓取API）"""
         try:
             self.logger.info(f"停用VLAN: {vlan_id}")
             self.navigate_to_vlan_page()
             time.sleep(2)  # 确保页面完全加载
-            
-            # 在页面稳定后设置API监听
-            hook_func, matched_calls = self._setup_vlan_api_listener(f"disable_{vlan_id}")
-            self.page.on("requestfinished", hook_func)
-            self.logger.info(f"[API监听] 已设置停用VLAN {vlan_id}的API监听器")
-            time.sleep(0.5)  # 给监听器一点时间绑定
             
             rows = self.page.query_selector_all("table tbody tr")
             for row in rows:
@@ -606,34 +676,92 @@ class VlanPage(BasePage):
                     for btn in btns:
                         if btn.text_content() and btn.text_content().strip() == "停用":
                             self.logger.info(f"🎯 找到停用按钮，准备点击...")
-                            
-                            # 先等待一下确保监听器完全就绪
-                            time.sleep(0.2)
                             btn.click()
-                            self.logger.info(f"✅ 已点击停用按钮，等待API调用...")
-                            
-                            # 等待更长时间，确保API调用被捕获（路由器可能有延迟）
-                            for i in range(200):  # 等待20秒，每100ms检查一次
-                                if matched_calls:
-                                    self.logger.info(f"🎉 检测到停用API调用 (第{i+1}次检查): {[c['action'] for c in matched_calls]}")
-                                    break
-                                time.sleep(0.1)
-                            else:
-                                self.logger.warning(f"⚠️ 等待20秒后仍未检测到停用API调用")
-                            
-                            # 在这里等待额外的时间确保所有API调用都被捕获
-                            self.logger.info("⏳ 等待额外5秒以确保所有延迟的API调用都被捕获...")
-                            time.sleep(5)
-                            
-                            self._cleanup_api_listener(hook_func)
+                            self.logger.info(f"✅ 已点击停用按钮")
+                            time.sleep(2)  # 等待操作完成
                             return True
             
-            self._cleanup_api_listener(hook_func)
             self.logger.error(f"未找到VLAN{vlan_id}的停用按钮")
             return False
         except Exception as e:
             self.logger.error(f"停用VLAN出错: {e}")
             self.screenshot.take_screenshot("vlan_disable_error")
+            return False
+
+    def disable_all_vlans(self):
+        """全部停用VLAN（抓取批量停用API）- 使用全局监听"""
+        try:
+            self.logger.info("全部停用VLAN")
+            
+            # 设置全局API监听器，只过滤down操作
+            hook_func, matched_calls = self._setup_vlan_api_listener("disable_all", filter_actions=["down"])
+            self.page.on("requestfinished", hook_func)
+            self.logger.info("[API监听] 已设置全局停用VLAN的API监听器")
+            
+            # 导航到VLAN页面
+            self.navigate_to_vlan_page()
+            time.sleep(2)  # 确保页面完全加载
+            
+            # 点击表头全选复选框
+            checkbox = self._find_select_all_checkbox()
+            if not checkbox:
+                self.logger.error("未找到表头全选复选框")
+                self._cleanup_api_listener(hook_func)
+                return False
+            
+            self.logger.info("🎯 准备点击全选复选框...")
+            checkbox.click()
+            self.logger.info("✅ 已点击全选复选框")
+            time.sleep(1)
+            
+            # 点击批量停用按钮
+            self.logger.info("🎯 准备点击批量停用按钮...")
+            self.page.get_by_role("link", name="停用").click()
+            self.logger.info("✅ 已点击批量停用按钮，等待API调用...")
+            
+            # 等待API调用被捕获 - 专门等待down接口
+            down_api_found = False
+            for i in range(150):  # 等待15秒，每100ms检查一次
+                if matched_calls:
+                    actions = [c['action'] for c in matched_calls]
+                    if 'down' in actions:
+                        self.logger.info(f"🎉 检测到批量停用API调用 (第{i+1}次检查): {actions}")
+                        down_api_found = True
+                        break
+                    elif i % 10 == 0:  # 每秒输出一次进度
+                        self.logger.info(f"⏳ 等待停用API调用... (第{i+1}次检查，已捕获: {actions})")
+                time.sleep(0.1)
+            
+            # 如果还没找到down接口，再等待5秒
+            if not down_api_found:
+                self.logger.info("⏳ 继续等待5秒以捕获延迟的停用API调用...")
+                for i in range(50):  # 再等待5秒
+                    if matched_calls:
+                        actions = [c['action'] for c in matched_calls]
+                        if 'down' in actions:
+                            self.logger.info(f"🎉 检测到延迟的批量停用API调用: {actions}")
+                            down_api_found = True
+                            break
+                    time.sleep(0.1)
+            
+            if not down_api_found:
+                self.logger.warning("⚠️ 等待20秒后仍未检测到批量停用(down)API调用")
+                # 显示捕获到的所有API调用
+                if matched_calls:
+                    all_actions = [c['action'] for c in matched_calls]
+                    self.logger.warning(f"实际捕获到的API调用: {all_actions}")
+            
+            # 等待额外时间确保所有API调用都被捕获
+            self.logger.info("⏳ 等待额外2秒以确保所有延迟的API调用都被捕获...")
+            time.sleep(2)
+            
+            self._cleanup_api_listener(hook_func)
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"全部停用VLAN出错: {e}")
+            self.screenshot.take_screenshot("vlan_disable_all_error")
+            self._cleanup_api_listener(hook_func)
             return False
 
     def _find_select_all_checkbox(self):
@@ -646,62 +774,64 @@ class VlanPage(BasePage):
             pass
         return None
 
-    def batch_enable_vlans(self, vlan_ids: list = None, select_all: bool = False):
-        """批量启用VLAN（全选前自动刷新页面，且只用唯一定位方式）"""
+    def batch_enable_vlans(self, vlan_ids: list[str] | None = None, select_all: bool = False):
+        """批量启用VLAN（兼容旧接口，推荐使用enable_all_vlans）"""
+        if select_all or not vlan_ids:
+            return self.enable_all_vlans()
+        
         try:
-            self.logger.info("批量启用VLAN")
+            self.logger.info(f"批量启用指定VLAN: {vlan_ids}")
             
             # 设置API监听
-            operation_name = "batch_enable_all" if select_all else f"batch_enable_{len(vlan_ids) if vlan_ids else 0}"
-            hook_func, matched_calls = self._setup_vlan_api_listener(operation_name)
+            hook_func, matched_calls = self._setup_vlan_api_listener(f"batch_enable_{len(vlan_ids)}")
             self.page.on("requestfinished", hook_func)
             
-            if select_all:
-                self.navigate_to_vlan_page()
-                time.sleep(1)
-                checkbox = self._find_select_all_checkbox()
-                if not checkbox:
-                    self.logger.error("未找到表头全选复选框")
-                    self._cleanup_api_listener(hook_func)
-                    return False
-                checkbox.click()
-            elif vlan_ids:
-                for vid in vlan_ids:
-                    self.page.get_by_role("row", name=vid).locator(".td_check").click()
+            self.navigate_to_vlan_page()
+            time.sleep(1)
             
+            # 选择指定的VLAN
+            for vid in vlan_ids:
+                self.page.get_by_role("row", name=vid).locator(".td_check").click()
+            
+            # 点击批量启用按钮
             self.page.get_by_role("link", name="启用").click()
-            time.sleep(2)  # 等待API调用
+            
+            # 等待API调用被捕获
+            for i in range(100):  # 等待10秒
+                if matched_calls:
+                    self.logger.info(f"🎉 检测到批量启用API调用: {[c['action'] for c in matched_calls]}")
+                    break
+                time.sleep(0.1)
+            
+            time.sleep(2)  # 等待操作完成
             self._cleanup_api_listener(hook_func)
             return True
         except Exception as e:
             self.logger.error(f"批量启用VLAN出错: {e}")
             self.screenshot.take_screenshot("batch_vlan_enable_error")
+            self._cleanup_api_listener(hook_func)
             return False
 
-    def batch_disable_vlans(self, vlan_ids: list = None, select_all: bool = False):
-        """批量停用VLAN（全选前自动刷新页面，且只用唯一定位方式）"""
+    def batch_disable_vlans(self, vlan_ids: list[str] | None = None, select_all: bool = False):
+        """批量停用VLAN（兼容旧接口，推荐使用disable_all_vlans）"""
+        if select_all or not vlan_ids:
+            return self.disable_all_vlans()
+        
         try:
-            self.logger.info("批量停用VLAN")
+            self.logger.info(f"批量停用指定VLAN: {vlan_ids}")
             
             # 设置API监听
-            operation_name = "batch_disable_all" if select_all else f"batch_disable_{len(vlan_ids) if vlan_ids else 0}"
-            hook_func, matched_calls = self._setup_vlan_api_listener(operation_name)
+            hook_func, matched_calls = self._setup_vlan_api_listener(f"batch_disable_{len(vlan_ids)}")
             self.page.on("requestfinished", hook_func)
-            self.logger.info(f"[API监听] 已设置批量停用VLAN的API监听器: {operation_name}")
             
-            if select_all:
-                self.navigate_to_vlan_page()
-                time.sleep(1)
-                checkbox = self._find_select_all_checkbox()
-                if not checkbox:
-                    self.logger.error("未找到表头全选复选框")
-                    self._cleanup_api_listener(hook_func)
-                    return False
-                checkbox.click()
-            elif vlan_ids:
-                for vid in vlan_ids:
-                    self.page.get_by_role("row", name=vid).locator(".td_check").click()
+            self.navigate_to_vlan_page()
+            time.sleep(1)
             
+            # 选择指定的VLAN
+            for vid in vlan_ids:
+                self.page.get_by_role("row", name=vid).locator(".td_check").click()
+            
+            # 点击批量停用按钮
             self.logger.info("🎯 准备点击批量停用按钮...")
             self.page.get_by_role("link", name="停用").click()
             self.logger.info("✅ 已点击批量停用按钮，等待API调用...")
@@ -709,11 +839,11 @@ class VlanPage(BasePage):
             # 等待API调用被捕获
             for i in range(100):  # 等待10秒
                 if matched_calls:
-                    self.logger.info(f"🎉 检测到批量停用API调用 (第{i+1}次检查): {[c['action'] for c in matched_calls]}")
+                    self.logger.info(f"🎉 检测到批量停用API调用: {[c['action'] for c in matched_calls]}")
                     break
                 time.sleep(0.1)
             else:
-                self.logger.warning(f"⚠️ 等待10秒后仍未检测到批量停用API调用")
+                self.logger.warning("⚠️ 等待10秒后仍未检测到批量停用API调用")
             
             # 等待额外时间确保所有API调用都被捕获
             time.sleep(2)
