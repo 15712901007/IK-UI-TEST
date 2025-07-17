@@ -300,12 +300,18 @@ class VlanPage(BasePage):
                 except Exception:
                     pass
 
-                # 保存文件 (add)
+                # 保存文件 (add) - 使用去重机制
                 try:
                     from utils.api_recorder import save_api_call
-                    json_path, curl_path = save_api_call(f"add_vlan_{vlan_id}", req_obj, resp_obj, use_timestamp=False)
-                    self.logger.info(f"[API] 已保存至: {json_path}")
-                    self.logger.info(f"[CURL] 已保存至: {curl_path}")
+                    # 检查是否已经保存过添加操作的API
+                    dedup_key = "add_vlan_first"
+                    if dedup_key not in self._saved_api_types:
+                        self._saved_api_types.add(dedup_key)
+                        json_path, curl_path = save_api_call("add_vlan_36", req_obj, resp_obj, use_timestamp=False)
+                        self.logger.info(f"[API] 已保存至: {json_path}")
+                        self.logger.info(f"[CURL] 已保存至: {curl_path}")
+                    else:
+                        self.logger.debug(f"[API] 已保存过添加操作，跳过: {vlan_id}")
                 except Exception as e:
                     self.logger.warning(f"保存 API 记录失败: {e}")
 
@@ -322,8 +328,14 @@ class VlanPage(BasePage):
 
                     try:
                         from utils.api_recorder import save_api_call
-                        json_path, curl_path = save_api_call(f"show_vlan_after_add_{vlan_id}", s_req, s_resp, use_timestamp=False)
-                        self.logger.info(f"[API-SHOW] 已保存至: {json_path}")
+                        # 检查是否已经保存过show操作的API（统一只保存第一个）
+                        dedup_key = "show_vlan_after_add_first"
+                        if dedup_key not in self._saved_api_types:
+                            self._saved_api_types.add(dedup_key)
+                            json_path, curl_path = save_api_call("show_vlan_after_add_36", s_req, s_resp, use_timestamp=False)
+                            self.logger.info(f"[API-SHOW] 已保存至: {json_path}")
+                        else:
+                            self.logger.debug(f"[API-SHOW] 已保存过show操作，跳过: {vlan_id}")
                     except Exception:
                         pass
 
