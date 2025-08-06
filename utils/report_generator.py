@@ -139,20 +139,53 @@ class ReportGenerator:
             self.logger.warning("没有找到测试输出数据")
             return self._create_fallback_test_cases(test_results, test_config)
         
-        # 加载VLAN配置
-        yaml_config = self._load_vlan_yaml_config()
+        # 根据测试功能动态加载YAML配置
+        yaml_config = self._load_test_data_yaml(test_config)
         
         # 加载登录测试数据（用于参数化用例描述）
         login_config = self._load_login_yaml_config()
         
         # 解析测试用例
-        test_cases = self._parse_test_cases_from_output(raw_output, yaml_config, login_config)
+        test_cases = self._parse_test_cases_from_output(raw_output, yaml_config, login_config, test_config)
         
         if not test_cases:
             self.logger.warning("从输出中未解析到测试用例，使用备用方案")
             test_cases = self._create_fallback_test_cases(test_results, test_config)
         
         return test_cases
+
+    def _load_test_data_yaml(self, test_config):
+        """根据测试配置动态加载对应的YAML测试数据"""
+        selected_functions = test_config.get('test_function', [])
+        if isinstance(selected_functions, str):
+            selected_functions = [selected_functions]
+
+        # 如果有多个功能，或者为“全部功能”，则无法确定唯一的YAML文件
+        if not selected_functions or len(selected_functions) != 1 or '全部功能' in selected_functions:
+            self.logger.warning(f"测试功能为 {selected_functions}，无法加载特定YAML数据，将返回空")
+            return {}
+
+        primary_function = selected_functions[0]  # 提取列表的第一个元素作为字符串
+        
+        function_yaml_map = {
+            'VLAN设置': "data/vlan_data.yaml",
+            '终端分组': "data/sta_group.yaml",
+            '登录测试': "data/login_data.yaml"
+        }
+        
+        yaml_path = function_yaml_map.get(primary_function)
+
+        if not yaml_path:
+            self.logger.error(f"未找到功能 '{primary_function}' 对应的YAML配置文件")
+            return {}
+
+        try:
+            config = self.yaml_reader.read_yaml(yaml_path)
+            self.logger.info(f"成功加载 {primary_function} 的配置文件: {yaml_path}")
+            return config
+        except Exception as e:
+            self.logger.error(f"加载 {yaml_path} 失败: {e}")
+            return {}
 
     def _load_vlan_yaml_config(self):
         """加载VLAN YAML配置"""
@@ -173,7 +206,7 @@ class ReportGenerator:
             self.logger.error(f"加载登录测试数据失败: {e}")
             return {}
 
-    def _parse_test_cases_from_output(self, raw_output, vlan_yaml_config, login_yaml_config):
+    def _parse_test_cases_from_output(self, raw_output, yaml_config, login_yaml_config, test_config):
         """从原始输出解析测试用例"""
         test_cases = []
         lines = raw_output.split('\n')
@@ -183,6 +216,16 @@ class ReportGenerator:
         
         self.logger.info(f"开始解析测试输出，共 {len(lines)} 行")
         
+        # 从测试配置中获取测试类名称
+        selected_functions = test_config.get('test_function', ['未知模块'])
+        primary_function = selected_functions[0] if selected_functions and len(selected_functions) == 1 else '未知模块'
+        class_map = {
+            '登录测试': 'LOGIN_TEST',
+            'VLAN设置': 'VLAN_TEST',
+            '终端分组': 'STA_GROUP_TEST'
+        }
+        test_class = class_map.get(primary_function, 'UNKNOWN_TEST')
+
         for line in lines:
             line = line.strip()
             
@@ -197,51 +240,34 @@ class ReportGenerator:
                     test_cases.append(current_test_case)
                 
                 # 提取测试方法名及参数（支持参数化用例）
-                # 例如: [测试开始] test_invalid_login (admin/wrong_password)
-                test_match = re.search(r'\[测试开始\]\s+(\w+)(?:\s*\((.*?)\))?', line)
+                test_match = re.search(r'\[测试开始\]\s+([a-zA-Z0-9_]+)(?:\[(.*?)\])?', line)
+                if not test_match:
+                    test_match = re.search(r'\[测试开始\]\s+(\w+)(?:\s*\((.*?)\))?', line)
+
                 if test_match:
                     method_name = test_match.group(1)
-                    param_desc = test_match.group(2)  # 可能为空
+                    param_desc = test_match.group(2) or ""
 
-                    # 根据常见方法名映射更友好的中文名称
-                    default_name_map = {
-                        'test_valid_login': '有效登录功能测试',
-                        'test_invalid_login': '无效登录功能测试'
-                    }
+                    # 优先从YAML获取用例名称
+                    yaml_test_case = yaml_config.get('test_cases', {}).get(method_name, {})
+                    display_name = yaml_test_case.get('name', f'{method_name} 功能测试')
 
-                    default_name = default_name_map.get(method_name, f'{method_name} 功能测试')
-
-                    # 始终保持中文描述；参数化信息只用于 method_name，不影响 name
-                    display_name = default_name
-                    
-                    # 从YAML配置获取测试用例信息
-                    yaml_test_case = vlan_yaml_config.get('test_cases', {}).get(method_name, {})
-                    
-                    # 若为参数化登录场景，尝试从 login_yaml_config 匹配 description
-                    if method_name == 'test_invalid_login' and param_desc:
-                        parts = param_desc.split('/') if param_desc else []
-                        user = parts[0] if len(parts) > 0 else ''
-                        pwd = parts[1] if len(parts) > 1 else ''
-                        for case in login_yaml_config.get('invalid_login', []):
-                            if str(case.get('username')) == user and str(case.get('password')) == pwd:
-                                display_name = case.get('description', display_name)
-                                break
-                    elif method_name == 'test_valid_login':
-                        # 取有效登录描述
-                        first_valid = login_yaml_config.get('valid_login', [{}])[0]
-                        display_name = first_valid.get('description', display_name)
-
-                    # 依据方法名判断测试模块
-                    if 'login' in method_name.lower():
-                        test_class = 'LOGIN_TEST'
-                    else:
-                        test_class = 'VLAN_TEST'
+                    # 针对参数化用例，尝试从数据文件获取更详细的描述
+                    if param_desc:
+                        # 尝试从sta_group.yaml或vlan_data.yaml等文件中查找
+                        # 获取YAML数据中的第一个列表，作为测试用例数据源
+                        data_list_key = next((k for k, v in yaml_config.items() if isinstance(v, list)), None)
+                        if data_list_key:
+                            for item in yaml_config[data_list_key]:
+                                if item.get('test_case') == param_desc:
+                                    display_name = param_desc
+                                    break
                     
                     current_test_case = {
                         'case_id': len(test_cases) + 1,
                         'test_class': test_class,
                         'method_name': method_name + (f"[{param_desc}]" if param_desc else ""),
-                        'name': yaml_test_case.get('name', display_name),
+                        'name': display_name,
                         'business_scenario': yaml_test_case.get('business_scenario', '验证功能正确性'),
                         'test_steps': yaml_test_case.get('test_steps', ['1. 执行测试准备', '2. 执行核心操作', '3. 验证结果']),
                         'risk_level': yaml_test_case.get('risk_level', '中等'),
@@ -397,9 +423,36 @@ class ReportGenerator:
         """创建备用测试用例"""
         test_cases = []
         stats = test_results.get('statistics', {})
-        yaml_config = self._load_vlan_yaml_config()
+        # 根据测试功能动态加载YAML配置
+        yaml_config = self._load_test_data_yaml(test_config)
+        if not yaml_config:
+            self.logger.error("备用方案无法加载有效的YAML配置，无法生成测试用例")
+            return []
+            
         yaml_test_cases = yaml_config.get('test_cases', {})
         
+        # 如果test_cases为空，尝试从其他key获取，例如sta_group.yaml的'ip_groups'
+        if not yaml_test_cases:
+            data_key = next((k for k in ['ip_groups', 'basic_vlans', 'batch_vlans', 'invalid_vlans', 'valid_login', 'invalid_login'] if k in yaml_config), None)
+            if data_key:
+                temp_cases = {}
+                # 确保data_key对应的是一个列表
+                if isinstance(yaml_config[data_key], list):
+                    for i, item in enumerate(yaml_config[data_key]):
+                        # 构造一个唯一的method_name和case name
+                        case_name = item.get('test_case') or item.get('name') or item.get('description') or f"测试用例{i+1}"
+                        if case_name:
+                            method_name = re.sub(r'\W+', '_', case_name).lower()
+                            temp_cases[method_name] = {
+                                'name': case_name,
+                                'business_scenario': item.get('description', '验证功能正确性'),
+                                'test_steps': ['1. 执行测试准备', '2. 执行核心操作', '3. 验证结果'],
+                                'risk_level': '中等',
+                                'priority': '中'
+                            }
+                yaml_test_cases = temp_cases
+                self.logger.info(f"从 {data_key} 字段生成了 {len(temp_cases)} 个测试用例")
+
         total = stats.get('total', 0)
         passed = stats.get('passed', 0)
         failed = stats.get('failed', 0)
@@ -422,9 +475,9 @@ class ReportGenerator:
             
             test_cases.append({
                 'case_id': case_count + 1,
-                'test_class': 'LOGIN_TEST' if 'login' in method_name.lower() else 'VLAN_TEST',
+                'test_class': str(test_config.get('test_function', ['UNKNOWN_TEST'])[0] if isinstance(test_config.get('test_function', ['UNKNOWN_TEST']), list) else test_config.get('test_function', 'UNKNOWN_TEST')).replace('设置', '_TEST').replace('测试', '_TEST'),
                 'method_name': method_name,
-                'name': '有效登录功能测试' if method_name == 'test_valid_login' else ('无效登录功能测试' if 'invalid_login' in method_name else f'{method_name} 功能测试'),
+                'name': case_config.get('name', f'{method_name} 功能测试'),
                 'business_scenario': case_config.get('business_scenario', '验证功能正确性'),
                 'test_steps': case_config.get('test_steps', ['1. 执行测试准备', '2. 执行核心操作', '3. 验证结果']),
                 'risk_level': case_config.get('risk_level', '中等'),

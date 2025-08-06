@@ -1,0 +1,6 @@
+curl -X POST 'http://10.66.0.40/Action/call' \
+  -H 'accept: application/json, text/plain, */*' \
+  -H 'content-type: application/json;charset=UTF-8' \
+  -H 'cookie: sess_key=365aadfd984780abffa00c5d920dff9b; username=admin; login=1' \
+  -H 'referer: http://10.66.0.40/' \
+  -d '{"func_name": "vlan", "action": "add", "param": {"vlan_id": "300", "vlan_name": "vlan300", "ip_addr": "192.168.47.1", "mac": "00:b7:21:ef:01:2c", "ip_mask": "", "interface": "lan1", "netmask": "255.255.255.0", "comment": "\u6279\u91cf\u6d4b\u8bd5VLAN300", "enabled": "yes"}}'

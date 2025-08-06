@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>路由器自动化测试报告</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Microsoft YaHei', Arial, sans-serif; 
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container { 
+            max-width: 1600px; 
+            margin: 0 auto; 
+            padding: 20px;
+        }
+        
+        .header { 
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white; 
+            padding: 30px; 
+            border-radius: 10px; 
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        
+        .summary-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .summary-card.failed { border-left-color: #f44336; }
+        .summary-card.total { border-left-color: #2196F3; }
+        .summary-card.rate { border-left-color: #FF9800; }
+        
+        .card-title { font-size: 0.9em; color: #666; margin-bottom: 5px; }
+        .card-value { font-size: 2em; font-weight: bold; }
+        .card-value.success { color: #4CAF50; }
+        .card-value.error { color: #f44336; }
+        .card-value.info { color: #2196F3; }
+        .card-value.warning { color: #FF9800; }
+        
+        .test-info-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #4CAF50;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 3px solid #4CAF50;
+        }
+        
+        .info-label { font-weight: bold; color: #555; }
+        .info-value { color: #333; }
+        
+        .test-table-section {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .table-header {
+            background: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+        
+        .test-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+        }
+        
+        .test-table thead {
+            background: #45a049;
+            color: white;
+        }
+        
+        .test-table th,
+        .test-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .test-table th {
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+        }
+        
+        .test-table tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .test-table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: white;
+            display: inline-block;
+        }
+        
+        .status-badge.passed { background: #4CAF50; }
+        .status-badge.failed { background: #f44336; }
+        .status-badge.error { background: #FF9800; }
+        
+        .details-btn {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+        
+        .details-btn:hover {
+            background: #1976D2;
+        }
+        
+        .details-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 1200px;
+            max-height: 80vh;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .modal-header {
+            background: #4CAF50;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title { font-size: 1.3em; font-weight: bold; }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+        
+        .modal-body {
+            padding: 20px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        
+        .detail-section {
+            margin-bottom: 25px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        
+        .detail-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 1.1em;
+        }
+        
+        .steps-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .steps-list li {
+            padding: 8px 12px;
+            margin: 5px 0;
+            background: #f8f9fa;
+            border-left: 3px solid #4CAF50;
+            border-radius: 4px;
+        }
+        
+        .execution-timeline {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .timeline-item {
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .timeline-item:last-child { border-bottom: none; }
+        
+        .timeline-item.step { background: #e8f5e8; }
+        .timeline-item.system { background: #e3f2fd; }
+        .timeline-item.error { background: #ffebee; }
+        
+        .timeline-time {
+            font-size: 0.8em;
+            color: #666;
+            min-width: 70px;
+        }
+        
+        .timeline-content { flex: 1; }
+        
+        @media (max-width: 768px) {
+            .container { padding: 10px; }
+            .test-table { font-size: 0.8em; }
+            .test-table th,
+            .test-table td { padding: 8px 10px; }
+            .modal-content { margin: 2% auto; width: 95%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 报告头部 -->
+        <div class="header">
+            <h1>🤖 路由器自动化测试报告</h1>
+            <div>报告生成时间：2025年08月06日 10:48:44</div>
+            <div style="margin-top: 10px;">
+                
+                <span style="background: rgba(255,255,255,0.2); padding: 8px 20px; border-radius: 20px;">
+                    ✅ 测试通过
+                </span>
+                
+            </div>
+        </div>
+
+        <!-- 测试摘要 -->
+        <div class="summary-section">
+            <div class="section-title">📊 测试摘要</div>
+            <div class="summary-cards">
+                <div class="summary-card total">
+                    <div class="card-title">测试用例总数</div>
+                    <div class="card-value info">20</div>
+                </div>
+                <div class="summary-card">
+                    <div class="card-title">成功用例</div>
+                    <div class="card-value success">20</div>
+                </div>
+                <div class="summary-card failed">
+                    <div class="card-title">失败用例</div>
+                    <div class="card-value error">0</div>
+                </div>
+                <div class="summary-card rate">
+                    <div class="card-title">成功率</div>
+                    <div class="card-value warning">100.0%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 测试环境信息 -->
+        <div class="test-info-section">
+            <div class="section-title">🌐 测试环境信息</div>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">🔗 路由器IP：</span>
+                    <span class="info-value">10.66.0.40</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">🧪 测试功能：</span>
+                    <span class="info-value">终端分组</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">👤 测试人员：</span>
+                    <span class="info-value">自动化测试</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">🔄 循环次数：</span>
+                    <span class="info-value">1</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">⏰ 开始时间：</span>
+                    <span class="info-value">2025-08-06 10:47:10</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">⏰ 结束时间：</span>
+                    <span class="info-value">2025-08-06 10:48:44</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">⏱️ 总耗时：</span>
+                    <span class="info-value">0:01:33</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">📋 测试版本：</span>
+                    <span class="info-value">1.0.0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 详细测试用例表格 -->
+        <div class="test-table-section">
+            <div class="table-header">📝 详细信息 (20 个测试用例)</div>
+            <table class="test-table">
+                <thead>
+                    <tr>
+                        <th>编号</th>
+                        <th>测试类</th>
+                        <th>测试方法</th>
+                        <th>用例描述</th>
+                        <th>执行时间</th>
+                        <th>执行结果</th>
+                        <th>详细信息</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    <tr>
+                        <td>1</td>
+                        <td>终端分组</td>
+                        <td>基础功能测试_单分组_</td>
+                        <td>基础功能测试（单分组）</td>
+                        <td>2-5秒</td>
+                        <td>
+                            
+                            <span class="status-badge passed">成功</span>
+                            
+                        </td>
+                        <td>
+                            <button class="details-btn" onclick="showDetails(0)">
+                                查看详情
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>2</td>
+                        <td>终端分组</td>
+                        <td>批量分组测试</td>
+                        <td>批量分组测试</td>
+                        <td>2-5秒</td>
+                        <td>
+                            
+                            <span class="status-badge passed">成功</span>
+                            
+                        </td>
+                        <td>
+                            <button class="details-btn" onclick="showDetails(1)">
+                                查看详情
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>3</td>
+                        <td>终端分组</td>
+                        <td>边界值测试</td>
+                        <td>边界值测试</td>
+                        <td>2-5秒</td>
+                        <td>
+                            
+                            <span class="status-badge passed">成功</span>
+                            
+                        </td>
+                        <td>
+                            <button class="details-btn" onclick="showDetails(2)">
+                                查看详情
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>4</td>
+                        <td>终端分组</td>
+                        <td>混合格式测试</td>
+                        <td>混合格式测试</td>
+                        <td>2-5秒</td>
+                        <td>
+                            
+                            <span class="status-badge passed">成功</span>
+                            
+                        </td>
+                        <td>
+                            <button class="details-btn" onclick="showDetails(3)">
+                                查看详情
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>5</td>
+                        <td>终端分组</td>
+                        <td>纯英文分组名称测试</td>
+                        <td>纯英文分组名称测试</td>
+                        <td>2-5秒</td>
+                        <td>
+                            
+                            <span class="status-badge passed">成功</span>
+                            
+                        </td>
+                        <td>
+                            <button class="details-btn" onclick="showDetails(4)">
+                                查看详情
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>6</td>
+                        <td>终端分组</td>
+                        <td>纯数字分组名称测试</td>
+                        <td>纯数字分组名称测试</td>
+                        <td>2-5秒</td>
+                        <td>
+                            
+                            <span class="status-badge passed">成功</span>
+                            
+                        </td>
+                        <td>
+                            <button class="details-btn" onclick="showDetails(5)">
+                                查看详情
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>7</td>
+                        <td>终端分组</td>
+                        <td>中英文混合分组名称测试</td>
+                        <td>中英文混合分组名称测试</td>
+                        <td>2-5秒</td>
+                        <td>
+                            
+                            <span class="status-badge passed">成功</span>
+                            
+                        </td>
+                        <td>
+                            <button class="details-btn" onclick="showDetails(6)">
+                                查看详情
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>8</td>
+                        <td>终端分组</td>
+                        <td>英文数字混合分组名称测试</td>
+                        <td>英文数字混合分组名称测试</td>
+                        <td>2-5秒</td>
+                        <td>
+                            
+                            <span class="status-badge passed">成功</span>
+                            
+                        </td>
+                        <td>
+                            <button class="details-btn" onclick="showDetails(7)">
+                                查看详情
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>9</td>
+                        <td>终端分组</td>
+                        <td>特殊字符分组名称测试</td>
+                        <td>特殊字符分组名称测试</td>
+                        <td>2-5秒</td>
+                        <td>
+                            
+                            <span class="status-badge passed">成功</span>
+                            
+                        </td>
+                        <td>
+                            <button class="details-btn" onclick="showDetails(8)">
+                                查看详情
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>10</td>
+                        <td>终端分组</td>
+                        <td>中英数特殊字符混合分组名称测试</td>
+                        <td>中英数特殊字符混合分组名称测试</td>
+                        <td>2-5秒</td>
+                        <td>
+                            
+                            <span class="status-badge passed">成功</span>
+                            
+                        </td>
+                        <td>
+                            <button class="details-btn" onclick="showDetails(9)">
+                                查看详情
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>11</td>
+                        <td>终端分组</td>
+                        <td>异常格式测试</td>
+                        <td>异常格式测试</td>
+                        <td>2-5秒</td>
+                        <td>
+                            
+                            <span class="status-badge passed">成功</span>
+                            
+                        </td>
+                        <td>
+                            <button class="details-btn" onclick="showDetails(10)">
+                                查看详情
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>12</td>
+                        <td>终端分组</td>
+                        <td>超长名称测试</td>
+                        <td>超长名称测试</td>
+                        <td>2-5秒</td>
+                        <td>
+                            
+                            <span class="status-badge passed">成功</span>
+                            
+                        </td>
+                        <td>
+                            <button class="details-btn" onclick="showDetails(11)">
+                                查看详情
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>13</td>
+                        <td>终端分组</td>
+                        <td>重复ip测试</td>
+                        <td>重复IP测试</td>
+                        <td>2-5秒</td>
+                        <td>
+                            
+                            <span class="status-badge passed">成功</span>
+                            
+                        </td>
+                        <td>
+                            <button class="details-btn" onclick="showDetails(12)">
+                                查看详情
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>14</td>
+                        <td>终端分组</td>
+                        <td>空分组名称测试</td>
+                        <td>空分组名称测试</td>
+                        <td>2-5秒</td>
+                        <td>
+                            
+                            <span class="status-badge passed">成功</span>
+                            
+                        </td>
+                        <td>
+                            <button class="details-btn" onclick="showDetails(13)">
+                                查看详情
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>15</td>
+                        <td>终端分组</td>
+                        <td>空ip列表测试</td>
+                        <td>空IP列表测试</td>
+                        <td>2-5秒</td>
+                        <td>
+                            
+                            <span class="status-badge passed">成功</span>
+                            
+                        </td>
+                        <td>
+                            <button class="details-btn" onclick="showDetails(14)">
+                                查看详情
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>16</td>
+                        <td>终端分组</td>
+                        <td>搜索测试_现有数据</td>
+                        <td>搜索测试 - 现有数据</td>
+                        <td>2-5秒</td>
+                        <td>
+                            
+                            <span class="status-badge passed">成功</span>
+                            
+                        </td>
+                        <td>
+                            <button class="details-btn" onclick="showDetails(15)">
+                                查看详情
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>17</td>
+                        <td>终端分组</td>
+                        <td>搜索测试_没有数据</td>
+                        <td>搜索测试 - 没有数据</td>
+                        <td>2-5秒</td>
+                        <td>
+                            
+                            <span class="status-badge passed">成功</span>
+                            
+                        </td>
+                        <td>
+                            <button class="details-btn" onclick="showDetails(16)">
+                                查看详情
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>18</td>
+                        <td>终端分组</td>
+                        <td>编辑分组测试</td>
+                        <td>编辑分组测试</td>
+                        <td>2-5秒</td>
+                        <td>
+                            
+                            <span class="status-badge passed">成功</span>
+                            
+                        </td>
+                        <td>
+                            <button class="details-btn" onclick="showDetails(17)">
+                                查看详情
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>19</td>
+                        <td>终端分组</td>
+                        <td>删除分组测试</td>
+                        <td>删除分组测试</td>
+                        <td>2-5秒</td>
+                        <td>
+                            
+                            <span class="status-badge passed">成功</span>
+                            
+                        </td>
+                        <td>
+                            <button class="details-btn" onclick="showDetails(18)">
+                                查看详情
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>20</td>
+                        <td>终端分组</td>
+                        <td>全部删除</td>
+                        <td>全部删除</td>
+                        <td>2-5秒</td>
+                        <td>
+                            
+                            <span class="status-badge passed">成功</span>
+                            
+                        </td>
+                        <td>
+                            <button class="details-btn" onclick="showDetails(19)">
+                                查看详情
+                            </button>
+                        </td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 详情模态框 -->
+        <div id="detailsModal" class="details-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title" id="modalTitle">测试用例详情</div>
+                    <button class="close-btn" onclick="closeModal()">&times;</button>
+                </div>
+                <div class="modal-body" id="modalBody">
+                    <!-- 详情内容将在这里动态加载 -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // 测试用例数据
+        const testCases = [{"business_scenario": "\u9a8c\u8bc1\u57fa\u7840IP\u5206\u7ec4\u6dfb\u52a0\u529f\u80fd", "case_id": 1, "duration": "2-5\u79d2", "end_time": "\u672a\u77e5", "execution_details": [{"content": "\u5907\u7528\u65b9\u6848\u751f\u6210\u7684 PASSED \u6d4b\u8bd5\u7528\u4f8b", "timestamp": "\u672a\u77e5", "type": "step"}], "execution_summary": {"key_steps": ["\u5907\u7528\u65b9\u6848: PASSED \u6d4b\u8bd5\u7528\u4f8b"], "total_actions": 0, "total_steps": 1}, "method_name": "\u57fa\u7840\u529f\u80fd\u6d4b\u8bd5_\u5355\u5206\u7ec4_", "name": "\u57fa\u7840\u529f\u80fd\u6d4b\u8bd5\uff08\u5355\u5206\u7ec4\uff09", "priority": "\u4e2d", "risk_level": "\u4e2d\u7b49", "start_time": "\u672a\u77e5", "status": "PASSED", "test_class": "\u7ec8\u7aef\u5206\u7ec4", "test_steps": ["1. \u6267\u884c\u6d4b\u8bd5\u51c6\u5907", "2. \u6267\u884c\u6838\u5fc3\u64cd\u4f5c", "3. \u9a8c\u8bc1\u7ed3\u679c"]}, {"business_scenario": "\u6d4b\u8bd5\u6279\u91cfIP\u6bb5\u6dfb\u52a0", "case_id": 2, "duration": "2-5\u79d2", "end_time": "\u672a\u77e5", "execution_details": [{"content": "\u5907\u7528\u65b9\u6848\u751f\u6210\u7684 PASSED \u6d4b\u8bd5\u7528\u4f8b", "timestamp": "\u672a\u77e5", "type": "step"}], "execution_summary": {"key_steps": ["\u5907\u7528\u65b9\u6848: PASSED \u6d4b\u8bd5\u7528\u4f8b"], "total_actions": 0, "total_steps": 1}, "method_name": "\u6279\u91cf\u5206\u7ec4\u6d4b\u8bd5", "name": "\u6279\u91cf\u5206\u7ec4\u6d4b\u8bd5", "priority": "\u4e2d", "risk_level": "\u4e2d\u7b49", "start_time": "\u672a\u77e5", "status": "PASSED", "test_class": "\u7ec8\u7aef\u5206\u7ec4", "test_steps": ["1. \u6267\u884c\u6d4b\u8bd5\u51c6\u5907", "2. \u6267\u884c\u6838\u5fc3\u64cd\u4f5c", "3. \u9a8c\u8bc1\u7ed3\u679c"]}, {"business_scenario": "\u7279\u6b8aIP\u5730\u5740\u5904\u7406\u9a8c\u8bc1", "case_id": 3, "duration": "2-5\u79d2", "end_time": "\u672a\u77e5", "execution_details": [{"content": "\u5907\u7528\u65b9\u6848\u751f\u6210\u7684 PASSED \u6d4b\u8bd5\u7528\u4f8b", "timestamp": "\u672a\u77e5", "type": "step"}], "execution_summary": {"key_steps": ["\u5907\u7528\u65b9\u6848: PASSED \u6d4b\u8bd5\u7528\u4f8b"], "total_actions": 0, "total_steps": 1}, "method_name": "\u8fb9\u754c\u503c\u6d4b\u8bd5", "name": "\u8fb9\u754c\u503c\u6d4b\u8bd5", "priority": "\u4e2d", "risk_level": "\u4e2d\u7b49", "start_time": "\u672a\u77e5", "status": "PASSED", "test_class": "\u7ec8\u7aef\u5206\u7ec4", "test_steps": ["1. \u6267\u884c\u6d4b\u8bd5\u51c6\u5907", "2. \u6267\u884c\u6838\u5fc3\u64cd\u4f5c", "3. \u9a8c\u8bc1\u7ed3\u679c"]}, {"business_scenario": "\u6df7\u5408\u683c\u5f0fIP\u8f93\u5165\u9a8c\u8bc1", "case_id": 4, "duration": "2-5\u79d2", "end_time": "\u672a\u77e5", "execution_details": [{"content": "\u5907\u7528\u65b9\u6848\u751f\u6210\u7684 PASSED \u6d4b\u8bd5\u7528\u4f8b", "timestamp": "\u672a\u77e5", "type": "step"}], "execution_summary": {"key_steps": ["\u5907\u7528\u65b9\u6848: PASSED \u6d4b\u8bd5\u7528\u4f8b"], "total_actions": 0, "total_steps": 1}, "method_name": "\u6df7\u5408\u683c\u5f0f\u6d4b\u8bd5", "name": "\u6df7\u5408\u683c\u5f0f\u6d4b\u8bd5", "priority": "\u4e2d", "risk_level": "\u4e2d\u7b49", "start_time": "\u672a\u77e5", "status": "PASSED", "test_class": "\u7ec8\u7aef\u5206\u7ec4", "test_steps": ["1. \u6267\u884c\u6d4b\u8bd5\u51c6\u5907", "2. \u6267\u884c\u6838\u5fc3\u64cd\u4f5c", "3. \u9a8c\u8bc1\u7ed3\u679c"]}, {"business_scenario": "\u9a8c\u8bc1\u7eaf\u82f1\u6587\u5206\u7ec4\u540d\u79f0", "case_id": 5, "duration": "2-5\u79d2", "end_time": "\u672a\u77e5", "execution_details": [{"content": "\u5907\u7528\u65b9\u6848\u751f\u6210\u7684 PASSED \u6d4b\u8bd5\u7528\u4f8b", "timestamp": "\u672a\u77e5", "type": "step"}], "execution_summary": {"key_steps": ["\u5907\u7528\u65b9\u6848: PASSED \u6d4b\u8bd5\u7528\u4f8b"], "total_actions": 0, "total_steps": 1}, "method_name": "\u7eaf\u82f1\u6587\u5206\u7ec4\u540d\u79f0\u6d4b\u8bd5", "name": "\u7eaf\u82f1\u6587\u5206\u7ec4\u540d\u79f0\u6d4b\u8bd5", "priority": "\u4e2d", "risk_level": "\u4e2d\u7b49", "start_time": "\u672a\u77e5", "status": "PASSED", "test_class": "\u7ec8\u7aef\u5206\u7ec4", "test_steps": ["1. \u6267\u884c\u6d4b\u8bd5\u51c6\u5907", "2. \u6267\u884c\u6838\u5fc3\u64cd\u4f5c", "3. \u9a8c\u8bc1\u7ed3\u679c"]}, {"business_scenario": "\u9a8c\u8bc1\u7eaf\u6570\u5b57\u5206\u7ec4\u540d\u79f0", "case_id": 6, "duration": "2-5\u79d2", "end_time": "\u672a\u77e5", "execution_details": [{"content": "\u5907\u7528\u65b9\u6848\u751f\u6210\u7684 PASSED \u6d4b\u8bd5\u7528\u4f8b", "timestamp": "\u672a\u77e5", "type": "step"}], "execution_summary": {"key_steps": ["\u5907\u7528\u65b9\u6848: PASSED \u6d4b\u8bd5\u7528\u4f8b"], "total_actions": 0, "total_steps": 1}, "method_name": "\u7eaf\u6570\u5b57\u5206\u7ec4\u540d\u79f0\u6d4b\u8bd5", "name": "\u7eaf\u6570\u5b57\u5206\u7ec4\u540d\u79f0\u6d4b\u8bd5", "priority": "\u4e2d", "risk_level": "\u4e2d\u7b49", "start_time": "\u672a\u77e5", "status": "PASSED", "test_class": "\u7ec8\u7aef\u5206\u7ec4", "test_steps": ["1. \u6267\u884c\u6d4b\u8bd5\u51c6\u5907", "2. \u6267\u884c\u6838\u5fc3\u64cd\u4f5c", "3. \u9a8c\u8bc1\u7ed3\u679c"]}, {"business_scenario": "\u9a8c\u8bc1\u4e2d\u82f1\u6587\u6df7\u5408\u5206\u7ec4\u540d\u79f0", "case_id": 7, "duration": "2-5\u79d2", "end_time": "\u672a\u77e5", "execution_details": [{"content": "\u5907\u7528\u65b9\u6848\u751f\u6210\u7684 PASSED \u6d4b\u8bd5\u7528\u4f8b", "timestamp": "\u672a\u77e5", "type": "step"}], "execution_summary": {"key_steps": ["\u5907\u7528\u65b9\u6848: PASSED \u6d4b\u8bd5\u7528\u4f8b"], "total_actions": 0, "total_steps": 1}, "method_name": "\u4e2d\u82f1\u6587\u6df7\u5408\u5206\u7ec4\u540d\u79f0\u6d4b\u8bd5", "name": "\u4e2d\u82f1\u6587\u6df7\u5408\u5206\u7ec4\u540d\u79f0\u6d4b\u8bd5", "priority": "\u4e2d", "risk_level": "\u4e2d\u7b49", "start_time": "\u672a\u77e5", "status": "PASSED", "test_class": "\u7ec8\u7aef\u5206\u7ec4", "test_steps": ["1. \u6267\u884c\u6d4b\u8bd5\u51c6\u5907", "2. \u6267\u884c\u6838\u5fc3\u64cd\u4f5c", "3. \u9a8c\u8bc1\u7ed3\u679c"]}, {"business_scenario": "\u9a8c\u8bc1\u82f1\u6587\u6570\u5b57\u6df7\u5408\u5206\u7ec4\u540d\u79f0", "case_id": 8, "duration": "2-5\u79d2", "end_time": "\u672a\u77e5", "execution_details": [{"content": "\u5907\u7528\u65b9\u6848\u751f\u6210\u7684 PASSED \u6d4b\u8bd5\u7528\u4f8b", "timestamp": "\u672a\u77e5", "type": "step"}], "execution_summary": {"key_steps": ["\u5907\u7528\u65b9\u6848: PASSED \u6d4b\u8bd5\u7528\u4f8b"], "total_actions": 0, "total_steps": 1}, "method_name": "\u82f1\u6587\u6570\u5b57\u6df7\u5408\u5206\u7ec4\u540d\u79f0\u6d4b\u8bd5", "name": "\u82f1\u6587\u6570\u5b57\u6df7\u5408\u5206\u7ec4\u540d\u79f0\u6d4b\u8bd5", "priority": "\u4e2d", "risk_level": "\u4e2d\u7b49", "start_time": "\u672a\u77e5", "status": "PASSED", "test_class": "\u7ec8\u7aef\u5206\u7ec4", "test_steps": ["1. \u6267\u884c\u6d4b\u8bd5\u51c6\u5907", "2. \u6267\u884c\u6838\u5fc3\u64cd\u4f5c", "3. \u9a8c\u8bc1\u7ed3\u679c"]}, {"business_scenario": "\u9a8c\u8bc1\u7279\u6b8a\u5b57\u7b26\u5206\u7ec4\u540d\u79f0", "case_id": 9, "duration": "2-5\u79d2", "end_time": "\u672a\u77e5", "execution_details": [{"content": "\u5907\u7528\u65b9\u6848\u751f\u6210\u7684 PASSED \u6d4b\u8bd5\u7528\u4f8b", "timestamp": "\u672a\u77e5", "type": "step"}], "execution_summary": {"key_steps": ["\u5907\u7528\u65b9\u6848: PASSED \u6d4b\u8bd5\u7528\u4f8b"], "total_actions": 0, "total_steps": 1}, "method_name": "\u7279\u6b8a\u5b57\u7b26\u5206\u7ec4\u540d\u79f0\u6d4b\u8bd5", "name": "\u7279\u6b8a\u5b57\u7b26\u5206\u7ec4\u540d\u79f0\u6d4b\u8bd5", "priority": "\u4e2d", "risk_level": "\u4e2d\u7b49", "start_time": "\u672a\u77e5", "status": "PASSED", "test_class": "\u7ec8\u7aef\u5206\u7ec4", "test_steps": ["1. \u6267\u884c\u6d4b\u8bd5\u51c6\u5907", "2. \u6267\u884c\u6838\u5fc3\u64cd\u4f5c", "3. \u9a8c\u8bc1\u7ed3\u679c"]}, {"business_scenario": "\u9a8c\u8bc1\u6df7\u5408\u5b57\u7b26\u5206\u7ec4\u540d\u79f0", "case_id": 10, "duration": "2-5\u79d2", "end_time": "\u672a\u77e5", "execution_details": [{"content": "\u5907\u7528\u65b9\u6848\u751f\u6210\u7684 PASSED \u6d4b\u8bd5\u7528\u4f8b", "timestamp": "\u672a\u77e5", "type": "step"}], "execution_summary": {"key_steps": ["\u5907\u7528\u65b9\u6848: PASSED \u6d4b\u8bd5\u7528\u4f8b"], "total_actions": 0, "total_steps": 1}, "method_name": "\u4e2d\u82f1\u6570\u7279\u6b8a\u5b57\u7b26\u6df7\u5408\u5206\u7ec4\u540d\u79f0\u6d4b\u8bd5", "name": "\u4e2d\u82f1\u6570\u7279\u6b8a\u5b57\u7b26\u6df7\u5408\u5206\u7ec4\u540d\u79f0\u6d4b\u8bd5", "priority": "\u4e2d", "risk_level": "\u4e2d\u7b49", "start_time": "\u672a\u77e5", "status": "PASSED", "test_class": "\u7ec8\u7aef\u5206\u7ec4", "test_steps": ["1. \u6267\u884c\u6d4b\u8bd5\u51c6\u5907", "2. \u6267\u884c\u6838\u5fc3\u64cd\u4f5c", "3. \u9a8c\u8bc1\u7ed3\u679c"]}, {"business_scenario": "\u9a8c\u8bc1\u5f02\u5e38IP\u683c\u5f0f", "case_id": 11, "duration": "2-5\u79d2", "end_time": "\u672a\u77e5", "execution_details": [{"content": "\u5907\u7528\u65b9\u6848\u751f\u6210\u7684 PASSED \u6d4b\u8bd5\u7528\u4f8b", "timestamp": "\u672a\u77e5", "type": "step"}], "execution_summary": {"key_steps": ["\u5907\u7528\u65b9\u6848: PASSED \u6d4b\u8bd5\u7528\u4f8b"], "total_actions": 0, "total_steps": 1}, "method_name": "\u5f02\u5e38\u683c\u5f0f\u6d4b\u8bd5", "name": "\u5f02\u5e38\u683c\u5f0f\u6d4b\u8bd5", "priority": "\u4e2d", "risk_level": "\u4e2d\u7b49", "start_time": "\u672a\u77e5", "status": "PASSED", "test_class": "\u7ec8\u7aef\u5206\u7ec4", "test_steps": ["1. \u6267\u884c\u6d4b\u8bd5\u51c6\u5907", "2. \u6267\u884c\u6838\u5fc3\u64cd\u4f5c", "3. \u9a8c\u8bc1\u7ed3\u679c"]}, {"business_scenario": "\u9a8c\u8bc1\u7cfb\u7edf\u5bf9\u957f\u5206\u7ec4\u540d\u7684\u5904\u7406", "case_id": 12, "duration": "2-5\u79d2", "end_time": "\u672a\u77e5", "execution_details": [{"content": "\u5907\u7528\u65b9\u6848\u751f\u6210\u7684 PASSED \u6d4b\u8bd5\u7528\u4f8b", "timestamp": "\u672a\u77e5", "type": "step"}], "execution_summary": {"key_steps": ["\u5907\u7528\u65b9\u6848: PASSED \u6d4b\u8bd5\u7528\u4f8b"], "total_actions": 0, "total_steps": 1}, "method_name": "\u8d85\u957f\u540d\u79f0\u6d4b\u8bd5", "name": "\u8d85\u957f\u540d\u79f0\u6d4b\u8bd5", "priority": "\u4e2d", "risk_level": "\u4e2d\u7b49", "start_time": "\u672a\u77e5", "status": "PASSED", "test_class": "\u7ec8\u7aef\u5206\u7ec4", "test_steps": ["1. \u6267\u884c\u6d4b\u8bd5\u51c6\u5907", "2. \u6267\u884c\u6838\u5fc3\u64cd\u4f5c", "3. \u9a8c\u8bc1\u7ed3\u679c"]}, {"business_scenario": "\u9a8c\u8bc1\u91cd\u590dIP\u6d4b\u8bd5", "case_id": 13, "duration": "2-5\u79d2", "end_time": "\u672a\u77e5", "execution_details": [{"content": "\u5907\u7528\u65b9\u6848\u751f\u6210\u7684 PASSED \u6d4b\u8bd5\u7528\u4f8b", "timestamp": "\u672a\u77e5", "type": "step"}], "execution_summary": {"key_steps": ["\u5907\u7528\u65b9\u6848: PASSED \u6d4b\u8bd5\u7528\u4f8b"], "total_actions": 0, "total_steps": 1}, "method_name": "\u91cd\u590dip\u6d4b\u8bd5", "name": "\u91cd\u590dIP\u6d4b\u8bd5", "priority": "\u4e2d", "risk_level": "\u4e2d\u7b49", "start_time": "\u672a\u77e5", "status": "PASSED", "test_class": "\u7ec8\u7aef\u5206\u7ec4", "test_steps": ["1. \u6267\u884c\u6d4b\u8bd5\u51c6\u5907", "2. \u6267\u884c\u6838\u5fc3\u64cd\u4f5c", "3. \u9a8c\u8bc1\u7ed3\u679c"]}, {"business_scenario": "\u9a8c\u8bc1\u7a7a\u5206\u7ec4\u540d\u79f0\u5904\u7406", "case_id": 14, "duration": "2-5\u79d2", "end_time": "\u672a\u77e5", "execution_details": [{"content": "\u5907\u7528\u65b9\u6848\u751f\u6210\u7684 PASSED \u6d4b\u8bd5\u7528\u4f8b", "timestamp": "\u672a\u77e5", "type": "step"}], "execution_summary": {"key_steps": ["\u5907\u7528\u65b9\u6848: PASSED \u6d4b\u8bd5\u7528\u4f8b"], "total_actions": 0, "total_steps": 1}, "method_name": "\u7a7a\u5206\u7ec4\u540d\u79f0\u6d4b\u8bd5", "name": "\u7a7a\u5206\u7ec4\u540d\u79f0\u6d4b\u8bd5", "priority": "\u4e2d", "risk_level": "\u4e2d\u7b49", "start_time": "\u672a\u77e5", "status": "PASSED", "test_class": "\u7ec8\u7aef\u5206\u7ec4", "test_steps": ["1. \u6267\u884c\u6d4b\u8bd5\u51c6\u5907", "2. \u6267\u884c\u6838\u5fc3\u64cd\u4f5c", "3. \u9a8c\u8bc1\u7ed3\u679c"]}, {"business_scenario": "\u9a8c\u8bc1\u7a7aIP\u5217\u8868", "case_id": 15, "duration": "2-5\u79d2", "end_time": "\u672a\u77e5", "execution_details": [{"content": "\u5907\u7528\u65b9\u6848\u751f\u6210\u7684 PASSED \u6d4b\u8bd5\u7528\u4f8b", "timestamp": "\u672a\u77e5", "type": "step"}], "execution_summary": {"key_steps": ["\u5907\u7528\u65b9\u6848: PASSED \u6d4b\u8bd5\u7528\u4f8b"], "total_actions": 0, "total_steps": 1}, "method_name": "\u7a7aip\u5217\u8868\u6d4b\u8bd5", "name": "\u7a7aIP\u5217\u8868\u6d4b\u8bd5", "priority": "\u4e2d", "risk_level": "\u4e2d\u7b49", "start_time": "\u672a\u77e5", "status": "PASSED", "test_class": "\u7ec8\u7aef\u5206\u7ec4", "test_steps": ["1. \u6267\u884c\u6d4b\u8bd5\u51c6\u5907", "2. \u6267\u884c\u6838\u5fc3\u64cd\u4f5c", "3. \u9a8c\u8bc1\u7ed3\u679c"]}, {"business_scenario": "\u9a8c\u8bc1\u529f\u80fd\u6b63\u786e\u6027", "case_id": 16, "duration": "2-5\u79d2", "end_time": "\u672a\u77e5", "execution_details": [{"content": "\u5907\u7528\u65b9\u6848\u751f\u6210\u7684 PASSED \u6d4b\u8bd5\u7528\u4f8b", "timestamp": "\u672a\u77e5", "type": "step"}], "execution_summary": {"key_steps": ["\u5907\u7528\u65b9\u6848: PASSED \u6d4b\u8bd5\u7528\u4f8b"], "total_actions": 0, "total_steps": 1}, "method_name": "\u641c\u7d22\u6d4b\u8bd5_\u73b0\u6709\u6570\u636e", "name": "\u641c\u7d22\u6d4b\u8bd5 - \u73b0\u6709\u6570\u636e", "priority": "\u4e2d", "risk_level": "\u4e2d\u7b49", "start_time": "\u672a\u77e5", "status": "PASSED", "test_class": "\u7ec8\u7aef\u5206\u7ec4", "test_steps": ["1. \u6267\u884c\u6d4b\u8bd5\u51c6\u5907", "2. \u6267\u884c\u6838\u5fc3\u64cd\u4f5c", "3. \u9a8c\u8bc1\u7ed3\u679c"]}, {"business_scenario": "\u9a8c\u8bc1\u529f\u80fd\u6b63\u786e\u6027", "case_id": 17, "duration": "2-5\u79d2", "end_time": "\u672a\u77e5", "execution_details": [{"content": "\u5907\u7528\u65b9\u6848\u751f\u6210\u7684 PASSED \u6d4b\u8bd5\u7528\u4f8b", "timestamp": "\u672a\u77e5", "type": "step"}], "execution_summary": {"key_steps": ["\u5907\u7528\u65b9\u6848: PASSED \u6d4b\u8bd5\u7528\u4f8b"], "total_actions": 0, "total_steps": 1}, "method_name": "\u641c\u7d22\u6d4b\u8bd5_\u6ca1\u6709\u6570\u636e", "name": "\u641c\u7d22\u6d4b\u8bd5 - \u6ca1\u6709\u6570\u636e", "priority": "\u4e2d", "risk_level": "\u4e2d\u7b49", "start_time": "\u672a\u77e5", "status": "PASSED", "test_class": "\u7ec8\u7aef\u5206\u7ec4", "test_steps": ["1. \u6267\u884c\u6d4b\u8bd5\u51c6\u5907", "2. \u6267\u884c\u6838\u5fc3\u64cd\u4f5c", "3. \u9a8c\u8bc1\u7ed3\u679c"]}, {"business_scenario": "\u6d4b\u8bd5\u7f16\u8f91\u5206\u7ec4\u529f\u80fd", "case_id": 18, "duration": "2-5\u79d2", "end_time": "\u672a\u77e5", "execution_details": [{"content": "\u5907\u7528\u65b9\u6848\u751f\u6210\u7684 PASSED \u6d4b\u8bd5\u7528\u4f8b", "timestamp": "\u672a\u77e5", "type": "step"}], "execution_summary": {"key_steps": ["\u5907\u7528\u65b9\u6848: PASSED \u6d4b\u8bd5\u7528\u4f8b"], "total_actions": 0, "total_steps": 1}, "method_name": "\u7f16\u8f91\u5206\u7ec4\u6d4b\u8bd5", "name": "\u7f16\u8f91\u5206\u7ec4\u6d4b\u8bd5", "priority": "\u4e2d", "risk_level": "\u4e2d\u7b49", "start_time": "\u672a\u77e5", "status": "PASSED", "test_class": "\u7ec8\u7aef\u5206\u7ec4", "test_steps": ["1. \u6267\u884c\u6d4b\u8bd5\u51c6\u5907", "2. \u6267\u884c\u6838\u5fc3\u64cd\u4f5c", "3. \u9a8c\u8bc1\u7ed3\u679c"]}, {"business_scenario": "\u6d4b\u8bd5\u5220\u9664\u5206\u7ec4\u529f\u80fd", "case_id": 19, "duration": "2-5\u79d2", "end_time": "\u672a\u77e5", "execution_details": [{"content": "\u5907\u7528\u65b9\u6848\u751f\u6210\u7684 PASSED \u6d4b\u8bd5\u7528\u4f8b", "timestamp": "\u672a\u77e5", "type": "step"}], "execution_summary": {"key_steps": ["\u5907\u7528\u65b9\u6848: PASSED \u6d4b\u8bd5\u7528\u4f8b"], "total_actions": 0, "total_steps": 1}, "method_name": "\u5220\u9664\u5206\u7ec4\u6d4b\u8bd5", "name": "\u5220\u9664\u5206\u7ec4\u6d4b\u8bd5", "priority": "\u4e2d", "risk_level": "\u4e2d\u7b49", "start_time": "\u672a\u77e5", "status": "PASSED", "test_class": "\u7ec8\u7aef\u5206\u7ec4", "test_steps": ["1. \u6267\u884c\u6d4b\u8bd5\u51c6\u5907", "2. \u6267\u884c\u6838\u5fc3\u64cd\u4f5c", "3. \u9a8c\u8bc1\u7ed3\u679c"]}, {"business_scenario": "\u6d4b\u8bd5\u5168\u90e8\u5220\u9664\u529f\u80fd", "case_id": 20, "duration": "2-5\u79d2", "end_time": "\u672a\u77e5", "execution_details": [{"content": "\u5907\u7528\u65b9\u6848\u751f\u6210\u7684 PASSED \u6d4b\u8bd5\u7528\u4f8b", "timestamp": "\u672a\u77e5", "type": "step"}], "execution_summary": {"key_steps": ["\u5907\u7528\u65b9\u6848: PASSED \u6d4b\u8bd5\u7528\u4f8b"], "total_actions": 0, "total_steps": 1}, "method_name": "\u5168\u90e8\u5220\u9664", "name": "\u5168\u90e8\u5220\u9664", "priority": "\u4e2d", "risk_level": "\u4e2d\u7b49", "start_time": "\u672a\u77e5", "status": "PASSED", "test_class": "\u7ec8\u7aef\u5206\u7ec4", "test_steps": ["1. \u6267\u884c\u6d4b\u8bd5\u51c6\u5907", "2. \u6267\u884c\u6838\u5fc3\u64cd\u4f5c", "3. \u9a8c\u8bc1\u7ed3\u679c"]}];
+        
+        function showDetails(index) {
+            const testCase = testCases[index];
+            const modal = document.getElementById('detailsModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+            
+            modalTitle.textContent = testCase.name;
+            
+            let detailsHtml = `
+                <div class="detail-section">
+                    <div class="detail-title">💼 业务场景</div>
+                    <div>${testCase.business_scenario}</div>
+                </div>
+                
+                <div class="detail-section">
+                    <div class="detail-title">📋 预定义测试步骤</div>
+                    <ul class="steps-list">
+                        ${testCase.test_steps.map(step => `<li>${step}</li>`).join('')}
+                    </ul>
+                </div>
+                
+                <div class="detail-section">
+                    <div class="detail-title">🚀 实际执行详情</div>
+                    <div class="execution-timeline">
+                        ${testCase.execution_details.map(detail => `
+                            <div class="timeline-item ${detail.type}">
+                                <div class="timeline-time">${detail.timestamp}</div>
+                                <div class="timeline-content">${detail.content}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div class="detail-section">
+                    <div class="detail-title">📊 执行摘要</div>
+                    <div>
+                        <strong>执行步骤数：</strong>${testCase.execution_summary ? testCase.execution_summary.total_steps : 0}<br>
+                        <strong>系统操作数：</strong>${testCase.execution_summary ? testCase.execution_summary.total_actions : 0}<br>
+                        <strong>执行时间：</strong>${testCase.duration}
+                    </div>
+                </div>
+            `;
+            
+            modalBody.innerHTML = detailsHtml;
+            modal.style.display = 'block';
+        }
+        
+        function closeModal() {
+            document.getElementById('detailsModal').style.display = 'none';
+        }
+        
+        // 点击模态框外部关闭
+        window.onclick = function(event) {
+            const modal = document.getElementById('detailsModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+        
+        // ESC键关闭模态框
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

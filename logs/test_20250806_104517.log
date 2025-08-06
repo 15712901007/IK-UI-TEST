@@ -1,0 +1,19 @@
+2025-08-06 10:45:17,427 - RouterTest - INFO - 强制重新创建表格样式模板成功
+2025-08-06 10:45:17,455 - RouterTest - INFO - 成功加载 VLAN设置 的配置文件: data/vlan_data.yaml
+2025-08-06 10:45:17,463 - RouterTest - INFO - 成功加载 终端分组 的配置文件: data/sta_group.yaml
+2025-08-06 10:45:17,466 - RouterTest - INFO - 成功加载 登录测试 的配置文件: data/login_data.yaml
+2025-08-06 10:45:17,466 - RouterTest - WARNING - 测试功能为 ['全部功能']，无法加载特定YAML数据，将返回空
+2025-08-06 10:45:17,466 - RouterTest - WARNING - 测试功能为 ['VLAN设置', '终端分组']，无法加载特定YAML数据，将返回空
+2025-08-06 10:45:17,468 - RouterTest - INFO - 强制重新创建表格样式模板成功
+2025-08-06 10:45:17,488 - RouterTest - INFO - 成功加载 VLAN设置 的配置文件: data/vlan_data.yaml
+2025-08-06 10:45:17,489 - RouterTest - INFO - 开始解析测试输出，共 16 行
+2025-08-06 10:45:17,490 - RouterTest - INFO - 发现测试用例: test_sample_case_1
+2025-08-06 10:45:17,490 - RouterTest - ERROR - 生成中文测试报告失败: 'list' object has no attribute 'get'
+2025-08-06 10:45:17,496 - RouterTest - INFO - 成功加载 终端分组 的配置文件: data/sta_group.yaml
+2025-08-06 10:45:17,498 - RouterTest - INFO - 开始解析测试输出，共 16 行
+2025-08-06 10:45:17,498 - RouterTest - INFO - 发现测试用例: test_sample_case_1
+2025-08-06 10:45:17,498 - RouterTest - ERROR - 生成中文测试报告失败: 'list' object has no attribute 'get'
+2025-08-06 10:45:17,500 - RouterTest - INFO - 成功加载 登录测试 的配置文件: data/login_data.yaml
+2025-08-06 10:45:17,502 - RouterTest - INFO - 开始解析测试输出，共 16 行
+2025-08-06 10:45:17,502 - RouterTest - INFO - 发现测试用例: test_sample_case_1
+2025-08-06 10:45:17,502 - RouterTest - ERROR - 生成中文测试报告失败: 'list' object has no attribute 'get'

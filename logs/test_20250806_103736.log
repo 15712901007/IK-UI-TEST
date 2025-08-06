@@ -1,0 +1,3 @@
+2025-08-06 10:37:45,150 - RouterTest - INFO - 测试配置更新成功
+2025-08-06 10:39:19,745 - RouterTest - INFO - 强制重新创建表格样式模板成功
+2025-08-06 10:39:19,753 - RouterTest - ERROR - 生成中文测试报告失败: unhashable type: 'list'

@@ -1,0 +1,38 @@
+{
+  "timestamp": 1752753716,
+  "url": "http://10.66.0.40/Action/call",
+  "method": "POST",
+  "request_headers": {
+    "accept": "application/json, text/plain, */*",
+    "content-type": "application/json;charset=UTF-8",
+    "cookie": "sess_key=365aadfd984780abffa00c5d920dff9b; username=admin; login=1",
+    "referer": "http://10.66.0.40/"
+  },
+  "request_body": "{\"func_name\": \"vlan\", \"action\": \"add\", \"param\": {\"vlan_id\": \"300\", \"vlan_name\": \"vlan300\", \"ip_addr\": \"192.168.47.1\", \"mac\": \"00:b7:21:ef:01:2c\", \"ip_mask\": \"\", \"interface\": \"lan1\", \"netmask\": \"255.255.255.0\", \"comment\": \"\\u6279\\u91cf\\u6d4b\\u8bd5VLAN300\", \"enabled\": \"yes\"}}",
+  "response_status": 200,
+  "response_headers": {
+    "date": "Thu, 17 Jul 2025 12:01:56 GMT",
+    "content-type": "application/json;charset=UTF-8",
+    "connection": "close",
+    "server": "Nginx",
+    "expires": "0",
+    "pragma": "no-cache",
+    "cache-control": "no-cache",
+    "x-lang": "1",
+    "x-timezone": "0800",
+    "x-timestamp": "1752753716",
+    "x-arch": "x86",
+    "x-sysbit": "x64",
+    "x-enterprise": "1",
+    "x-support-i18n": "1",
+    "x-support-wifi": "0",
+    "x-default-ip": "0",
+    "content-length": "46"
+  },
+  "response_body": {
+    "Result": 30000,
+    "ErrMsg": "Success",
+    "RowId": 6
+  },
+  "python": "import requests, json\nurl = 'http://10.66.0.40/Action/call'\nheaders = {\n  \"accept\": \"application/json, text/plain, */*\",\n  \"content-type\": \"application/json;charset=UTF-8\",\n  \"cookie\": \"sess_key=365aadfd984780abffa00c5d920dff9b; username=admin; login=1\",\n  \"referer\": \"http://10.66.0.40/\"\n}\ndata = \"{\\\"func_name\\\": \\\"vlan\\\", \\\"action\\\": \\\"add\\\", \\\"param\\\": {\\\"vlan_id\\\": \\\"300\\\", \\\"vlan_name\\\": \\\"vlan300\\\", \\\"ip_addr\\\": \\\"192.168.47.1\\\", \\\"mac\\\": \\\"00:b7:21:ef:01:2c\\\", \\\"ip_mask\\\": \\\"\\\", \\\"interface\\\": \\\"lan1\\\", \\\"netmask\\\": \\\"255.255.255.0\\\", \\\"comment\\\": \\\"\\\\u6279\\\\u91cf\\\\u6d4b\\\\u8bd5VLAN300\\\", \\\"enabled\\\": \\\"yes\\\"}}\"\nresp = requests.post(url, headers=headers, data=data, verify=False)\nprint(resp.text)"
+}

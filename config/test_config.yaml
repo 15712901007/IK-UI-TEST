@@ -3,7 +3,7 @@ router:
   username: admin
   password: admin123
 browser:
-  headless: false
+  headless: true
   browser_type: chromium
   viewport:
     width: 1920
