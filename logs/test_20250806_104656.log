@@ -1,0 +1,10 @@
+2025-08-06 10:47:10,191 - RouterTest - INFO - 测试配置更新成功
+2025-08-06 10:48:44,128 - RouterTest - INFO - 强制重新创建表格样式模板成功
+2025-08-06 10:48:44,133 - RouterTest - INFO - 成功加载 终端分组 的配置文件: data/sta_group.yaml
+2025-08-06 10:48:44,134 - RouterTest - INFO - 开始解析测试输出，共 328 行
+2025-08-06 10:48:44,135 - RouterTest - INFO - 成功解析出 0 个测试用例
+2025-08-06 10:48:44,135 - RouterTest - WARNING - 从输出中未解析到测试用例，使用备用方案
+2025-08-06 10:48:44,140 - RouterTest - INFO - 成功加载 终端分组 的配置文件: data/sta_group.yaml
+2025-08-06 10:48:44,141 - RouterTest - INFO - 从 ip_groups 字段生成了 20 个测试用例
+2025-08-06 10:48:44,141 - RouterTest - INFO - 报告数据准备完成，测试用例数量: 20
+2025-08-06 10:48:44,151 - RouterTest - INFO - 中文测试报告生成成功: reports\outputs\中文测试报告_20250806_104844.html
